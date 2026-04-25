@@ -1,0 +1,24 @@
+nalana_test_suite/
+│
+├── schema.py                      # The Data Layer
+│   └── Classes: TestSuite, TestCaseCard, InitialScene, QualitySignals
+│   └── Role: Validates JSON fixtures into strict Pydantic objects.
+│
+├── metrics_evaluator.py           # The Scoring Engine (Ring 2 Signal)
+│   └── Class: MetricsEvaluator
+│   └── Role: Runs Blender math (bmesh/bpy) to check quad ratios, manifold
+│             geometry, and Chamfer distance. Calculates Pass@k.
+│
+├── test_harness.py                # The Execution Engine (Main Script)
+│   └── Class: NalanaTestHarness
+│   └── Role: Orchestrates the test loop, bridges to the Nalana AI via
+│             XML-RPC, safely executes generated Python code, and writes logs.
+│
+├── dpo_preference_pairs.jsonl     # Output Log (Continuous Improvement)
+│   └── Role: Automatically generated dataset containing
+│             (input, bad_output, good_output) for RLHF/DPO training.
+│
+└── fixtures/
+    └── sample_cases.json          # The Input Data
+        └── Role: Contains stratified test cases (Unit, Integration, E2E)
+                  with injected voice commands and ground truth code.

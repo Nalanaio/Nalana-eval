@@ -1,0 +1,53 @@
+[fixtures/sample_cases.json]
+                   │
+                   ▼
++---------------------------------------------------+
+|                   schema.py                       |
+|  (Parses JSON into strict TestSuite/TestCaseCard) |
++---------------------------------------------------+
+                   │
+                   │ Validated Python Objects
+                   ▼
++---------------------------------------------------+
+|               test_harness.py                     |
+|            (NalanaTestHarness)                    |
+|                                                   |
+| 1. Iterates through cases & voice commands        |
+| 2. Calls reset_scene(initial_scene)               |
++---------+-------------------------------+---------+
+          │                               │
+          │ (1) Sends Voice Command       │ (2) Returns Generated
+          │     via XML-RPC               │     `bpy` code
+          ▼                               │
++-----------------------+                 │
+|     XML-RPC Bridge    |                 │
+|   (localhost:8000)    |-----------------┘
++-----------------------+
+          │             ▲
+          ▼             │
++-----------------------+                 +-----------------------+
+|    Nalana Engine      |                 |    test_harness.py    |
+|  (Backend AI Model)   |                 | (3) Safely executes   |
++-----------------------+                 |     code in isolated  |
+                                          |     Blender globals   |
+                                          +-----------+-----------+
+                                                      │
+                                                      │ (4) Passes generated mesh
+                                                      ▼
+                                          +-----------------------+
+                                          | metrics_evaluator.py  |
+                                          |  - quad_ratio         |
+                                          |  - is_manifold        |
+                                          |  - chamfer_distance   |
+                                          +-----------+-----------+
+                                                      │
+                                                      │ (5) Evaluates Success
+                                                      ▼
+                                           [ Execution & Geo Check ]
+                                            /                     \
+                                     (Pass) /                       \ (Fail)
+                                           /                         \
+                          +-----------------------+        +-----------------------+
+                          |   Log Pass@k Metric   |        |   Log to DPO Dataset  |
+                          |   (Continue Loop)     |        | (dpo_preference.jsonl)|
+                          +-----------------------+        +-----------------------+

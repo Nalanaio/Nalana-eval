@@ -1,0 +1,92 @@
+[
+  {
+    "id": "TS-UNIT-001",
+    "category": "Object Creation",
+    "difficulty": "Short",
+    "voice_commands": [
+      "Add a cylinder with 32 vertices",
+      "Create a standard cylinder",
+      "Drop a cylinder into the scene",
+      "Add a sill under with thirty-two vertices"
+    ],
+    "initial_scene": {
+      "active": null,
+      "mode": "OBJECT"
+    },
+    "ground_truth": [
+      {
+        "op": "bpy.ops.mesh.primitive_cylinder_add",
+        "params": {"vertices": 32, "radius": 1.0, "depth": 2.0}
+      }
+    ],
+    "target_mesh": "ground_truth_unit_001.obj",
+    "quality_signals": {
+      "quad_ratio_min": 0.0,
+      "manifold": true,
+      "chamfer_threshold": 0.001
+    }
+  },
+  {
+    "id": "TS-INT-042",
+    "category": "Transformations & Editing",
+    "difficulty": "Medium",
+    "voice_commands": [
+      "Bevel the edges of this cube by 0.1 meters with 3 segments",
+      "Give the cube a slight bevel, about point one meters and three cuts",
+      "Round the corners of the box a bit",
+      "Baffle the edges by zero point one meaters"
+    ],
+    "initial_scene": {
+      "active": "Cube",
+      "mode": "EDIT"
+    },
+    "ground_truth": [
+      {
+        "op": "bpy.ops.mesh.bevel",
+        "params": {"offset": 0.1, "segments": 3}
+      }
+    ],
+    "target_mesh": "ground_truth_int_042.obj",
+    "quality_signals": {
+      "quad_ratio_min": 0.85,
+      "manifold": true,
+      "chamfer_threshold": 0.001
+    }
+  },
+  {
+    "id": "TS-E2E-089",
+    "category": "Compositional-Creative",
+    "difficulty": "Long",
+    "voice_commands": [
+      "Make an Art Deco brass lamp",
+      "Create a 1920s style lamp out of brass",
+      "Model a vintage desk lamp with geometric shapes",
+      "Make an art gecko brass lamb"
+    ],
+    "initial_scene": {
+      "active": null,
+      "mode": "OBJECT",
+      "screenshot": "screenshot_089.png"
+    },
+    "ground_truth": [
+      {
+        "op": "bpy.ops.mesh.primitive_cylinder_add",
+        "params": {"vertices": 16, "radius": 0.5, "depth": 0.1}
+      },
+      {
+        "op": "bpy.ops.mesh.primitive_cylinder_add",
+        "params": {"vertices": 8, "radius": 0.05, "depth": 1.5}
+      },
+      {
+        "op": "bpy.ops.transform.translate",
+        "params": {"value": [0, 0, 0.8]}
+      }
+    ],
+    "target_mesh": "ground_truth_e2e_089.blend",
+    "quality_signals": {
+      "quad_ratio_min": 0.85,
+      "manifold": true,
+      "chamfer_threshold": 0.005
+    }
+  }
+]
