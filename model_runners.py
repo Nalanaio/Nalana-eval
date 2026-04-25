@@ -1,4 +1,8 @@
+import json
+import os
 import time
+import urllib.error
+import urllib.request
 import xmlrpc.client
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, Optional
@@ -199,4 +203,92 @@ class GeminiRunner(StaticPayloadRunner):
             output_contract=output_contract,
             prompt_template_version=prompt_template_version,
         )
+
+
+def _post(url: str, body: Any, headers: Optional[Dict[str, str]] = None, *, timeout: int = 60) -> Any:
+    payload = json.dumps(body).encode()
+    all_headers = {"Content-Type": "application/json", **(headers or {})}
+    req = urllib.request.Request(url, data=payload, headers=all_headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read())
+    except urllib.error.HTTPError as exc:
+        raise RuntimeError(f"HTTP {exc.code}: {exc.read().decode('utf-8', errors='replace')}") from exc
+
+
+def _unwrap_fences(text: str) -> str:
+    """Strip ```...``` wrappers that models sometimes add around their JSON."""
+    s = text.strip()
+    if not s.startswith("```"):
+        return s
+    lines = s.splitlines()
+    closing = next((i for i in range(len(lines) - 1, 0, -1) if lines[i].strip() == "```"), None)
+    return "\n".join(lines[1:closing]).strip() if closing else s
+
+
+class _LiveApiRunner(ModelRunner):
+    """Base for runners that call a live model API. Handles key loading."""
+
+    _ENV_VAR: str = ""
+
+    def __init__(
+        self,
+        *,
+        model_id: str,
+        api_key: Optional[str] = None,
+        output_contract: OutputContract = OutputContract.NORMALIZED,
+        prompt_template_version: str = PROMPT_TEMPLATE_VERSION,
+    ):
+        super().__init__(
+            model_id=model_id,
+            output_contract=output_contract,
+            prompt_template_version=prompt_template_version,
+        )
+        key = api_key or os.environ.get(self._ENV_VAR, "")
+        if not key:
+            raise ValueError(f"{self._ENV_VAR} is not set")
+        self._key = key
+
+
+class AnthropicRunner(_LiveApiRunner):
+    _ENV_VAR = "ANTHROPIC_API_KEY"
+
+    def __init__(self, *, model_id: str, max_tokens: int = 2048, **kwargs):
+        super().__init__(model_id=model_id, **kwargs)
+        self._max_tokens = max_tokens
+
+    def _generate(self, case: TestCaseCard, voice_command: str, attempt_index: int, prompt: str) -> Any:
+        resp = _post(
+            "https://api.anthropic.com/v1/messages",
+            body={"model": self.model_id, "max_tokens": self._max_tokens, "messages": [{"role": "user", "content": prompt}]},
+            headers={"x-api-key": self._key, "anthropic-version": "2023-06-01"},
+        )
+        return _unwrap_fences(resp["content"][0]["text"])
+
+
+class GeminiApiRunner(_LiveApiRunner):
+    _ENV_VAR = "GEMINI_API_KEY"
+
+    def __init__(self, *, model_id: str = "gemini-2.5-pro", **kwargs):
+        super().__init__(model_id=model_id, **kwargs)
+
+    def _generate(self, case: TestCaseCard, voice_command: str, attempt_index: int, prompt: str) -> Any:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model_id}:generateContent?key={self._key}"
+        try:
+            resp = _post(url, body={"contents": [{"parts": [{"text": prompt}]}]})
+        except RuntimeError as exc:
+            raise RuntimeError(str(exc).replace(self._key, "<redacted>")) from None
+        return _unwrap_fences(resp["candidates"][0]["content"]["parts"][0]["text"])
+
+
+class OpenAICompatibleRunner(_LiveApiRunner):
+    _ENV_VAR = "OPENAI_API_KEY"
+
+    def _generate(self, case: TestCaseCard, voice_command: str, attempt_index: int, prompt: str) -> Any:
+        resp = _post(
+            "https://api.openai.com/v1/chat/completions",
+            body={"model": self.model_id, "messages": [{"role": "user", "content": prompt}]},
+            headers={"Authorization": f"Bearer {self._key}"},
+        )
+        return _unwrap_fences(resp["choices"][0]["message"]["content"])
 
