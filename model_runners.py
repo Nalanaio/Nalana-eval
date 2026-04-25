@@ -5,7 +5,7 @@ import urllib.error
 import urllib.request
 import xmlrpc.client
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Dict, Optional
 
 try:
     from .contracts import normalize_model_output
@@ -133,25 +133,6 @@ class StaticPayloadRunner(ModelRunner):
                 return self.payloads[key]
         raise KeyError(f"No static payload configured for case {case.id} attempt {attempt_index}")
 
-
-class CallableModelRunner(ModelRunner):
-    def __init__(
-        self,
-        generator: Callable[[TestCaseCard, str, int, str], Any],
-        *,
-        model_id: str,
-        output_contract: OutputContract = OutputContract.LEGACY_OPS,
-        prompt_template_version: str = PROMPT_TEMPLATE_VERSION,
-    ):
-        super().__init__(
-            model_id=model_id,
-            output_contract=output_contract,
-            prompt_template_version=prompt_template_version,
-        )
-        self.generator = generator
-
-    def _generate(self, case: TestCaseCard, voice_command: str, attempt_index: int, prompt: str) -> Any:
-        return self.generator(case, voice_command, attempt_index, prompt)
 
 
 class XmlRpcModelRunner(ModelRunner):
