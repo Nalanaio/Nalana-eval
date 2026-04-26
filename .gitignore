@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.venv/
+venv/
+
+# Run artifacts (per-run output folders)
+artifacts/
+
+# Local database (CSV files, judge cache)
+db/*.csv
+db/*.sqlite
+db/*.sqlite-journal
+!db/.gitkeep
+
+# Calibration baseline results (these are local-only)
+calibration/baseline_results/
+calibration/reference_images/*
+!calibration/reference_images/.gitkeep
+
+# API key / secret files
+.env
+.env.*
+secrets.json
+api_keys.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Coverage / test artifacts
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Legacy reference (kept for now during migration)
+# Remove these comments after migration is complete
