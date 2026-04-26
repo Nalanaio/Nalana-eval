@@ -3,32 +3,37 @@ from typing import Dict, List, Sequence, Tuple
 import numpy as np
 
 try:
-    from .schema import NormalizedStep, SceneSnapshot
+    from .schema import NormalizedStep, SceneSnapshot, TopologyScore
 except ImportError:  # pragma: no cover - Blender script fallback
-    from schema import NormalizedStep, SceneSnapshot
+    from schema import NormalizedStep, SceneSnapshot, TopologyScore
 
 
 class MetricsEvaluator:
-    """
-    Pure-Python scoring helpers for benchmark artifacts and scene snapshots.
-    """
 
     @staticmethod
-    def calculate_quad_ratio(snapshot: SceneSnapshot) -> float:
-        total_faces = 0
-        total_quads = 0
-        for mesh in snapshot.mesh_objects:
-            total_faces += mesh.face_count
-            total_quads += mesh.face_sizes.get("4", 0)
-        if total_faces == 0:
-            return 0.0
-        return total_quads / total_faces
+    def calculate_topology_score(snapshot: SceneSnapshot) -> TopologyScore:
+        meshes = snapshot.mesh_objects
+        if not meshes:
+            return TopologyScore()
 
-    @staticmethod
-    def check_manifold(snapshot: SceneSnapshot) -> bool:
-        if not snapshot.mesh_objects:
-            return False
-        return all(mesh.manifold for mesh in snapshot.mesh_objects)
+        total_faces = sum(m.face_count for m in meshes)
+
+        if total_faces > 0:
+            quad_ratio = sum(m.face_sizes.get("4", 0) for m in meshes) / total_faces
+            face_quality_score = sum(m.face_quality_score * m.face_count for m in meshes) / total_faces
+        else:
+            quad_ratio = 0.0
+            face_quality_score = 1.0
+
+        return TopologyScore(
+            manifold=all(m.manifold for m in meshes),
+            loose_geometry_count=sum(m.loose_geometry_count for m in meshes),
+            quad_ratio=quad_ratio,
+            face_quality_score=face_quality_score,
+            flipped_face_count=sum(m.flipped_face_count for m in meshes),
+            overlapping_verts=sum(m.overlapping_verts for m in meshes),
+            duplicate_faces=sum(m.duplicate_faces for m in meshes),
+        )
 
     @staticmethod
     def calculate_command_accuracy(expected: List[NormalizedStep], actual: List[NormalizedStep]) -> float:

@@ -2,6 +2,7 @@ import json
 import time
 from dataclasses import dataclass
 from hashlib import sha256
+from math import floor
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -220,31 +221,52 @@ class DualContractExecutor:
                 key = str(len(face.verts))
                 face_sizes[key] = face_sizes.get(key, 0) + 1
 
+            # 1. Manifold
             manifold = all(edge.is_manifold for edge in bm.edges)
 
-            # Face orientation: normals should point away from the mesh centroid
+            # 2. Loose geometry — verts/edges not part of any face
+            loose_geometry_count = (
+                sum(1 for v in bm.verts if not v.link_faces) +
+                sum(1 for e in bm.edges if not e.link_faces)
+            )
+
+            # 3. Face quality — tris and quads with nonzero area are "good"
+            if bm.faces:
+                good = sum(1 for f in bm.faces if len(f.verts) in (3, 4) and f.calc_area() > 1e-8)
+                face_quality_score = good / len(bm.faces)
+            else:
+                face_quality_score = 1.0
+
+            # 4. Normal direction — normals should point away from the mesh centroid
             if bm.verts and bm.faces:
                 n = len(bm.verts)
                 cx = sum(v.co.x for v in bm.verts) / n
                 cy = sum(v.co.y for v in bm.verts) / n
                 cz = sum(v.co.z for v in bm.verts) / n
-                flipped = 0
+                flipped_face_count = 0
                 for f in bm.faces:
                     fc = f.calc_center_median()
                     dx, dy, dz = fc.x - cx, fc.y - cy, fc.z - cz
                     if dx * f.normal.x + dy * f.normal.y + dz * f.normal.z < 0:
-                        flipped += 1
-                face_orientation_ok = flipped == 0
+                        flipped_face_count += 1
             else:
-                face_orientation_ok = True
+                flipped_face_count = 0
 
-            # Overlapping verts: count vertices sharing the same grid cell at 0.1 mm precision
+            # 5a. Overlapping verts — vertices sharing a grid cell at 0.1 mm precision
+            # floor (not int) so negative coords don't collapse across the origin
             _MERGE = 1e-4
-            seen: Dict[tuple, int] = {}
+            vert_grid: Dict[tuple, int] = {}
             for v in bm.verts:
-                key = (int(v.co.x / _MERGE), int(v.co.y / _MERGE), int(v.co.z / _MERGE))
-                seen[key] = seen.get(key, 0) + 1
-            overlapping_verts = sum(c - 1 for c in seen.values() if c > 1)
+                key = (floor(v.co.x / _MERGE), floor(v.co.y / _MERGE), floor(v.co.z / _MERGE))
+                vert_grid[key] = vert_grid.get(key, 0) + 1
+            overlapping_verts = sum(c - 1 for c in vert_grid.values() if c > 1)
+
+            # 5b. Duplicate faces — faces sharing the exact same vertex set
+            face_sets: Dict[frozenset, int] = {}
+            for f in bm.faces:
+                key = frozenset(v.index for v in f.verts)
+                face_sets[key] = face_sets.get(key, 0) + 1
+            duplicate_faces = sum(c - 1 for c in face_sets.values() if c > 1)
 
             bm.free()
 
@@ -256,8 +278,11 @@ class DualContractExecutor:
                 face_count=len(mesh.polygons),
                 face_sizes=face_sizes,
                 manifold=manifold,
-                face_orientation_ok=face_orientation_ok,
+                loose_geometry_count=loose_geometry_count,
+                face_quality_score=face_quality_score,
+                flipped_face_count=flipped_face_count,
                 overlapping_verts=overlapping_verts,
+                duplicate_faces=duplicate_faces,
                 world_vertices=world_vertices,
                 world_faces=world_faces,
                 location=[float(value) for value in obj.location],

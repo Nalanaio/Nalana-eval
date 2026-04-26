@@ -157,7 +157,8 @@ class BenchmarkReporter:
     _CSV_FIELDS = [
         "case_id", "prompt", "model", "attempt_index",
         "passed", "execution_success", "geometry_success",
-        "manifold", "face_orientation_ok", "overlapping_verts", "quad_ratio",
+        "topo_manifold", "topo_loose_geometry", "topo_face_quality",
+        "topo_flipped_faces", "topo_overlapping_verts", "topo_duplicate_faces",
         "chamfer_distance", "command_accuracy", "parameter_accuracy", "sequence_accuracy",
         "failure_class", "render_path",
     ]
@@ -168,6 +169,7 @@ class BenchmarkReporter:
             writer.writeheader()
             for case in run.case_results:
                 for attempt in case.attempts:
+                    topo = attempt.topology_score
                     writer.writerow({
                         "case_id": attempt.case_id,
                         "prompt": attempt.voice_command,
@@ -176,10 +178,12 @@ class BenchmarkReporter:
                         "passed": attempt.passed,
                         "execution_success": attempt.execution_success,
                         "geometry_success": attempt.geometry_success,
-                        "manifold": attempt.manifold,
-                        "face_orientation_ok": attempt.face_orientation_ok,
-                        "overlapping_verts": attempt.overlapping_verts,
-                        "quad_ratio": round(attempt.quad_ratio, 4),
+                        "topo_manifold": topo.manifold if topo else "",
+                        "topo_loose_geometry": topo.loose_geometry_count if topo else "",
+                        "topo_face_quality": round(topo.face_quality_score, 4) if topo else "",
+                        "topo_flipped_faces": topo.flipped_face_count if topo else "",
+                        "topo_overlapping_verts": topo.overlapping_verts if topo else "",
+                        "topo_duplicate_faces": topo.duplicate_faces if topo else "",
                         "chamfer_distance": round(attempt.chamfer_distance, 6) if attempt.chamfer_distance is not None else "",
                         "command_accuracy": round(attempt.command_accuracy, 4),
                         "parameter_accuracy": round(attempt.parameter_accuracy, 4),

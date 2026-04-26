@@ -169,17 +169,14 @@ class NalanaTestHarness:
         candidate_snapshot = outcome["snapshot"]
         artifact.reference_signature = reference_snapshot.geometry_signature if reference_snapshot else None
         artifact.candidate_signature = candidate_snapshot.geometry_signature
-        artifact.quad_ratio = self.evaluator.calculate_quad_ratio(candidate_snapshot)
-        artifact.manifold = self.evaluator.check_manifold(candidate_snapshot)
-        artifact.face_orientation_ok = all(m.face_orientation_ok for m in candidate_snapshot.mesh_objects)
-        artifact.overlapping_verts = sum(m.overlapping_verts for m in candidate_snapshot.mesh_objects)
+        artifact.topology_score = self.evaluator.calculate_topology_score(candidate_snapshot)
         artifact.chamfer_distance, artifact.sampling_mode = self.evaluator.calculate_chamfer_distance(
             reference_snapshot,
             candidate_snapshot,
         )
         artifact.geometry_success = (
-            artifact.quad_ratio >= case.quality_signals.quad_ratio_min
-            and artifact.manifold == case.quality_signals.manifold
+            artifact.topology_score.quad_ratio >= case.quality_signals.quad_ratio_min
+            and artifact.topology_score.manifold == case.quality_signals.manifold
             and artifact.chamfer_distance <= case.quality_signals.chamfer_threshold
         )
         artifact.passed = artifact.execution_success and artifact.geometry_success

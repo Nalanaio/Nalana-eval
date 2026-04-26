@@ -252,9 +252,13 @@ class SceneMeshSnapshot(BaseModel):
     edge_count: int = 0
     face_count: int = 0
     face_sizes: Dict[str, int] = Field(default_factory=dict)
+    # topology checks (computed by executor, aggregated into TopologyScore)
     manifold: bool = False
-    face_orientation_ok: bool = True
+    loose_geometry_count: int = 0
+    face_quality_score: float = 1.0
+    flipped_face_count: int = 0
     overlapping_verts: int = 0
+    duplicate_faces: int = 0
     world_vertices: List[List[float]] = Field(default_factory=list)
     world_faces: List[List[int]] = Field(default_factory=list)
     location: List[float] = Field(default_factory=lambda: [0.0, 0.0, 0.0])
@@ -274,6 +278,23 @@ class SceneSnapshot(BaseModel):
     mesh_objects: List[SceneMeshSnapshot] = Field(default_factory=list)
 
 
+class TopologyScore(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    # 1. Manifold — mesh is closed with no open edges or holes
+    manifold: bool = False
+    # 2. Loose geometry — stray verts/edges not attached to any face
+    loose_geometry_count: int = 0
+    # 3. Face quality
+    quad_ratio: float = 0.0          # quads / total faces (used by quality_signals.quad_ratio_min)
+    face_quality_score: float = 0.0  # (tris + quads with nonzero area) / total faces
+    # 4. Normal direction — faces whose normal points inward
+    flipped_face_count: int = 0
+    # 5. Self-overlap / duplicates
+    overlapping_verts: int = 0
+    duplicate_faces: int = 0
+
+
 class ModelInvocation(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -289,7 +310,7 @@ class ModelInvocation(BaseModel):
 
 
 class AttemptArtifact(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
     case_id: str
     attempt_index: int
@@ -315,10 +336,7 @@ class AttemptArtifact(BaseModel):
     command_accuracy: float = 0.0
     parameter_accuracy: float = 0.0
     sequence_accuracy: float = 0.0
-    quad_ratio: float = 0.0
-    manifold: bool = False
-    face_orientation_ok: bool = False
-    overlapping_verts: int = 0
+    topology_score: Optional["TopologyScore"] = None
     chamfer_distance: Optional[float] = None
     sampling_mode: Optional[str] = None
     reference_signature: Optional[str] = None
