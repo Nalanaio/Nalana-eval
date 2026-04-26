@@ -171,6 +171,8 @@ class NalanaTestHarness:
         artifact.candidate_signature = candidate_snapshot.geometry_signature
         artifact.quad_ratio = self.evaluator.calculate_quad_ratio(candidate_snapshot)
         artifact.manifold = self.evaluator.check_manifold(candidate_snapshot)
+        artifact.face_orientation_ok = all(m.face_orientation_ok for m in candidate_snapshot.mesh_objects)
+        artifact.overlapping_verts = sum(m.overlapping_verts for m in candidate_snapshot.mesh_objects)
         artifact.chamfer_distance, artifact.sampling_mode = self.evaluator.calculate_chamfer_distance(
             reference_snapshot,
             candidate_snapshot,
@@ -183,6 +185,15 @@ class NalanaTestHarness:
         artifact.passed = artifact.execution_success and artifact.geometry_success
         if not artifact.passed:
             artifact.failure_class = FailureClass.GEOMETRY_MISMATCH
+
+        safe_model = runner.model_id.replace("/", "-").replace(" ", "-")
+        render_path = str(self.artifact_dir / "renders" / safe_model / f"{case.id}_attempt{attempt_index}.png")
+        try:
+            self.executor.render_png(render_path)
+            artifact.render_path = render_path
+        except Exception:
+            pass
+
         return artifact
 
     def _build_case_result(self, case, attempts: List[AttemptArtifact], reference_snapshot) -> CaseResult:

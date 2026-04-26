@@ -213,11 +213,39 @@ class DualContractExecutor:
             bm = bmesh.new()
             bm.from_mesh(mesh)
             bm.faces.ensure_lookup_table()
+            bm.normal_update()
+
             face_sizes: Dict[str, int] = {}
             for face in bm.faces:
                 key = str(len(face.verts))
                 face_sizes[key] = face_sizes.get(key, 0) + 1
+
             manifold = all(edge.is_manifold for edge in bm.edges)
+
+            # Face orientation: normals should point away from the mesh centroid
+            if bm.verts and bm.faces:
+                n = len(bm.verts)
+                cx = sum(v.co.x for v in bm.verts) / n
+                cy = sum(v.co.y for v in bm.verts) / n
+                cz = sum(v.co.z for v in bm.verts) / n
+                flipped = 0
+                for f in bm.faces:
+                    fc = f.calc_center_median()
+                    dx, dy, dz = fc.x - cx, fc.y - cy, fc.z - cz
+                    if dx * f.normal.x + dy * f.normal.y + dz * f.normal.z < 0:
+                        flipped += 1
+                face_orientation_ok = flipped == 0
+            else:
+                face_orientation_ok = True
+
+            # Overlapping verts: count vertices sharing the same grid cell at 0.1 mm precision
+            _MERGE = 1e-4
+            seen: Dict[tuple, int] = {}
+            for v in bm.verts:
+                key = (int(v.co.x / _MERGE), int(v.co.y / _MERGE), int(v.co.z / _MERGE))
+                seen[key] = seen.get(key, 0) + 1
+            overlapping_verts = sum(c - 1 for c in seen.values() if c > 1)
+
             bm.free()
 
             mesh_snapshot = SceneMeshSnapshot(
@@ -228,6 +256,8 @@ class DualContractExecutor:
                 face_count=len(mesh.polygons),
                 face_sizes=face_sizes,
                 manifold=manifold,
+                face_orientation_ok=face_orientation_ok,
+                overlapping_verts=overlapping_verts,
                 world_vertices=world_vertices,
                 world_faces=world_faces,
                 location=[float(value) for value in obj.location],
@@ -396,6 +426,19 @@ class DualContractExecutor:
             if obj.type == "MESH":
                 vertex_count += len(obj.data.vertices)
         return object_count, vertex_count
+
+    def render_png(self, output_path: str) -> None:
+        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+        if not bpy.context.scene.camera:
+            bpy.ops.object.camera_add(location=(7.36, -6.93, 4.96))
+            cam = bpy.context.active_object
+            cam.rotation_euler = (1.109, 0.0, 0.815)
+            bpy.context.scene.camera = cam
+
+        bpy.context.scene.render.filepath = output_path
+        bpy.context.scene.render.image_settings.file_format = "PNG"
+        bpy.ops.render.render(write_still=True)
 
     def _enforce_scene_quotas(self, baseline_objects: int, baseline_vertices: int) -> None:
         object_count, vertex_count = self._scene_counters()

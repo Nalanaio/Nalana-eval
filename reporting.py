@@ -1,3 +1,4 @@
+import csv
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 import json
@@ -141,6 +142,7 @@ class BenchmarkReporter:
 
         markdown_path = run_dir / "report.md"
         json_path = run_dir / "report.json"
+        csv_path = run_dir / "attempts.csv"
         run.report_markdown_path = str(markdown_path)
         run.report_json_path = str(json_path)
         markdown = self.render_markdown(run)
@@ -149,7 +151,42 @@ class BenchmarkReporter:
             handle.write(markdown)
         with open(json_path, "w", encoding="utf-8") as handle:
             json.dump(run.model_dump(mode="json"), handle, indent=2)
+        self._write_attempt_csv(run, csv_path)
         return run
+
+    _CSV_FIELDS = [
+        "case_id", "prompt", "model", "attempt_index",
+        "passed", "execution_success", "geometry_success",
+        "manifold", "face_orientation_ok", "overlapping_verts", "quad_ratio",
+        "chamfer_distance", "command_accuracy", "parameter_accuracy", "sequence_accuracy",
+        "failure_class", "render_path",
+    ]
+
+    def _write_attempt_csv(self, run: BenchmarkRun, path: Path) -> None:
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=self._CSV_FIELDS)
+            writer.writeheader()
+            for case in run.case_results:
+                for attempt in case.attempts:
+                    writer.writerow({
+                        "case_id": attempt.case_id,
+                        "prompt": attempt.voice_command,
+                        "model": attempt.model_id,
+                        "attempt_index": attempt.attempt_index,
+                        "passed": attempt.passed,
+                        "execution_success": attempt.execution_success,
+                        "geometry_success": attempt.geometry_success,
+                        "manifold": attempt.manifold,
+                        "face_orientation_ok": attempt.face_orientation_ok,
+                        "overlapping_verts": attempt.overlapping_verts,
+                        "quad_ratio": round(attempt.quad_ratio, 4),
+                        "chamfer_distance": round(attempt.chamfer_distance, 6) if attempt.chamfer_distance is not None else "",
+                        "command_accuracy": round(attempt.command_accuracy, 4),
+                        "parameter_accuracy": round(attempt.parameter_accuracy, 4),
+                        "sequence_accuracy": round(attempt.sequence_accuracy, 4),
+                        "failure_class": attempt.failure_class.value,
+                        "render_path": attempt.render_path or "",
+                    })
 
     def render_markdown(self, run: BenchmarkRun) -> str:
         lines = [

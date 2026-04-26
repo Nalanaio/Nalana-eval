@@ -253,6 +253,8 @@ class SceneMeshSnapshot(BaseModel):
     face_count: int = 0
     face_sizes: Dict[str, int] = Field(default_factory=dict)
     manifold: bool = False
+    face_orientation_ok: bool = True
+    overlapping_verts: int = 0
     world_vertices: List[List[float]] = Field(default_factory=list)
     world_faces: List[List[int]] = Field(default_factory=list)
     location: List[float] = Field(default_factory=lambda: [0.0, 0.0, 0.0])
@@ -315,10 +317,13 @@ class AttemptArtifact(BaseModel):
     sequence_accuracy: float = 0.0
     quad_ratio: float = 0.0
     manifold: bool = False
+    face_orientation_ok: bool = False
+    overlapping_verts: int = 0
     chamfer_distance: Optional[float] = None
     sampling_mode: Optional[str] = None
     reference_signature: Optional[str] = None
     candidate_signature: Optional[str] = None
+    render_path: Optional[str] = None
 
 
 class CaseResult(BaseModel):
