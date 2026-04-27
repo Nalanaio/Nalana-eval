@@ -2,6 +2,7 @@
 
 Usage examples:
     python -m nalana_eval.cli --cases 5 --models mock --simple-mode
+    python -m nalana_eval.cli --cases 5 --models mock --mock-blender
     python -m nalana_eval.cli history --model gpt-4o --last 5
     python -m nalana_eval.cli review --collect artifacts/.../report.md
     python -m nalana_eval.cli calibrate --judge-model gpt-4o
@@ -9,11 +10,12 @@ Usage examples:
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List, Optional, Set
 
 
 # ---------------------------------------------------------------------------
@@ -59,6 +61,21 @@ def _load_dotenv(path: str) -> None:
         os.environ.setdefault(key.strip(), value.strip())
 
 
+def _load_case_ids_from_jsonl(path: str) -> Set[str]:
+    """Read case_ids from a failures.jsonl written by harness."""
+    ids: Set[str] = set()
+    try:
+        for line in Path(path).read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line:
+                data = json.loads(line)
+                if "case_id" in data:
+                    ids.add(data["case_id"])
+    except Exception as exc:
+        print(f"Warning: could not read cases from {path}: {exc}", file=sys.stderr)
+    return ids
+
+
 def _make_runner(model_id: str, system_prompt: str, config: "object") -> "object":
     """Instantiate the correct runner class based on model_id prefix."""
     kw = {
@@ -98,8 +115,20 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
     if args.api_keys_file:
         _load_dotenv(args.api_keys_file)
 
-    suite_path = args.suite or "fixtures/starter_v3"
+    # Load suite (--legacy-suite takes precedence over --suite)
+    suite_path = args.legacy_suite or args.suite or "fixtures/starter_v3"
     suite = TestSuite.from_json_or_dir(suite_path)
+
+    # Filter to specific cases from a failures.jsonl
+    if getattr(args, "cases_from", "") and args.cases_from:
+        case_ids = _load_case_ids_from_jsonl(args.cases_from)
+        if case_ids:
+            suite = TestSuite(
+                suite_id=suite.suite_id,
+                fixture_version=suite.fixture_version,
+                cases=[c for c in suite.cases if c.id in case_ids],
+            )
+            print(f"Filtered suite to {len(suite.cases)} cases from {args.cases_from}", file=sys.stderr)
 
     model_ids = _parse_models(args.models)
     if not model_ids:
@@ -120,6 +149,8 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
         output_dir=args.output_dir or "artifacts",
         judge_budget=args.judge_budget,
         difficulty_dist=_parse_dist(args.difficulty_dist),
+        task_length_dist=_parse_dist(getattr(args, "task_length_dist", "") or ""),
+        mock_blender=getattr(args, "mock_blender", False),
     )
 
     system_prompt_path = Path("prompts") / f"{config.system_prompt_version}.md"
@@ -137,13 +168,16 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
 
     worker_pool = None
     simple_runner = None
-    if args.simple_mode:
+    if config.mock_blender or args.simple_mode:
         simple_runner = SimpleRunner(blender_bin=args.blender_bin or "blender")
     else:
         worker_pool = WorkerPool(
             n_workers=args.workers,
             blender_bin=args.blender_bin or "blender",
         )
+
+    # Exclude non-serializable values (func, etc.) from cli_args
+    cli_args = {k: v for k, v in vars(args).items() if not callable(v)}
 
     harness = Harness(
         suite=suite,
@@ -153,6 +187,7 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
         judge=judge,
         worker_pool=worker_pool,
         simple_runner=simple_runner,
+        cli_args=cli_args,
     )
 
     runs = harness.run()
@@ -171,7 +206,7 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
 
 
 def cmd_history(args: argparse.Namespace) -> None:
-    from nalana_eval import csv_db, history  # noqa: PLC0415
+    from nalana_eval import history  # noqa: PLC0415
     history.show(
         model_id=args.model,
         last_n=args.last,
@@ -218,6 +253,9 @@ def _add_benchmark_parser(sub: argparse.Action) -> None:
     p.add_argument("--cases", type=int, default=0, help="Number of cases (0=all)")
     p.add_argument("--models", required=True, help="Comma-separated model IDs")
     p.add_argument("--suite", default="", help="Path to suite JSON or directory")
+    p.add_argument("--legacy-suite", default="", help="Path to v2 suite JSON (auto-converted)")
+    p.add_argument("--cases-from", default="", metavar="FAILURES_JSONL",
+                   help="Re-run only cases listed in a failures.jsonl")
     p.add_argument("--pass-at-k", type=int, default=3)
     p.add_argument("--judge-model", default="", help="Model ID for LLM-as-Judge")
     p.add_argument("--no-judge", action="store_true")
@@ -227,9 +265,12 @@ def _add_benchmark_parser(sub: argparse.Action) -> None:
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--workers", type=int, default=1)
     p.add_argument("--simple-mode", action="store_true")
+    p.add_argument("--mock-blender", action="store_true",
+                   help="Skip real Blender; use stub snapshot + placeholder PNG (CI mode)")
     p.add_argument("--blender-bin", default="blender")
     p.add_argument("--output-dir", default="artifacts")
     p.add_argument("--difficulty-dist", default="", help="e.g. Short:0.4,Medium:0.4,Long:0.2")
+    p.add_argument("--task-length-dist", default="", help="e.g. easy:0.3,medium:0.5,hard:0.2")
     p.add_argument("--api-keys-file", default="")
     p.add_argument("--verbose", "-v", action="store_true")
     p.set_defaults(func=cmd_benchmark)

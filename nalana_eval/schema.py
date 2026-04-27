@@ -571,6 +571,7 @@ class BenchmarkRunConfig(BaseModel):
     judge_budget: float = 10.0
     difficulty_dist: Dict[str, float] = Field(default_factory=dict)
     task_length_dist: Dict[str, float] = Field(default_factory=dict)
+    mock_blender: bool = False
 
 
 class RunMetrics(BaseModel):

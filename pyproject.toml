@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nalana-eval"
+version = "3.0.0"
+description = "Nalana Blender+LLM 3D modelling evaluation system v3"
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+
+dependencies = [
+    "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.30"]
+anthropic = ["anthropic>=0.28"]
+gemini = ["google-genai>=1.0"]
+all = [
+    "openai>=1.30",
+    "anthropic>=0.28",
+    "google-genai>=1.0",
+]
+dev = [
+    "pytest>=8",
+    "pytest-anyio",
+]
+
+[project.scripts]
+nalana-eval = "nalana_eval.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nalana_eval*"]
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+testpaths = ["tests"]

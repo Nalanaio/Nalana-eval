@@ -65,8 +65,9 @@ def run_one_case(msg: dict) -> dict:
     require_screenshot = artifact_policy.get("require_screenshot", True)
     screenshot_path = ""
     if require_screenshot:
-        os.makedirs(output_dir, exist_ok=True)
-        screenshot_path = os.path.join(output_dir, f"{case_id}_attempt_{attempt_index}.png")
+        screenshots_dir = os.path.join(output_dir, "screenshots")
+        os.makedirs(screenshots_dir, exist_ok=True)
+        screenshot_path = os.path.join(screenshots_dir, f"{case_id}_attempt_{attempt_index}.png")
         try:
             screenshot.render_scene_to_png(screenshot_path, resolution=(800, 600))
         except Exception as exc:
