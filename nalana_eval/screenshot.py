@@ -7,7 +7,7 @@ make_thumbnail:
     Called from main process after worker returns the PNG path (PIL required).
 """
 import os
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 try:
     import bpy  # type: ignore[import]
