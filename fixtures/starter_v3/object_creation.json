@@ -1,0 +1,146 @@
+{
+  "suite_id": "starter-v3-object-creation",
+  "fixture_version": "3.0",
+  "cases": [
+    {
+      "fixture_version": "3.0",
+      "id": "CV-OBJ-001",
+      "category": "Object Creation",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add a default cube to the scene",
+        "Create a cube",
+        "Place a cube in the scene",
+        "Add a box shape"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1},
+        "required_object_types": ["MESH"]
+      },
+      "topology_policy": {"manifold_required": true, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "single mesh object", "metric": "total_mesh_objects", "direction": "exact",
+         "target": 1.0, "tolerance": 0.0, "weight": 1.0}
+      ],
+      "style_intent": {"explicit": false, "concept": "cube", "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-OBJ-002",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a UV sphere with radius approximately 2 meters",
+        "Create a sphere about 2 meters in radius",
+        "Place a large sphere with radius 2m in the scene",
+        "Add a ball with radius of 2 meters"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1},
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [3.5, 3.5, 3.5],
+              "maximum": [4.5, 4.5, 4.5]
+            }
+          }
+        ]
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0, "max_vertex_count": 50000},
+      "soft_constraints": [
+        {"name": "sphere vertex count reasonable", "metric": "total_vertices", "direction": "min",
+         "target": 50.0, "tolerance": 20.0, "weight": 0.5}
+      ],
+      "style_intent": {"explicit": false, "concept": "sphere", "concept_aliases": ["ball"], "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-OBJ-003",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a cylinder with radius 1 meter and height 3 meters",
+        "Create a cylinder that is 1m wide and 3m tall",
+        "Make a cylindrical shape, radius 1m height 3m",
+        "Add a tall cylinder: radius=1, depth=3"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1},
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [1.5, 1.5, 2.5],
+              "maximum": [2.5, 2.5, 3.5]
+            }
+          }
+        ]
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [],
+      "style_intent": {"explicit": false, "concept": "cylinder", "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-OBJ-004",
+      "category": "Object Creation",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add an icosphere to the scene",
+        "Create an icosphere",
+        "Place an icospheric mesh in the scene",
+        "Add an icosahedron sphere"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1},
+        "required_object_types": ["MESH"]
+      },
+      "topology_policy": {"manifold_required": true, "quad_ratio_min": 0.0},
+      "soft_constraints": [],
+      "style_intent": {"explicit": false, "concept": "sphere", "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-OBJ-005",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a torus to the scene",
+        "Create a torus (donut shape)",
+        "Place a donut-shaped mesh in the scene",
+        "Add a torus primitive"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1},
+        "required_object_types": ["MESH"]
+      },
+      "topology_policy": {"manifold_required": true, "quad_ratio_min": 0.7},
+      "soft_constraints": [
+        {"name": "torus vertex count", "metric": "total_vertices", "direction": "min",
+         "target": 50.0, "tolerance": 20.0, "weight": 0.5}
+      ],
+      "style_intent": {"explicit": false, "concept": "torus", "concept_aliases": ["donut", "ring"], "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "suite_id": "starter-v3-ambiguous",
+  "fixture_version": "3.0",
+  "cases": [
+    {
+      "fixture_version": "3.0",
+      "id": "CV-AMB-001",
+      "category": "Ambiguous/Contextual",
+      "difficulty": "Long",
+      "task_family": "open_ended_creative",
+      "prompt_variants": [
+        "Create an apple",
+        "Make an apple shape",
+        "Add an apple to the scene",
+        "Build an apple using 3D primitives"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "apple",
+        "concept_aliases": ["fruit"],
+        "acceptable_styles": ["cartoon", "realistic", "low-poly", "stylized", "geometric"]
+      },
+      "judge_policy": "score",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-AMB-002",
+      "category": "Ambiguous/Contextual",
+      "difficulty": "Long",
+      "task_family": "open_ended_creative",
+      "prompt_variants": [
+        "Make a simple chair",
+        "Create a basic chair shape",
+        "Build a chair using primitives",
+        "Model a chair"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "chair needs structure", "metric": "total_mesh_objects", "direction": "min",
+         "target": 1.0, "tolerance": 0.0, "weight": 0.5}
+      ],
+      "style_intent": {
+        "explicit": false,
+        "concept": "chair",
+        "concept_aliases": ["seat", "furniture"],
+        "acceptable_styles": ["cartoon", "geometric", "low-poly", "realistic"]
+      },
+      "judge_policy": "score",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-AMB-003",
+      "category": "Ambiguous/Contextual",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add a basic shape to the scene",
+        "Create something simple",
+        "Add any primitive mesh",
+        "Put a shape in the scene"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [],
+      "style_intent": {"explicit": false, "acceptable_styles": []},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-AMB-004",
+      "category": "Ambiguous/Contextual",
+      "difficulty": "Long",
+      "task_family": "open_ended_creative",
+      "prompt_variants": [
+        "Make a simple house or building shape",
+        "Create a basic house using primitives",
+        "Build a house-shaped structure",
+        "Model a simple house or building"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "house has multiple parts", "metric": "total_mesh_objects", "direction": "min",
+         "target": 1.0, "tolerance": 0.0, "weight": 0.5}
+      ],
+      "style_intent": {
+        "explicit": false,
+        "concept": "house",
+        "concept_aliases": ["building", "home", "structure"],
+        "acceptable_styles": ["cartoon", "geometric", "low-poly", "realistic"]
+      },
+      "judge_policy": "score",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-AMB-005",
+      "category": "Ambiguous/Contextual",
+      "difficulty": "Long",
+      "task_family": "open_ended_creative",
+      "prompt_variants": [
+        "Make something interesting with primitives",
+        "Create something cool using 3D shapes",
+        "Be creative and add some objects",
+        "Make an interesting 3D composition"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [],
+      "style_intent": {"explicit": false, "acceptable_styles": []},
+      "judge_policy": "score",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    }
+  ]
+}

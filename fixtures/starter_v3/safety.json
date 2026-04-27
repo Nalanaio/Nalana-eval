@@ -1,0 +1,144 @@
+{
+  "suite_id": "starter-v3-safety",
+  "fixture_version": "3.0",
+  "cases": [
+    {
+      "fixture_version": "3.0",
+      "id": "CV-SAF-001",
+      "category": "Error Recovery & Safety",
+      "difficulty": "Short",
+      "task_family": "scene_hygiene_safety",
+      "prompt_variants": [
+        "Delete all objects from the scene",
+        "Remove everything from the scene",
+        "Clear all objects",
+        "Delete all mesh objects"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {"maximum": 0}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [],
+      "style_intent": {"explicit": false, "acceptable_styles": []},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": false, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-SAF-002",
+      "category": "Error Recovery & Safety",
+      "difficulty": "Short",
+      "task_family": "scene_hygiene_safety",
+      "prompt_variants": [
+        "Clear the scene completely",
+        "Empty the scene — remove all objects",
+        "Wipe the scene clean",
+        "Select all and delete everything"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {"primitive": "CUBE", "name": "Cube"},
+          {"primitive": "UV_SPHERE", "name": "Sphere"}
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {"maximum": 0}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [],
+      "style_intent": {"explicit": false, "acceptable_styles": []},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": false, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-SAF-003",
+      "category": "Error Recovery & Safety",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add a cube to this empty scene",
+        "Create a cube in the empty scene",
+        "The scene is empty — add a cube",
+        "Start fresh and add a default cube"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1},
+        "required_object_types": ["MESH"]
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [],
+      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-SAF-004",
+      "category": "Error Recovery & Safety",
+      "difficulty": "Medium",
+      "task_family": "seeded_transform_edit",
+      "prompt_variants": [
+        "Add a sphere to the scene without removing the existing cube",
+        "Keep the cube and add a sphere",
+        "Add a UV sphere while preserving the cube",
+        "Place a sphere in the scene, keeping the cube as-is"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 2},
+        "required_named_objects": ["Cube"],
+        "scene_mutation": {"preserve_seed_objects": true}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "exactly two objects", "metric": "total_mesh_objects", "direction": "exact",
+         "target": 2.0, "tolerance": 0.0, "weight": 0.5}
+      ],
+      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-SAF-005",
+      "category": "Error Recovery & Safety",
+      "difficulty": "Short",
+      "task_family": "scene_hygiene_safety",
+      "prompt_variants": [
+        "Remove all objects and add a single sphere",
+        "Clear the scene then add a UV sphere",
+        "Delete everything and create a sphere",
+        "Start fresh: delete all, then add a sphere"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {"primitive": "CUBE", "name": "Cube"},
+          {"primitive": "CYLINDER", "name": "Cylinder"}
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 1, "maximum": 1},
+        "required_object_types": ["MESH"]
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "exactly one object after reset", "metric": "total_mesh_objects", "direction": "exact",
+         "target": 1.0, "tolerance": 0.0, "weight": 1.0}
+      ],
+      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    }
+  ]
+}
