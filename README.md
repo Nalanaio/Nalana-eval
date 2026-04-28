@@ -235,6 +235,42 @@ Nalana-eval/
 
 ---
 
+## Docker
+
+No local Blender install required. Requires Docker with Compose v2.
+
+### Interactive launcher (recommended)
+
+```bash
+make bench
+```
+
+Prompts you for model, suite, number of cases, and API key, then builds and runs everything.
+
+### Direct run (scripting / CI)
+
+```bash
+make docker-run                                              # mock model, all cases
+MODELS=claude-sonnet-4-6 ANTHROPIC_API_KEY=sk-ant-... make docker-run
+MODELS=mock CASES=5 make docker-run
+```
+
+Artifacts land in `./artifacts/` and `./db/` via volume mounts.
+
+| Env var | Default | Description |
+|---|---|---|
+| `MODELS` | `mock` | Comma-separated model IDs |
+| `CASES` | `0` (all) | Number of cases to run |
+| `SUITE` | `fixtures/starter_v3` | Fixture directory or JSON file |
+| `ANTHROPIC_API_KEY` | — | Required for `claude-*` models |
+| `OPENAI_API_KEY` | — | Required for `gpt-*` models |
+| `GEMINI_API_KEY` | — | Required for `gemini-*` models |
+
+To pass extra CLI flags directly: `docker compose run --build --rm eval --pass-at-k 1 --judge-model gpt-4o`  
+To pin a different Blender version: `docker compose build --build-arg BLENDER_VERSION=4.2.4`
+
+---
+
 ## Where do I look at the CSV database?
 
 `db/runs.csv` and `db/attempts.csv` in your workspace are plain CSV files. Four ways to view them:

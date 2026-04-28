@@ -1,0 +1,32 @@
+# Nalana-eval — headless Blender end-to-end evaluation
+#
+# Usage:
+#   make docker-run                                     # mock model, all cases
+#   MODELS=claude-sonnet-4-6 ANTHROPIC_API_KEY=... make docker-run
+#   MODELS=mock CASES=5 make docker-run
+
+services:
+  eval:
+    build:
+      context: .
+      args:
+        BUILDPLATFORM: linux/amd64
+    platform: linux/amd64
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./db:/app/db
+    environment:
+      - MODELS=${MODELS:-mock}
+      - CASES=${CASES:-0}
+      - SUITE=${SUITE:-fixtures/starter_v3}
+      # Standard API keys
+      - ANTHROPIC_API_KEY
+      - OPENAI_API_KEY
+      - GEMINI_API_KEY
+      # Azure AI Foundry overrides (optional — take precedence when set)
+      - ANTHROPIC_FOUNDRY_BASE_URL
+      - ANTHROPIC_FOUNDRY_API_KEY
+      - AZURE_OPENAI_ENDPOINT
+      - AZURE_OPENAI_API_KEY
+      - AZURE_OPENAI_API_VERSION
+      - GPT55_DEPLOYMENT_NAME
