@@ -2,6 +2,7 @@ import json
 import time
 from dataclasses import dataclass
 from hashlib import sha256
+from math import floor
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -213,11 +214,60 @@ class DualContractExecutor:
             bm = bmesh.new()
             bm.from_mesh(mesh)
             bm.faces.ensure_lookup_table()
+            bm.normal_update()
+
             face_sizes: Dict[str, int] = {}
             for face in bm.faces:
                 key = str(len(face.verts))
                 face_sizes[key] = face_sizes.get(key, 0) + 1
+
+            # 1. Manifold
             manifold = all(edge.is_manifold for edge in bm.edges)
+
+            # 2. Loose geometry — verts/edges not part of any face
+            loose_geometry_count = (
+                sum(1 for v in bm.verts if not v.link_faces) +
+                sum(1 for e in bm.edges if not e.link_faces)
+            )
+
+            # 3. Face quality — tris and quads with nonzero area are "good"
+            if bm.faces:
+                good = sum(1 for f in bm.faces if len(f.verts) in (3, 4) and f.calc_area() > 1e-8)
+                face_quality_score = good / len(bm.faces)
+            else:
+                face_quality_score = 1.0
+
+            # 4. Normal direction — normals should point away from the mesh centroid
+            if bm.verts and bm.faces:
+                n = len(bm.verts)
+                cx = sum(v.co.x for v in bm.verts) / n
+                cy = sum(v.co.y for v in bm.verts) / n
+                cz = sum(v.co.z for v in bm.verts) / n
+                flipped_face_count = 0
+                for f in bm.faces:
+                    fc = f.calc_center_median()
+                    dx, dy, dz = fc.x - cx, fc.y - cy, fc.z - cz
+                    if dx * f.normal.x + dy * f.normal.y + dz * f.normal.z < 0:
+                        flipped_face_count += 1
+            else:
+                flipped_face_count = 0
+
+            # 5a. Overlapping verts — vertices sharing a grid cell at 0.1 mm precision
+            # floor (not int) so negative coords don't collapse across the origin
+            _MERGE = 1e-4
+            vert_grid: Dict[tuple, int] = {}
+            for v in bm.verts:
+                key = (floor(v.co.x / _MERGE), floor(v.co.y / _MERGE), floor(v.co.z / _MERGE))
+                vert_grid[key] = vert_grid.get(key, 0) + 1
+            overlapping_verts = sum(c - 1 for c in vert_grid.values() if c > 1)
+
+            # 5b. Duplicate faces — faces sharing the exact same vertex set
+            face_sets: Dict[frozenset, int] = {}
+            for f in bm.faces:
+                key = frozenset(v.index for v in f.verts)
+                face_sets[key] = face_sets.get(key, 0) + 1
+            duplicate_faces = sum(c - 1 for c in face_sets.values() if c > 1)
+
             bm.free()
 
             mesh_snapshot = SceneMeshSnapshot(
@@ -228,6 +278,11 @@ class DualContractExecutor:
                 face_count=len(mesh.polygons),
                 face_sizes=face_sizes,
                 manifold=manifold,
+                loose_geometry_count=loose_geometry_count,
+                face_quality_score=face_quality_score,
+                flipped_face_count=flipped_face_count,
+                overlapping_verts=overlapping_verts,
+                duplicate_faces=duplicate_faces,
                 world_vertices=world_vertices,
                 world_faces=world_faces,
                 location=[float(value) for value in obj.location],
@@ -396,6 +451,19 @@ class DualContractExecutor:
             if obj.type == "MESH":
                 vertex_count += len(obj.data.vertices)
         return object_count, vertex_count
+
+    def render_png(self, output_path: str) -> None:
+        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+        if not bpy.context.scene.camera:
+            bpy.ops.object.camera_add(location=(7.36, -6.93, 4.96))
+            cam = bpy.context.active_object
+            cam.rotation_euler = (1.109, 0.0, 0.815)
+            bpy.context.scene.camera = cam
+
+        bpy.context.scene.render.filepath = output_path
+        bpy.context.scene.render.image_settings.file_format = "PNG"
+        bpy.ops.render.render(write_still=True)
 
     def _enforce_scene_quotas(self, baseline_objects: int, baseline_vertices: int) -> None:
         object_count, vertex_count = self._scene_counters()

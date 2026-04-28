@@ -169,20 +169,28 @@ class NalanaTestHarness:
         candidate_snapshot = outcome["snapshot"]
         artifact.reference_signature = reference_snapshot.geometry_signature if reference_snapshot else None
         artifact.candidate_signature = candidate_snapshot.geometry_signature
-        artifact.quad_ratio = self.evaluator.calculate_quad_ratio(candidate_snapshot)
-        artifact.manifold = self.evaluator.check_manifold(candidate_snapshot)
+        artifact.topology_score = self.evaluator.calculate_topology_score(candidate_snapshot)
         artifact.chamfer_distance, artifact.sampling_mode = self.evaluator.calculate_chamfer_distance(
             reference_snapshot,
             candidate_snapshot,
         )
         artifact.geometry_success = (
-            artifact.quad_ratio >= case.quality_signals.quad_ratio_min
-            and artifact.manifold == case.quality_signals.manifold
+            artifact.topology_score.quad_ratio >= case.quality_signals.quad_ratio_min
+            and artifact.topology_score.manifold == case.quality_signals.manifold
             and artifact.chamfer_distance <= case.quality_signals.chamfer_threshold
         )
         artifact.passed = artifact.execution_success and artifact.geometry_success
         if not artifact.passed:
             artifact.failure_class = FailureClass.GEOMETRY_MISMATCH
+
+        safe_model = runner.model_id.replace("/", "-").replace(" ", "-")
+        render_path = str(self.artifact_dir / "renders" / safe_model / f"{case.id}_attempt{attempt_index}.png")
+        try:
+            self.executor.render_png(render_path)
+            artifact.render_path = render_path
+        except Exception:
+            pass
+
         return artifact
 
     def _build_case_result(self, case, attempts: List[AttemptArtifact], reference_snapshot) -> CaseResult:
