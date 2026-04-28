@@ -1,38 +1,38 @@
-# Nalana 评测系统使用指南（CLI Usage Guide）
+# Nalana Eval — CLI Usage Guide
 
-> 本文档教你**怎么用**这个系统。如果你想理解**为什么这样设计**，先读 `DESIGN.md`。
-
----
-
-## 目录
-
-- [前置：装环境](#前置装环境)
-- [常用命令速查](#常用命令速查)
-- [主命令：`nalana-eval`](#主命令-nalana-eval)
-- [辅助命令：`nalana-eval-history`](#辅助命令-nalana-eval-history)
-- [辅助命令：`nalana-eval-review`](#辅助命令-nalana-eval-review)
-- [辅助命令：`nalana-eval-calibrate`](#辅助命令-nalana-eval-calibrate)
-- [Run folder 长什么样](#run-folder-长什么样)
-- [怎么读 report.md](#怎么读-reportmd)
-- [常见使用场景](#常见使用场景)
-- [常见问题排查](#常见问题排查)
+> This document teaches you **how to use** the system. If you want to understand **why it's designed this way**, read `DESIGN.md` first.
 
 ---
 
-## 前置：装环境
+## Table of contents
 
-### 1. Python 依赖
+- [Prerequisites: environment setup](#prerequisites-environment-setup)
+- [Common commands quick reference](#common-commands-quick-reference)
+- [Main command: `nalana-eval`](#main-command-nalana-eval)
+- [Auxiliary command: `nalana-eval-history`](#auxiliary-command-nalana-eval-history)
+- [Auxiliary command: `nalana-eval-review`](#auxiliary-command-nalana-eval-review)
+- [Auxiliary command: `nalana-eval-calibrate`](#auxiliary-command-nalana-eval-calibrate)
+- [What a run folder looks like](#what-a-run-folder-looks-like)
+- [How to read report.md](#how-to-read-reportmd)
+- [Common usage scenarios](#common-usage-scenarios)
+- [Common troubleshooting](#common-troubleshooting)
+
+---
+
+## Prerequisites: environment setup
+
+### 1. Python dependencies
 
 ```bash
 cd /Users/ianian/Nalana-eval
-python -m venv .venv         # 推荐用虚拟环境
+python -m venv .venv         # virtual env recommended
 source .venv/bin/activate    # Linux/macOS
 pip install -r requirements.txt
 ```
 
 ### 2. Blender 4.0+
 
-评测系统需要在外部调用 Blender 跑 case：
+The eval system needs to invoke Blender externally to run cases:
 
 ```bash
 # macOS
@@ -41,24 +41,24 @@ brew install --cask blender
 # Linux (Ubuntu/Debian)
 sudo snap install blender --classic
 
-# 或从官网下载：https://www.blender.org/download/
+# Or download from the official site: https://www.blender.org/download/
 ```
 
-**验证**：
+**Verify**:
 
 ```bash
-blender --version    # 应该输出 Blender 4.x.x
+blender --version    # should print Blender 4.x.x
 ```
 
-如果 `blender` 不在 PATH 中，设置环境变量：
+If `blender` isn't in PATH, set the environment variable:
 
 ```bash
-export BLENDER_BIN=/Applications/Blender.app/Contents/MacOS/Blender   # macOS 示例
+export BLENDER_BIN=/Applications/Blender.app/Contents/MacOS/Blender   # macOS example
 ```
 
-### 3. API key 配置
+### 3. API key configuration
 
-**推荐**：写到 `.env` 文件（仓库根目录），系统会自动加载。
+**Recommended**: write to `.env` (at the repo root) — the system loads it automatically.
 
 ```bash
 cat > .env <<EOF
@@ -68,265 +68,265 @@ GOOGLE_API_KEY=...
 EOF
 ```
 
-**安全提醒**：`.env` 已在 `.gitignore` 里，不会进 git。**永远不要**把 API key 直接放在命令行里——会留在 shell history。
+**Security reminder**: `.env` is in `.gitignore` and won't enter git. **Never** put API keys directly on the command line — they end up in shell history.
 
-只测部分模型时，只配那部分的 key 即可（缺失的会被跳过并在 report 里标记 `model_unavailable`）。
+If you only want to test some models, configure only those keys (missing ones get skipped and marked `model_unavailable` in the report).
 
 ---
 
-## 常用命令速查
+## Common commands quick reference
 
 ```bash
-# Smoke test（10 个 case，最快验证环境）
+# Smoke test (10 cases, fastest env validation)
 python -m nalana_eval.cli --cases 10 --models gpt-5 --simple-mode
 
-# 主 benchmark（200 用例，多模型对比）
+# Main benchmark (200 cases, multi-model comparison)
 python -m nalana_eval.cli \
     --cases 200 --models gpt-5,claude-sonnet-4-6,gemini-2.5-pro \
     --pass-at-k 3 --workers 8
 
-# 跑 legacy L1 单元测试套件（防回归）
+# Run the L1 legacy unit-test suite (regression guard)
 python -m nalana_eval.cli --legacy-suite fixtures/legacy_v2/sample_cases_v2.json --models gpt-5
 
-# 查看历史趋势
+# View historical trends
 python -m nalana_eval.cli history --model gpt-5 --last 10
 
-# 多模型对比表
+# Multi-model comparison table
 python -m nalana_eval.cli history --compare gpt-5,claude-sonnet-4-6
 
-# 收集人审反馈
+# Collect human review feedback
 python -m nalana_eval.cli review --collect artifacts/run_<id>/report.md
 
-# 跑判官校准集
+# Run the judge calibration set
 python -m nalana_eval.cli calibrate --judge-model gpt-4o
 ```
 
-> **注**：所有子命令都通过 `python -m nalana_eval.cli <subcommand>` 调用。如果安装了 setuptools entry points，可以直接 `nalana-eval ...`、`nalana-eval-history ...` 等。
+> **Note**: all subcommands are invoked via `python -m nalana_eval.cli <subcommand>`. If you've installed the setuptools entry points, you can use `nalana-eval ...`, `nalana-eval-history ...`, etc. directly.
 
 ---
 
-## 主命令：`nalana-eval`
+## Main command: `nalana-eval`
 
-### 完整参数表
+### Full parameter table
 
-| 参数 | 类型 | 默认 | 说明 |
+| Parameter | Type | Default | Description |
 |---|---|---|---|
-| `--cases N` | int | 全部 | 跑多少个 case（按 distribution 采样） |
-| `--models M1,M2,...` | str | gpt-5 | 要测的 LLM，逗号分隔（串行执行） |
-| `--suite path` | str | fixtures/starter_v3 | 测试用例目录或文件 |
-| `--legacy-suite path` | str | none | 跑 L1 legacy 单元测试套件（v2.0 格式） |
-| `--difficulty-dist` | str | uniform | 难度分布，例如 `short:0.3,medium:0.5,long:0.2` |
-| `--pass-at-k k` | int | 3 | 每个 case 跑 k 次 attempt |
-| `--workers N` | int | cpu_count*0.75 | Blender worker 数 |
-| `--simple-mode` | flag | off | 退化为单次 subprocess 模式（慢但稳） |
-| `--judge-model M` | str | gpt-4o | LLM 评委模型 |
-| `--judge-budget USD` | float | 10.0 | 判官调用预算上限（美元） |
-| `--no-judge` | flag | off | 完全禁用 LLM-as-Judge |
-| `--system-prompt name` | str | eval-default | system prompt：`eval-default` 或 `nalana-prod` |
-| `--temperature T` | float | 0.7 | LLM 采样温度 |
-| `--seed N` | int | 42 | 随机种子（复现实验用） |
-| `--output-dir path` | str | artifacts/ | run folder 输出位置 |
-| `--api-keys-file path` | str | .env | API key 文件 |
-| `--verbose` | flag | off | 详细日志 |
+| `--cases N` | int | all | how many cases to run (sampled by distribution) |
+| `--models M1,M2,...` | str | gpt-5 | LLMs to test, comma-separated (run sequentially) |
+| `--suite path` | str | fixtures/starter_v3 | test case directory or file |
+| `--legacy-suite path` | str | none | run L1 legacy unit-test suite (v2.0 format) |
+| `--difficulty-dist` | str | uniform | difficulty distribution, e.g. `short:0.3,medium:0.5,long:0.2` |
+| `--pass-at-k k` | int | 3 | k attempts per case |
+| `--workers N` | int | cpu_count*0.75 | number of Blender workers |
+| `--simple-mode` | flag | off | fall back to per-case subprocess mode (slow but stable) |
+| `--judge-model M` | str | gpt-4o | LLM-as-Judge model |
+| `--judge-budget USD` | float | 10.0 | judge call budget cap (USD) |
+| `--no-judge` | flag | off | disable LLM-as-Judge entirely |
+| `--system-prompt name` | str | eval-default | system prompt: `eval-default` or `nalana-prod` |
+| `--temperature T` | float | 0.7 | LLM sampling temperature |
+| `--seed N` | int | 42 | random seed (for reproducibility) |
+| `--output-dir path` | str | artifacts/ | run-folder output location |
+| `--api-keys-file path` | str | .env | API key file |
+| `--verbose` | flag | off | verbose logging |
 
-### 参数详解
+### Parameter detail
 
-#### `--cases` 与分布参数
+#### `--cases` and distribution parameters
 
 ```bash
-# 用例数 = 200，按 difficulty 分布采样
+# 200 cases, sampled by difficulty distribution
 --cases 200 --difficulty-dist short:0.4,medium:0.4,long:0.2
-# 实际跑：80 short + 80 medium + 40 long
+# Actually runs: 80 short + 80 medium + 40 long
 ```
 
-如果 suite 里某个分布 bucket 不够，会从其他 bucket 借（并在 report 里 warning）。
+If a distribution bucket is short on cases in the suite, the system borrows from other buckets (and emits a warning in the report).
 
-#### `--models` 多模型行为
+#### `--models` multi-model behavior
 
-逗号分隔的模型名，**串行**跑（不并发），原因：
-1. 同家 API rate limit 不同模型无法共享
-2. 不同家 API 可以并行，但日志混在一起难调试
-3. 串行时间可控（200 用例 × 3 模型 ≈ 30 分钟）
+Comma-separated model names, run **sequentially** (not concurrently), reasons:
+1. Same-vendor API rate limits aren't shared across models
+2. Different vendors could run in parallel, but mixed logs are hard to debug
+3. Sequential time is bounded (200 cases × 3 models ≈ 30 minutes)
 
-每个模型产出独立的 run folder。CSV `db/runs.csv` 会有 N 行（每模型一行），但共享同一 `run_group_id`。
+Each model produces its own run folder. `db/runs.csv` gets N rows (one per model), but they share the same `run_group_id`.
 
 #### `--pass-at-k`
 
-`k=1`：每 case 跑 1 次。最快，但抓不到 LLM 随机性。
-`k=3`（**默认**）：每 case 跑 3 次。SWE-bench 行业标准。
-`k=5`：更稳的 pass rate 估计，5 倍成本。
+`k=1`: 1 attempt per case. Fastest, but doesn't capture LLM randomness.
+`k=3` (**default**): 3 attempts per case. SWE-bench industry standard.
+`k=5`: more stable pass-rate estimate, 5× cost.
 
-每次 attempt 用不同的 prompt variant（如果 case 有多个 `prompt_variants`），并轮转 temperature seed。
+Each attempt uses a different prompt variant (if the case has multiple `prompt_variants`), and rotates the temperature seed.
 
-#### `--workers` 与执行模式
+#### `--workers` and execution mode
 
-| 模式 | 1000 用例耗时 | 适用场景 |
+| Mode | 1000-case time | Use case |
 |---|---|---|
-| Worker pool（默认）| 5-10 分钟 | 平时正式 benchmark |
-| `--simple-mode` | 30-50 分钟 | CI、debug、第一次跑 |
+| Worker pool (default) | 5–10 min | Day-to-day formal benchmarks |
+| `--simple-mode` | 30–50 min | CI, debug, first-time validation |
 
-worker pool 会启动 N 个常驻 `blender --background` 进程，case 之间用 `read_factory_settings(use_empty=True)` 重置场景。每 100 用例自动重启 worker（防内存泄漏）。
+Worker pool spawns N long-lived `blender --background` processes, with `read_factory_settings(use_empty=True)` resetting the scene between cases. Workers auto-restart every 100 cases (memory-leak guard).
 
-#### `--judge-model` 与 `--judge-budget`
+#### `--judge-model` and `--judge-budget`
 
 ```bash
-# 单判官（默认）
+# Single judge (default)
 --judge-model gpt-4o
 
-# 双判官求平均（更降偏，2 倍成本）
+# Dual-judge averaged (lower bias, 2× cost)
 --judge-model gpt-4o,claude-sonnet-4-6
 ```
 
-预算超额时跳过剩余判官调用，report 里标 `judge skipped: budget exceeded`。
+When the budget is exceeded, remaining judge calls are skipped, marked `judge skipped: budget exceeded` in the report.
 
 #### `--system-prompt`
 
-| 值 | 用什么 prompt | 测什么 |
+| Value | Prompt used | What it tests |
 |---|---|---|
-| `eval-default`（默认）| `prompts/eval_default.md` 中性 prompt | **裸 LLM 在公平测试下的能力** |
-| `nalana-prod` | `prompts/nalana_prod.md`（复制自生产） | **加了 Nalana 业务 prompt 后的端到端表现** |
+| `eval-default` (default) | neutral prompt at `prompts/eval_default.md` | **bare-LLM capability under fair-test conditions** |
+| `nalana-prod` | `prompts/nalana_prod.md` (mirror of production) | **end-to-end performance with the Nalana business prompt added** |
 
-模型对比时**必须用同一个 system prompt**，否则不公平。
+When comparing models, you **must** use the same system prompt — otherwise it's not fair.
 
 ---
 
-## 辅助命令：`nalana-eval-history`
+## Auxiliary command: `nalana-eval-history`
 
-读 `db/runs.csv` + `db/attempts.csv`，输出趋势/对比。
+Reads `db/runs.csv` + `db/attempts.csv`, outputs trend / comparison.
 
-### 用法
+### Usage
 
 ```bash
-# 单模型最近 N 次趋势
+# Single-model trend over last N runs
 python -m nalana_eval.cli history --model gpt-5 --last 10
-# 输出 ASCII 折线 + 关键指标表
+# Outputs ASCII line chart + key-metrics table
 
-# 多模型 head-to-head
+# Multi-model head-to-head
 python -m nalana_eval.cli history --compare gpt-5,claude-sonnet-4-6 --metric hard_pass_rate
 
-# 单 case 历史
+# Single-case history
 python -m nalana_eval.cli history --case CV-OBJ-042 --model gpt-5
 
-# 输出 CSV / JSON
+# Output CSV / JSON
 python -m nalana_eval.cli history --model gpt-5 --last 10 --format json > trend.json
 
-# 出 PNG 趋势图（需 matplotlib）
+# PNG trend chart (needs matplotlib)
 python -m nalana_eval.cli history --model gpt-5 --last 10 --plot trend.png
 ```
 
 ---
 
-## 辅助命令：`nalana-eval-review`
+## Auxiliary command: `nalana-eval-review`
 
-收集 `report.md` 里的 `HUMAN_REVIEW_BLOCK`，回填到 `db/attempts.csv` 的 `judge_human_override` 等列。
+Collects `HUMAN_REVIEW_BLOCK` entries from `report.md` and writes them back to the `judge_human_override` columns of `db/attempts.csv`.
 
-### 工作流
+### Workflow
 
-1. 跑完 benchmark，打开 `artifacts/run_<id>/report.md`
-2. 在浏览器/编辑器里看每个 case 的截图 + 判官打分
-3. **觉得判官打错了？** 在那个 case 的 `<!-- HUMAN_REVIEW_BLOCK -->` 里改：
+1. Run a benchmark, open `artifacts/run_<id>/report.md`
+2. In your browser/editor, look at each case's screenshot + judge score
+3. **Think the judge got it wrong?** Edit that case's `<!-- HUMAN_REVIEW_BLOCK -->`:
 
    ```markdown
    <!-- HUMAN_REVIEW_BLOCK:CV-OBJ-042:attempt_0
-   override: disagree           ← 改成 agree / disagree / partial
-   corrected_semantic: 5        ← 你认为正确的分（5 分制）
+   override: disagree           ← change to agree / disagree / partial
+   corrected_semantic: 5        ← the score you think is correct (5-pt scale)
    corrected_aesthetic: 4
    corrected_professional: 3
-   reviewer: ian                ← 你的名字
-   note: 判官没识别出这是卡通风格    ← 任意说明
+   reviewer: ian                ← your name
+   note: judge didn't recognize this as cartoon style    ← any explanation
    END_HUMAN_REVIEW_BLOCK -->
    ```
 
-4. 跑回收命令：
+4. Run the collector:
 
    ```bash
    python -m nalana_eval.cli review --collect artifacts/run_<id>/report.md
    ```
 
-   系统会解析所有 review block，写回 `db/attempts.csv` 对应行的 `judge_human_override` 等列，同时追加到 `db/judge_vs_human.csv` 累积学习数据。
+   The system parses all review blocks and writes back to the corresponding rows of `db/attempts.csv` (`judge_human_override`, etc.), simultaneously appending to `db/judge_vs_human.csv` for long-term learning data.
 
-5. 多人 review 同一个 run：每人 review 完都跑一次 `--collect`。后写的覆盖前写的（同一 case + reviewer 唯一），会保留所有 reviewer 的记录。
+5. Multiple reviewers on the same run: each runs `--collect` after their pass. Later writes override earlier ones (same case + reviewer is unique), but all reviewer records are kept.
 
-### 批量 review
+### Batch review
 
 ```bash
-# 批量收集多个 run
+# Collect from multiple runs
 python -m nalana_eval.cli review --collect-glob 'artifacts/run_*/report.md'
 
-# 只看待 review 的（override: pending）
+# Show only pending review items (override: pending)
 python -m nalana_eval.cli review --pending --run <run_id>
 ```
 
 ---
 
-## 辅助命令：`nalana-eval-calibrate`
+## Auxiliary command: `nalana-eval-calibrate`
 
-跑判官校准集，检测 LLM 评委的系统性偏差。详见 `calibration/README.md`。
+Runs the judge calibration set to detect systematic bias in the LLM judge. See `calibration/README.md` for details.
 
-### 快速校准
+### Quick calibration
 
 ```bash
-# 跑全部校准集（cartoon + realistic + low-poly 各 20-30 张）
+# Run all calibration sets (cartoon + realistic + low-poly, 20-30 each)
 python -m nalana_eval.cli calibrate --judge-model gpt-4o
 
-# 只跑某个风格
+# Run a single style only
 python -m nalana_eval.cli calibrate --judge-model gpt-4o --style cartoon
 ```
 
-输出 `calibration/baseline_results/<judge_model>_<timestamp>.json` 含：
-- 每个风格的均分 + stddev
-- 跨风格的偏差分析（卡通组 vs 写实组在各自标准下的均分差距）
-- 建议（如果偏差 > 0.3 应换判官或调 prompt）
+Output goes to `calibration/baseline_results/<judge_model>_<timestamp>.json`, containing:
+- mean + stddev for each style
+- cross-style bias analysis (the gap between cartoon group's mean under cartoon standard and realistic group's mean under realistic standard)
+- recommendations (if drift > 0.3, switch judge model or adjust prompt)
 
 ---
 
-## Run folder 长什么样
+## What a run folder looks like
 
-每次 `nalana-eval` 运行产出一个独立文件夹：
+Each `nalana-eval` invocation produces an independent folder:
 
 ```
 artifacts/run_20260425_143022_<run_id_8>/
-├── report.md                        ← 人类主报告（你最常看的）
-├── report.json                      ← 完整结构化数据
-├── failures.jsonl                   ← 失败 case 详细日志（调试用）
-├── config.json                      ← 这次 run 的所有 CLI 参数
-├── prompts_used.json                ← 这次 run 用了什么 system prompt
-├── baseline_delta.json              ← 与上次同模型 run 的对比
+├── report.md                        ← human-readable main report (your daily driver)
+├── report.json                      ← full structured data
+├── failures.jsonl                   ← per-failure detailed log (debugging)
+├── config.json                      ← all CLI args used in this run
+├── prompts_used.json                ← which system prompt this run used
+├── baseline_delta.json              ← comparison to last run of the same model
 │
 ├── screenshots/
-│   ├── CV-OBJ-042_attempt_0.png         ← 原图 800×600
-│   ├── CV-OBJ-042_attempt_0_thumb.png   ← 缩略图 512×384
+│   ├── CV-OBJ-042_attempt_0.png         ← original 800×600
+│   ├── CV-OBJ-042_attempt_0_thumb.png   ← thumbnail 512×384
 │   ├── CV-OBJ-042_attempt_1.png
 │   ├── CV-OBJ-042_attempt_1_thumb.png
 │   └── ...
 │
 └── scene_stats/
-    ├── CV-OBJ-042_attempt_0.json    ← bmesh 统计、bbox、对象列表、materials
+    ├── CV-OBJ-042_attempt_0.json    ← bmesh stats, bbox, object list, materials
     └── ...
 ```
 
-**为什么每个 attempt 都有原图 + 缩略图？**
+**Why does each attempt get an original + thumbnail?**
 
-- 原图（800×600）：高清，给人审看细节
-- 缩略图（512×384）：嵌入 markdown，加载快
+- Original (800×600): high-resolution, for human reviewers to see detail
+- Thumbnail (512×384): embedded in markdown, fast to load
 
-`report.md` 用相对路径引用缩略图，点击跳转到原图：
+`report.md` references the thumbnail by relative path; clicking jumps to the original:
 
 ```markdown
 [![attempt 0](screenshots/CV-OBJ-042_attempt_0_thumb.png)](screenshots/CV-OBJ-042_attempt_0.png)
 ```
 
-整个 run folder **可以打包发给任何人**，图片不会丢——所有路径都是相对的。
+The whole run folder **can be packaged and sent to anyone** — images won't go missing because all paths are relative.
 
 ---
 
-## 怎么读 report.md
+## How to read report.md
 
-`report.md` 的标准结构：
+Standard `report.md` structure:
 
-### 1. Executive Summary（开头）
+### 1. Executive Summary (top)
 
-模型对比的一张表：
+A single comparison table:
 
 ```markdown
 | Model | Hard Pass | Topology Pass | Avg Soft | Pass@3 | Judge Avg | Cost |
@@ -335,22 +335,22 @@ artifacts/run_20260425_143022_<run_id_8>/
 | claude-sonnet-4-6 | 74% | 83% | 0.69 | 88% | 3.9/5 | $5.10 |
 ```
 
-### 2. Distribution（输入结构）
+### 2. Distribution (input structure)
 
-这次 run 跑了什么：
+What this run actually ran:
 
 ```markdown
 **Categories**: Object Creation: 80, Transformations: 50, Materials: 40, Compositional: 30
 **Difficulty**: Short: 80, Medium: 80, Long: 40
 ```
 
-### 3. Breakdown（按维度拆解）
+### 3. Breakdown (by dimension)
 
-每个 category / difficulty / task_family 的通过率，找模型的薄弱面。
+Pass rate per category / difficulty / task_family — to find the model's weak spots.
 
 ### 4. Top Failure Reasons
 
-按 `failure_class` 汇总，看模型最常在哪挂：
+Aggregated by `failure_class` — where the model fails most:
 
 ```markdown
 1. CONSTRAINT_FAILED (23 cases)
@@ -364,11 +364,11 @@ artifacts/run_20260425_143022_<run_id_8>/
 
 ### 5. Sample Cases
 
-挑选**有代表性**的失败和边界用例展示：每个 case 内嵌缩略图、约束结果、判官分、`HUMAN_REVIEW_BLOCK`。
+Selected **representative** failing and boundary cases — each one displays its thumbnail, constraint result, judge score, and `HUMAN_REVIEW_BLOCK`.
 
 ### 6. Baseline Delta
 
-与上次同模型 run 对比的 delta（正数好、负数坏）：
+Diff from last run of the same model (positive = improvement, negative = regression):
 
 ```markdown
 | Metric | This run | Last run | Delta |
@@ -379,7 +379,7 @@ artifacts/run_20260425_143022_<run_id_8>/
 
 ### 7. Judge Reliability
 
-判官健康指标：诱饵被打高分了吗？方差大吗？
+Judge health metrics: were honeypots given high scores? Was variance high?
 
 ```markdown
 - Honeypots correctly low-scored: 9/10 (90%) ✓
@@ -389,22 +389,22 @@ artifacts/run_20260425_143022_<run_id_8>/
 
 ---
 
-## 常见使用场景
+## Common usage scenarios
 
-### 场景 A：每天 smoke test（5 分钟）
+### Scenario A: daily smoke test (5 minutes)
 
-每天上班花 5 分钟确认主模型没退化：
+5 minutes every morning to verify the main model hasn't regressed:
 
 ```bash
 python -m nalana_eval.cli \
     --cases 30 --models gpt-5 --pass-at-k 1 --workers 4
 ```
 
-看 `report.md` 的 Executive Summary 即可。
+Just look at `report.md`'s Executive Summary.
 
-### 场景 B：发版前正式 benchmark（30-60 分钟）
+### Scenario B: pre-release formal benchmark (30–60 minutes)
 
-模型即将上生产前完整跑一次：
+A complete run before a model goes to production:
 
 ```bash
 python -m nalana_eval.cli \
@@ -412,43 +412,43 @@ python -m nalana_eval.cli \
     --workers 8 --judge-model gpt-4o,claude-sonnet-4-6
 ```
 
-红线：Pass-to-Pass = 100%，Hard Pass Rate 不能比上一版掉超过 5%。
+Red lines: Pass-to-Pass = 100%, Hard Pass Rate must not drop more than 5% from previous version.
 
-### 场景 C：模型选型实验（2-3 小时）
+### Scenario C: model selection experiment (2–3 hours)
 
-要决定用哪个 LLM 做 Nalana 后端：
+Deciding which LLM to use as Nalana's backend:
 
 ```bash
-# 跑 200 用例 × 3 模型 × pass@3 = 1800 attempt
+# 200 cases × 3 models × pass@3 = 1800 attempts
 python -m nalana_eval.cli \
     --cases 200 \
     --models gpt-5,claude-sonnet-4-6,gemini-2.5-pro,gpt-4o \
     --pass-at-k 3 --workers 8
 ```
 
-然后用 `nalana-eval-history --compare gpt-5,claude-sonnet-4-6` 看头对头对比。
+Then use `nalana-eval-history --compare gpt-5,claude-sonnet-4-6` for head-to-head comparison.
 
-### 场景 D：定位回归（troubleshooting）
+### Scenario D: pinning down a regression (troubleshooting)
 
-某次 run 突然 Pass Rate 掉了 10%——
+A run suddenly drops 10% in pass rate —
 
 ```bash
-# 1. 看 baseline_delta.json 确认确实是回归
+# 1. Check baseline_delta.json to confirm it's really a regression
 cat artifacts/run_<id>/baseline_delta.json
 
-# 2. 看 failures.jsonl 找掉的 case
+# 2. Check failures.jsonl to find which cases dropped
 jq '.failure_class' artifacts/run_<id>/failures.jsonl | sort | uniq -c
 
-# 3. 重跑那批失败的 case 仔细看
+# 3. Re-run the failing batch with detailed inspection
 python -m nalana_eval.cli \
     --cases-from artifacts/run_<id>/failures.jsonl \
     --models gpt-5 --pass-at-k 1 --simple-mode --verbose
 ```
 
-### 场景 E：调试某个 case 的判官打分
+### Scenario E: debugging a specific case's judge score
 
 ```bash
-# 隔离跑单个 case，judge variance 拉到 5
+# Isolate a single case, crank judge variance to 5 runs
 python -m nalana_eval.cli \
     --case-ids CV-OBJ-042 \
     --models gpt-5 \
@@ -458,11 +458,11 @@ python -m nalana_eval.cli \
 
 ---
 
-## 常见问题排查
+## Common troubleshooting
 
-### 错误：`blender: command not found`
+### Error: `blender: command not found`
 
-设置 `BLENDER_BIN` 环境变量：
+Set the `BLENDER_BIN` env var:
 
 ```bash
 # macOS
@@ -472,57 +472,57 @@ export BLENDER_BIN=/Applications/Blender.app/Contents/MacOS/Blender
 export BLENDER_BIN=/snap/bin/blender
 ```
 
-或安装 blender 到 PATH。
+Or install blender to PATH.
 
-### 错误：`OPENAI_API_KEY not set`
+### Error: `OPENAI_API_KEY not set`
 
-检查 `.env` 是否在 cwd（仓库根目录）。或显式指定：
+Check that `.env` is in cwd (the repo root). Or specify it explicitly:
 
 ```bash
 python -m nalana_eval.cli ... --api-keys-file /path/to/.env
 ```
 
-### Blender worker 卡住、case 超时
+### Blender worker hangs / case times out
 
-通常是 worker 内存泄漏或某个 case 触发了 Blender bug。解决：
+Usually a worker memory leak or a case triggering a Blender bug. Workarounds:
 
-1. 减少 worker 数：`--workers 4`
-2. 切到 simple mode：`--simple-mode`
-3. 看 `failures.jsonl` 找触发 case，单独跑
+1. Reduce workers: `--workers 4`
+2. Switch to simple mode: `--simple-mode`
+3. Find the trigger case in `failures.jsonl` and run it in isolation
 
-### 判官给了不公平的分
+### Judge gave an unfair score
 
-走 `nalana-eval-review` 流程：在 report.md 里的 `HUMAN_REVIEW_BLOCK` 改 override，跑 `--collect`。
+Use the `nalana-eval-review` flow: edit `HUMAN_REVIEW_BLOCK` in report.md and run `--collect`.
 
-如果**全局**判官有偏差（不是个案），跑校准集：
+If judge bias is **global** (not just one case), run the calibration set:
 
 ```bash
 python -m nalana_eval.cli calibrate --judge-model gpt-4o
 ```
 
-如果 calibration drift > 0.3，考虑换判官模型或调 prompt（`prompts/judge_prompt.md`）。
+If calibration drift > 0.3, consider switching judge model or adjusting the prompt (`prompts/judge_prompt.md`).
 
-### 跑了很多次，CSV 越来越大
+### CSVs are getting large after many runs
 
 ```bash
-# 看大小
+# Check size
 ls -lh db/
 
-# 归档 90 天前的数据
+# Archive data older than 90 days
 python -m nalana_eval.cli db archive --before 2026-01-01
 
-# 或直接复制走然后清空
+# Or copy and clear
 cp db/runs.csv db/runs_archive_2026Q1.csv
-echo "" > db/runs.csv  # 危险！备份后再做
+echo "" > db/runs.csv  # dangerous! back up first
 ```
 
-或迁移到 SQLite（详见 `docs/CSV_SCHEMA.md` 末尾）。
+Or migrate to SQLite (see end of `docs/CSV_SCHEMA.md`).
 
 ---
 
-## 下一步
+## Next steps
 
-- 想自己写新 case → [`TEST_CASE_AUTHORING.md`](TEST_CASE_AUTHORING.md)
-- 想理解代码层架构 → [`ARCHITECTURE.md`](ARCHITECTURE.md)
-- 想改判官 prompt → [`../prompts/judge_prompt.md`](../prompts/judge_prompt.md) + 跑校准集验证
-- 遇到 bug / 想加新功能 → 提 issue 或 PR
+- Want to author new cases → [`TEST_CASE_AUTHORING.md`](TEST_CASE_AUTHORING.md)
+- Want to understand the code-level architecture → [`ARCHITECTURE.md`](ARCHITECTURE.md)
+- Want to modify the judge prompt → [`../prompts/judge_prompt.md`](../prompts/judge_prompt.md) + run the calibration set to verify
+- Hit a bug / want a new feature → open an issue or PR
