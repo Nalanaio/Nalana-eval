@@ -116,7 +116,8 @@ Which doc to read depends on what you want to do:
 
 | What you want to do | Read this | Language |
 |---|---|---|
-| **Understand the design philosophy and architecture** | [`docs/DESIGN.md`](docs/DESIGN.md) ← **must read** | EN |
+| **Get a one-page mental model of the whole system** | [`docs/SYSTEM_MAP.md`](docs/SYSTEM_MAP.md) ← **start here** | EN + 中文 |
+| **Understand the design philosophy and architecture** | [`docs/DESIGN.md`](docs/DESIGN.md) | EN |
 | **Learn the CLI** | [`docs/USAGE_GUIDE.md`](docs/USAGE_GUIDE.md) | EN |
 | **Author new test cases** | [`docs/TEST_CASE_AUTHORING.md`](docs/TEST_CASE_AUTHORING.md) | 中文 (EN pending — see #11) |
 | **Dig into the code-level architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | 中文 (EN pending — see #11) |

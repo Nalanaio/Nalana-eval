@@ -116,7 +116,8 @@ python -m nalana_eval.cli history --compare gpt-5,claude-sonnet-4-6
 
 | 你想做 | 读这个 |
 |---|---|
-| **理解整个系统的设计哲学和架构** | [`docs/DESIGN.md`](docs/DESIGN.md) ← **必读** |
+| **一页脑图先看个总览** | [`docs/SYSTEM_MAP.zh.md`](docs/SYSTEM_MAP.zh.md) ← **从这里开始** |
+| **理解整个系统的设计哲学和架构** | [`docs/DESIGN.md`](docs/DESIGN.md) |
 | **学会用 CLI** | [`docs/USAGE_GUIDE.md`](docs/USAGE_GUIDE.md) |
 | **写新的 test case** | [`docs/TEST_CASE_AUTHORING.md`](docs/TEST_CASE_AUTHORING.md) |
 | **了解技术架构细节** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
