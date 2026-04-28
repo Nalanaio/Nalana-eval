@@ -1,0 +1,2736 @@
+{
+  "suite_id": "synthetic-v3-primitives",
+  "fixture_version": "3.0",
+  "cases": [
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-OBJ-001",
+      "category": "Object Creation",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add a cube to the scene",
+        "Create a cube",
+        "Please add a cube",
+        "Insert a cube"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [
+        {
+          "name": "single object",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 1.0,
+          "tolerance": 0.0,
+          "weight": 0.5
+        }
+      ],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cube",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-OBJ-002",
+      "category": "Object Creation",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add a sphere to the scene",
+        "Create a sphere",
+        "Please add a sphere",
+        "Insert a sphere"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [
+        {
+          "name": "single object",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 1.0,
+          "tolerance": 0.0,
+          "weight": 0.5
+        }
+      ],
+      "style_intent": {
+        "explicit": false,
+        "concept": "sphere",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-OBJ-003",
+      "category": "Object Creation",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add a cylinder to the scene",
+        "Create a cylinder",
+        "Please add a cylinder",
+        "Insert a cylinder"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [
+        {
+          "name": "single object",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 1.0,
+          "tolerance": 0.0,
+          "weight": 0.5
+        }
+      ],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cylinder",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-OBJ-004",
+      "category": "Object Creation",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add a cone to the scene",
+        "Create a cone",
+        "Please add a cone",
+        "Insert a cone"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [
+        {
+          "name": "single object",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 1.0,
+          "tolerance": 0.0,
+          "weight": 0.5
+        }
+      ],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cone",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-OBJ-005",
+      "category": "Object Creation",
+      "difficulty": "Short",
+      "task_family": "primitive_creation",
+      "prompt_variants": [
+        "Add a torus to the scene",
+        "Create a torus",
+        "Please add a torus",
+        "Insert a torus"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [
+        {
+          "name": "single object",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 1.0,
+          "tolerance": 0.0,
+          "weight": 0.5
+        }
+      ],
+      "style_intent": {
+        "explicit": false,
+        "concept": "torus",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-001",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a small cube with radius 0.5m",
+        "Create a cube about 1.0 meters wide",
+        "Make a small cube"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                0.8,
+                0.8,
+                0.8
+              ],
+              "maximum": [
+                1.2,
+                1.2,
+                1.2
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cube",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-002",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a medium cube with radius 1.0m",
+        "Create a cube about 2.0 meters wide",
+        "Make a medium cube"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                1.5,
+                1.5,
+                1.5
+              ],
+              "maximum": [
+                2.5,
+                2.5,
+                2.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cube",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-003",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a large cube with radius 2.0m",
+        "Create a cube about 4.0 meters wide",
+        "Make a large cube"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                3.5,
+                3.5,
+                3.5
+              ],
+              "maximum": [
+                4.5,
+                4.5,
+                4.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cube",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-004",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a small sphere with radius 0.5m",
+        "Create a sphere about 1.0 meters wide",
+        "Make a small sphere"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                0.8,
+                0.8,
+                0.8
+              ],
+              "maximum": [
+                1.2,
+                1.2,
+                1.2
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "sphere",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-005",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a medium sphere with radius 1.0m",
+        "Create a sphere about 2.0 meters wide",
+        "Make a medium sphere"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                1.5,
+                1.5,
+                1.5
+              ],
+              "maximum": [
+                2.5,
+                2.5,
+                2.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "sphere",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-006",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a large sphere with radius 2.0m",
+        "Create a sphere about 4.0 meters wide",
+        "Make a large sphere"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                3.5,
+                3.5,
+                3.5
+              ],
+              "maximum": [
+                4.5,
+                4.5,
+                4.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "sphere",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-007",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a small cylinder with radius 0.5m",
+        "Create a cylinder about 1.0 meters wide",
+        "Make a small cylinder"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                0.8,
+                0.8,
+                0.8
+              ],
+              "maximum": [
+                1.2,
+                1.2,
+                1.2
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cylinder",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-008",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a medium cylinder with radius 1.0m",
+        "Create a cylinder about 2.0 meters wide",
+        "Make a medium cylinder"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                1.5,
+                1.5,
+                1.5
+              ],
+              "maximum": [
+                2.5,
+                2.5,
+                2.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cylinder",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-009",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a large cylinder with radius 2.0m",
+        "Create a cylinder about 4.0 meters wide",
+        "Make a large cylinder"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                3.5,
+                3.5,
+                3.5
+              ],
+              "maximum": [
+                4.5,
+                4.5,
+                4.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cylinder",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-010",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a small cone with radius 0.5m",
+        "Create a cone about 1.0 meters wide",
+        "Make a small cone"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                0.8,
+                0.8,
+                0.8
+              ],
+              "maximum": [
+                1.2,
+                1.2,
+                1.2
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cone",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-011",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a medium cone with radius 1.0m",
+        "Create a cone about 2.0 meters wide",
+        "Make a medium cone"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                1.5,
+                1.5,
+                1.5
+              ],
+              "maximum": [
+                2.5,
+                2.5,
+                2.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cone",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-012",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a large cone with radius 2.0m",
+        "Create a cone about 4.0 meters wide",
+        "Make a large cone"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                3.5,
+                3.5,
+                3.5
+              ],
+              "maximum": [
+                4.5,
+                4.5,
+                4.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "cone",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-013",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a small torus with radius 0.5m",
+        "Create a torus about 1.0 meters wide",
+        "Make a small torus"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                0.8,
+                0.8,
+                0.8
+              ],
+              "maximum": [
+                1.2,
+                1.2,
+                1.2
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "torus",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-014",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a medium torus with radius 1.0m",
+        "Create a torus about 2.0 meters wide",
+        "Make a medium torus"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                1.5,
+                1.5,
+                1.5
+              ],
+              "maximum": [
+                2.5,
+                2.5,
+                2.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "torus",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-PAR-015",
+      "category": "Object Creation",
+      "difficulty": "Medium",
+      "task_family": "parameterized_primitive_creation",
+      "prompt_variants": [
+        "Add a large torus with radius 2.0m",
+        "Create a torus about 4.0 meters wide",
+        "Make a large torus"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                3.5,
+                3.5,
+                3.5
+              ],
+              "maximum": [
+                4.5,
+                4.5,
+                4.5
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "concept": "torus",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-001",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cube red",
+        "Apply a red material to the cube",
+        "Color the cube red",
+        "Give the cube a red color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-002",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cube blue",
+        "Apply a blue material to the cube",
+        "Color the cube blue",
+        "Give the cube a blue color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-003",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cube green",
+        "Apply a green material to the cube",
+        "Color the cube green",
+        "Give the cube a green color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.8,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-004",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cube yellow",
+        "Apply a yellow material to the cube",
+        "Color the cube yellow",
+        "Give the cube a yellow color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-005",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cube white",
+        "Apply a white material to the cube",
+        "Color the cube white",
+        "Give the cube a white color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-006",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cube black",
+        "Apply a black material to the cube",
+        "Color the cube black",
+        "Give the cube a black color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-007",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the sphere red",
+        "Apply a red material to the sphere",
+        "Color the sphere red",
+        "Give the sphere a red color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "UV_SPHERE",
+            "name": "Uv_Sphere"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-008",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the sphere blue",
+        "Apply a blue material to the sphere",
+        "Color the sphere blue",
+        "Give the sphere a blue color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "UV_SPHERE",
+            "name": "Uv_Sphere"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-009",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the sphere green",
+        "Apply a green material to the sphere",
+        "Color the sphere green",
+        "Give the sphere a green color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "UV_SPHERE",
+            "name": "Uv_Sphere"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.8,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-010",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the sphere yellow",
+        "Apply a yellow material to the sphere",
+        "Color the sphere yellow",
+        "Give the sphere a yellow color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "UV_SPHERE",
+            "name": "Uv_Sphere"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-011",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the sphere white",
+        "Apply a white material to the sphere",
+        "Color the sphere white",
+        "Give the sphere a white color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "UV_SPHERE",
+            "name": "Uv_Sphere"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-012",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the sphere black",
+        "Apply a black material to the sphere",
+        "Color the sphere black",
+        "Give the sphere a black color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "UV_SPHERE",
+            "name": "Uv_Sphere"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-013",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cylinder red",
+        "Apply a red material to the cylinder",
+        "Color the cylinder red",
+        "Give the cylinder a red color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CYLINDER",
+            "name": "Cylinder"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-014",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cylinder blue",
+        "Apply a blue material to the cylinder",
+        "Color the cylinder blue",
+        "Give the cylinder a blue color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CYLINDER",
+            "name": "Cylinder"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-015",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cylinder green",
+        "Apply a green material to the cylinder",
+        "Color the cylinder green",
+        "Give the cylinder a green color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CYLINDER",
+            "name": "Cylinder"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.8,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-016",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cylinder yellow",
+        "Apply a yellow material to the cylinder",
+        "Color the cylinder yellow",
+        "Give the cylinder a yellow color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CYLINDER",
+            "name": "Cylinder"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-017",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cylinder white",
+        "Apply a white material to the cylinder",
+        "Color the cylinder white",
+        "Give the cylinder a white color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CYLINDER",
+            "name": "Cylinder"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-018",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cylinder black",
+        "Apply a black material to the cylinder",
+        "Color the cylinder black",
+        "Give the cylinder a black color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CYLINDER",
+            "name": "Cylinder"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-019",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cone red",
+        "Apply a red material to the cone",
+        "Color the cone red",
+        "Give the cone a red color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CONE",
+            "name": "Cone"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-020",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cone blue",
+        "Apply a blue material to the cone",
+        "Color the cone blue",
+        "Give the cone a blue color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CONE",
+            "name": "Cone"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-021",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cone green",
+        "Apply a green material to the cone",
+        "Color the cone green",
+        "Give the cone a green color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CONE",
+            "name": "Cone"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.8,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-022",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cone yellow",
+        "Apply a yellow material to the cone",
+        "Color the cone yellow",
+        "Give the cone a yellow color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CONE",
+            "name": "Cone"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-023",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cone white",
+        "Apply a white material to the cone",
+        "Color the cone white",
+        "Give the cone a white color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CONE",
+            "name": "Cone"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-024",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the cone black",
+        "Apply a black material to the cone",
+        "Color the cone black",
+        "Give the cone a black color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "CONE",
+            "name": "Cone"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-025",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the torus red",
+        "Apply a red material to the torus",
+        "Color the torus red",
+        "Give the torus a red color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "TORUS",
+            "name": "Torus"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-026",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the torus blue",
+        "Apply a blue material to the torus",
+        "Color the torus blue",
+        "Give the torus a blue color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "TORUS",
+            "name": "Torus"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-027",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the torus green",
+        "Apply a green material to the torus",
+        "Color the torus green",
+        "Give the torus a green color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "TORUS",
+            "name": "Torus"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.8,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-028",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the torus yellow",
+        "Apply a yellow material to the torus",
+        "Color the torus yellow",
+        "Give the torus a yellow color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "TORUS",
+            "name": "Torus"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-029",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the torus white",
+        "Apply a white material to the torus",
+        "Color the torus white",
+        "Give the torus a white color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "TORUS",
+            "name": "Torus"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "SYN-MAT-030",
+      "category": "Materials & Shading",
+      "difficulty": "Short",
+      "task_family": "material_color_assignment",
+      "prompt_variants": [
+        "Make the torus black",
+        "Apply a black material to the torus",
+        "Color the torus black",
+        "Give the torus a black color"
+      ],
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": [
+          {
+            "primitive": "TORUS",
+            "name": "Torus"
+          }
+        ]
+      },
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "materials": [
+          {
+            "target": "*",
+            "base_color": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "tolerance": 0.25
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
+      "soft_constraints": [],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
+      "judge_policy": "skip",
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      }
+    }
+  ]
+}

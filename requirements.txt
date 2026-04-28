@@ -1,0 +1,10 @@
+# Core (always required)
+pydantic>=2.7
+
+# LLM providers — install only what you use
+# openai>=1.30
+# anthropic>=0.28
+# google-genai>=1.0
+
+# Development / testing
+pytest>=8

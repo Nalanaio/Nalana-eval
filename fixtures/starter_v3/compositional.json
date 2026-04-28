@@ -1,0 +1,148 @@
+{
+  "suite_id": "starter-v3-compositional",
+  "fixture_version": "3.0",
+  "cases": [
+    {
+      "fixture_version": "3.0",
+      "id": "CV-CMP-001",
+      "category": "Compositional-Creative",
+      "difficulty": "Medium",
+      "task_family": "simple_multi_object_composition",
+      "prompt_variants": [
+        "Create a scene with a cube and a sphere",
+        "Add both a cube and a sphere to the scene",
+        "Place a cube and a sphere in the scene",
+        "Create two objects: a cube and a sphere"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 2}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "exactly two objects", "metric": "total_mesh_objects", "direction": "exact",
+         "target": 2.0, "tolerance": 1.0, "weight": 0.5}
+      ],
+      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-CMP-002",
+      "category": "Compositional-Creative",
+      "difficulty": "Long",
+      "task_family": "simple_multi_object_composition",
+      "prompt_variants": [
+        "Add three different primitive shapes to the scene",
+        "Create three distinct objects in the scene",
+        "Place three different primitives in the scene",
+        "Add a cube, sphere, and cylinder to the scene"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 3}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "at least three objects", "metric": "total_mesh_objects", "direction": "min",
+         "target": 3.0, "tolerance": 1.0, "weight": 1.0}
+      ],
+      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "judge_policy": "skip",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-CMP-003",
+      "category": "Compositional-Creative",
+      "difficulty": "Medium",
+      "task_family": "simple_multi_object_composition",
+      "prompt_variants": [
+        "Stack two cubes on top of each other",
+        "Place one cube on top of another cube",
+        "Create two cubes, one stacked on the other",
+        "Make a stack of two cubes"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 2},
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [1.5, 1.5, 3.5],
+              "maximum": [3.0, 3.0, 5.0]
+            }
+          }
+        ]
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "exactly two cubes", "metric": "total_mesh_objects", "direction": "exact",
+         "target": 2.0, "tolerance": 0.0, "weight": 0.5}
+      ],
+      "style_intent": {"explicit": false, "concept": "stack", "acceptable_styles": ["geometric"]},
+      "judge_policy": "audit_only",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-CMP-004",
+      "category": "Compositional-Creative",
+      "difficulty": "Long",
+      "task_family": "open_ended_creative",
+      "prompt_variants": [
+        "Build a simple table using primitives",
+        "Create a table shape using basic 3D objects",
+        "Make a simple table with a flat top and four legs",
+        "Construct a table from primitive shapes"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 2}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "table needs multiple parts", "metric": "total_mesh_objects", "direction": "min",
+         "target": 2.0, "tolerance": 1.0, "weight": 1.0}
+      ],
+      "style_intent": {
+        "explicit": false,
+        "concept": "table",
+        "concept_aliases": ["desk", "furniture"],
+        "acceptable_styles": ["geometric", "cartoon", "low-poly"]
+      },
+      "judge_policy": "score",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    },
+    {
+      "fixture_version": "3.0",
+      "id": "CV-CMP-005",
+      "category": "Compositional-Creative",
+      "difficulty": "Long",
+      "task_family": "open_ended_creative",
+      "prompt_variants": [
+        "Create a miniature scene with at least 3 objects arranged interestingly",
+        "Build a scene with multiple primitives in an interesting arrangement",
+        "Compose a scene with 3 or more objects",
+        "Create an arrangement of at least three 3D shapes"
+      ],
+      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "hard_constraints": {
+        "mesh_object_count": {"minimum": 3}
+      },
+      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "soft_constraints": [
+        {"name": "multiple objects", "metric": "total_mesh_objects", "direction": "min",
+         "target": 3.0, "tolerance": 1.0, "weight": 1.0}
+      ],
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": ["geometric", "cartoon", "low-poly", "abstract"]
+      },
+      "judge_policy": "score",
+      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+    }
+  ]
+}
