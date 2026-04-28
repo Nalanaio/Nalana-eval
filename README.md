@@ -124,6 +124,7 @@ Which doc to read depends on what you want to do:
 | **Migrate from the v2.0 system** | [`docs/MIGRATION_FROM_V2.md`](docs/MIGRATION_FROM_V2.md) | 中文 (EN pending — see #11) |
 | **Build a calibration set for the LLM judge** | [`calibration/README.md`](calibration/README.md) | 中文 (EN pending — see #11) |
 | **Understand the CSV database fields** | [`docs/CSV_SCHEMA.md`](docs/CSV_SCHEMA.md) | 中文 (EN pending — see #11) |
+| **See the architectural decisions log** | [`docs/DECISIONS.md`](docs/DECISIONS.md) | EN + 中文 |
 
 > Chinese originals of `DESIGN.md` and `USAGE_GUIDE.md` are kept alongside as `DESIGN.zh.md` and `USAGE_GUIDE.zh.md`.
 
