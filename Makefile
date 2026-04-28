@@ -1,5 +1,4 @@
-.PHONY: install test lint clean fixtures \
-        docker-build docker-test-unit docker-test-blender docker-smoke docker-eval
+.PHONY: install test lint clean fixtures docker-run bench
 
 install:
 	pip install -e ".[dev]"
@@ -19,23 +18,15 @@ clean:
 	find . -name "*.pyc" -delete 2>/dev/null || true
 	rm -rf .pytest_cache dist build nalana_eval.egg-info
 
-# ── Docker targets ──────────────────────────────────────────────────────────
+# ── Docker ──────────────────────────────────────────────────────────────────
+# Run all test cases end-to-end in headless Blender.
+# Configure via env vars — no file edits needed:
+#   MODELS   model IDs (default: mock)
+#   CASES    number of cases, 0=all (default: 0)
+#   SUITE    fixture path (default: fixtures/starter_v3)
+#   ANTHROPIC_API_KEY / OPENAI_API_KEY / GEMINI_API_KEY
+bench:
+	python bench.py
 
-docker-build:
-	docker compose build
-
-# Pure-Python unit tests (slim image, no Blender, ~20 s)
-docker-test-unit:
-	docker compose run --build --rm unit
-
-# Full test suite including Blender subprocess integration tests (~2-3 min)
-docker-test-blender:
-	docker compose run --build --rm blender
-
-# End-to-end smoke eval: mock model + mock Blender (no API keys needed)
-docker-smoke:
-	docker compose run --build --rm smoke
-
-# Real eval run — set EVAL_MODELS / API keys in environment or .env file
-docker-eval:
+docker-run:
 	docker compose run --build --rm eval

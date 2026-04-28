@@ -23,7 +23,7 @@ CMD ["pytest", "tests/", "-m", "not blender_worker", "--tb=short"]
 # ─── Stage 2: blender ───────────────────────────────────────────────────────
 # Full image: Ubuntu 22.04 + Blender portable binary + Xvfb for headless
 # OpenGL rendering (the BLENDER_WORKBENCH engine requires a display context).
-FROM ubuntu:22.04 AS blender
+FROM --platform=linux/amd64 ubuntu:22.04 AS blender
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -102,4 +102,4 @@ COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["pytest", "tests/", "--tb=short"]
+CMD []

@@ -1,27 +1,27 @@
 #!/usr/bin/env bash
-# Entrypoint for the `blender` Docker stage.
+# Entrypoint for the nalana-eval Docker container.
 #
-# 1. Activates the virtual environment so that nalana-eval, pytest, and all
-#    installed packages are unconditionally on PATH regardless of how the
-#    container's environment was initialised.
-# 2. Starts Xvfb before executing the container command so that Blender's
-#    BLENDER_WORKBENCH render engine can open an OpenGL display context.
+# Configuration is entirely via environment variables — no file edits needed:
+#   MODELS   comma-separated model IDs to evaluate  (default: mock)
+#   CASES    number of cases to run, 0 = all        (default: 0)
+#   SUITE    path to fixture suite dir or JSON       (default: fixtures/starter_v3)
+#
+# Any extra arguments passed to the container are forwarded to the CLI,
+# allowing one-off flag overrides without rebuilding.
 set -e
 
-# Activate the venv.  This prepends /opt/venv/bin to PATH and sets
-# VIRTUAL_ENV, making every installed console script (nalana-eval, pytest…)
-# immediately available to exec.
 source /opt/venv/bin/activate
 
-# Start Xvfb on display :99.
+# Start virtual framebuffer so Blender's OpenGL renderer has a display context.
 Xvfb :99 -screen 0 1920x1080x24 -ac +extension GLX +render -noreset &
-XVFB_PID=$!
 export DISPLAY=:99
-
-# Give Xvfb time to initialise before Blender tries to open a connection.
 sleep 1
+trap "kill $! 2>/dev/null || true" EXIT
 
-# Kill Xvfb when the container exits regardless of exit code.
-trap "kill ${XVFB_PID} 2>/dev/null || true" EXIT
-
-exec "$@"
+exec python -m nalana_eval.cli benchmark \
+    --models     "${MODELS:-mock}" \
+    --cases      "${CASES:-0}" \
+    --suite      "${SUITE:-fixtures/starter_v3}" \
+    --simple-mode \
+    --output-dir /app/artifacts \
+    "$@"

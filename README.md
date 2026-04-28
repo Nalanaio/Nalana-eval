@@ -124,6 +124,7 @@ Which doc to read depends on what you want to do:
 | **Migrate from the v2.0 system** | [`docs/MIGRATION_FROM_V2.md`](docs/MIGRATION_FROM_V2.md) | 中文 (EN pending — see #11) |
 | **Build a calibration set for the LLM judge** | [`calibration/README.md`](calibration/README.md) | 中文 (EN pending — see #11) |
 | **Understand the CSV database fields** | [`docs/CSV_SCHEMA.md`](docs/CSV_SCHEMA.md) | 中文 (EN pending — see #11) |
+| **See the architectural decisions log** | [`docs/DECISIONS.md`](docs/DECISIONS.md) | EN + 中文 |
 
 > Chinese originals of `DESIGN.md` and `USAGE_GUIDE.md` are kept alongside as `DESIGN.zh.md` and `USAGE_GUIDE.zh.md`.
 
@@ -238,46 +239,35 @@ Nalana-eval/
 
 No local Blender install required. Requires Docker with Compose v2.
 
+### Interactive launcher (recommended)
+
 ```bash
-# Smoke test — mock model, no API keys needed
-make docker-smoke
-
-# Full pytest suite including Blender subprocess tests
-make docker-test-blender
-
-# Unit tests only (fast, no Blender)
-make docker-test-unit
-
-# Real eval — set API keys first
-EVAL_MODELS=claude-sonnet-4-6 ANTHROPIC_API_KEY=sk-ant-... make docker-eval
+make bench
 ```
 
-Artifacts land in `./artifacts/` and `./db/` via volume mounts.  
-To pin a different Blender version: `docker compose build --build-arg BLENDER_VERSION=4.2.4`.
+Prompts you for model, suite, number of cases, and API key, then builds and runs everything.
 
-**Configurable via environment variables:**
+### Direct run (scripting / CI)
 
-| Variable | Default | Description |
+```bash
+make docker-run                                              # mock model, all cases
+MODELS=claude-sonnet-4-6 ANTHROPIC_API_KEY=sk-ant-... make docker-run
+MODELS=mock CASES=5 make docker-run
+```
+
+Artifacts land in `./artifacts/` and `./db/` via volume mounts.
+
+| Env var | Default | Description |
 |---|---|---|
-| `EVAL_MODELS` | `mock` | Comma-separated model IDs to evaluate |
-| `EVAL_CASES` | `5` | Number of test cases to run |
+| `MODELS` | `mock` | Comma-separated model IDs |
+| `CASES` | `0` (all) | Number of cases to run |
+| `SUITE` | `fixtures/starter_v3` | Fixture directory or JSON file |
 | `ANTHROPIC_API_KEY` | — | Required for `claude-*` models |
-| `OPENAI_API_KEY` | — | Required for `gpt-*` / `o*` models |
+| `OPENAI_API_KEY` | — | Required for `gpt-*` models |
 | `GEMINI_API_KEY` | — | Required for `gemini-*` models |
 
-**CLI flags** (append to the `command:` list in `docker-compose.yml` or pass directly):
-
-| Flag | Description |
-|---|---|
-| `--suite <path>` | Test suite directory or JSON file (default: `fixtures/starter_v3`) |
-| `--cases <n>` | Number of cases to sample (0 = all) |
-| `--pass-at-k <n>` | Attempts per case (default: 3) |
-| `--simple-mode` | One fresh Blender process per case (slower but isolated) |
-| `--mock-blender` | Skip real Blender; use stub geometry (CI / no-GPU mode) |
-| `--workers <n>` | Parallel Blender worker processes (default: 1) |
-| `--judge-model <id>` | Enable LLM-as-Judge with this model |
-| `--difficulty-dist <spec>` | e.g. `short:0.4,medium:0.4,long:0.2` |
-| `--system-prompt <name>` | Prompt file from `prompts/` (default: `eval_default`) |
+To pass extra CLI flags directly: `docker compose run --build --rm eval --pass-at-k 1 --judge-model gpt-4o`  
+To pin a different Blender version: `docker compose build --build-arg BLENDER_VERSION=4.2.4`
 
 ---
 

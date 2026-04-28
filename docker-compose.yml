@@ -1,90 +1,24 @@
-# Nalana-eval Docker Compose
+# Nalana-eval — headless Blender end-to-end evaluation
 #
-# Services:
-#   unit         – pure-Python unit tests, no Blender (~20 s, slim image)
-#   blender      – all tests including Blender subprocess integration (~2-3 min)
-#   smoke        – end-to-end smoke eval: mock runner + mock Blender, no API keys
-#   eval         – real eval run; pass API keys via .env or host environment
-#
-# Quick start:
-#   make docker-test-unit
-#   make docker-test-blender
-#   make docker-smoke
-#   EVAL_MODELS=claude-sonnet-4-6 make docker-eval
+# Usage:
+#   make docker-run                                     # mock model, all cases
+#   MODELS=claude-sonnet-4-6 ANTHROPIC_API_KEY=... make docker-run
+#   MODELS=mock CASES=5 make docker-run
 
 services:
-
-  # ── unit: fast, no Blender ────────────────────────────────────────────────
-  unit:
-    build:
-      context: .
-      target: unit-tests
-    command:
-      - python
-      - -m
-      - pytest
-      - tests/
-      - -m
-      - "not blender_worker"
-      - --tb=short
-
-  # ── blender: full image, pytest including Blender integration tests ────────
-  blender:
-    build:
-      context: .
-      target: blender
-    volumes:
-      - ./artifacts:/app/artifacts
-      - ./db:/app/db
-    command:
-      - python
-      - -m
-      - pytest
-      - tests/
-      - --tb=short
-
-  # ── smoke: e2e pipeline, mock model + mock Blender (no API keys needed) ───
-  smoke:
-    build:
-      context: .
-      target: blender
-    volumes:
-      - ./artifacts:/app/artifacts
-      - ./db:/app/db
-    command:
-      - python
-      - -m
-      - nalana_eval.cli
-      - benchmark
-      - --models
-      - mock
-      - --cases
-      - "3"
-      - --mock-blender
-      - --output-dir
-      - /app/artifacts
-
-  # ── eval: real model eval; supply keys via .env or environment ─────────────
   eval:
     build:
       context: .
-      target: blender
+      args:
+        BUILDPLATFORM: linux/amd64
+    platform: linux/amd64
     volumes:
       - ./artifacts:/app/artifacts
       - ./db:/app/db
     environment:
+      - MODELS=${MODELS:-mock}
+      - CASES=${CASES:-0}
+      - SUITE=${SUITE:-fixtures/starter_v3}
       - ANTHROPIC_API_KEY
       - OPENAI_API_KEY
       - GEMINI_API_KEY
-    command:
-      - python
-      - -m
-      - nalana_eval.cli
-      - benchmark
-      - --models
-      - ${EVAL_MODELS:-mock}
-      - --cases
-      - ${EVAL_CASES:-5}
-      - --simple-mode
-      - --output-dir
-      - /app/artifacts
