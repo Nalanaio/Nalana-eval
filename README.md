@@ -234,6 +234,53 @@ Nalana-eval/
 
 ---
 
+## Docker
+
+No local Blender install required. Requires Docker with Compose v2.
+
+```bash
+# Smoke test — mock model, no API keys needed
+make docker-smoke
+
+# Full pytest suite including Blender subprocess tests
+make docker-test-blender
+
+# Unit tests only (fast, no Blender)
+make docker-test-unit
+
+# Real eval — set API keys first
+EVAL_MODELS=claude-sonnet-4-6 ANTHROPIC_API_KEY=sk-ant-... make docker-eval
+```
+
+Artifacts land in `./artifacts/` and `./db/` via volume mounts.  
+To pin a different Blender version: `docker compose build --build-arg BLENDER_VERSION=4.2.4`.
+
+**Configurable via environment variables:**
+
+| Variable | Default | Description |
+|---|---|---|
+| `EVAL_MODELS` | `mock` | Comma-separated model IDs to evaluate |
+| `EVAL_CASES` | `5` | Number of test cases to run |
+| `ANTHROPIC_API_KEY` | — | Required for `claude-*` models |
+| `OPENAI_API_KEY` | — | Required for `gpt-*` / `o*` models |
+| `GEMINI_API_KEY` | — | Required for `gemini-*` models |
+
+**CLI flags** (append to the `command:` list in `docker-compose.yml` or pass directly):
+
+| Flag | Description |
+|---|---|
+| `--suite <path>` | Test suite directory or JSON file (default: `fixtures/starter_v3`) |
+| `--cases <n>` | Number of cases to sample (0 = all) |
+| `--pass-at-k <n>` | Attempts per case (default: 3) |
+| `--simple-mode` | One fresh Blender process per case (slower but isolated) |
+| `--mock-blender` | Skip real Blender; use stub geometry (CI / no-GPU mode) |
+| `--workers <n>` | Parallel Blender worker processes (default: 1) |
+| `--judge-model <id>` | Enable LLM-as-Judge with this model |
+| `--difficulty-dist <spec>` | e.g. `short:0.4,medium:0.4,long:0.2` |
+| `--system-prompt <name>` | Prompt file from `prompts/` (default: `eval_default`) |
+
+---
+
 ## Where do I look at the CSV database?
 
 `db/runs.csv` and `db/attempts.csv` in your workspace are plain CSV files. Four ways to view them:
