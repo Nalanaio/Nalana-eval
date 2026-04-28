@@ -19,7 +19,11 @@ class GeminiRunner(BaseModelRunner):
         api_key: Optional[str] = None,
         **kwargs: object,
     ) -> None:
-        resolved_key = api_key or os.environ.get("GOOGLE_API_KEY", "")
+        resolved_key = (
+            api_key
+            or os.environ.get("GEMINI_API_KEY")
+            or os.environ.get("GOOGLE_API_KEY", "")
+        )
         super().__init__(model_id=model_id, api_key=resolved_key, **kwargs)  # type: ignore[arg-type]
         self._last_input_tokens = 0
         self._last_output_tokens = 0

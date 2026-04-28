@@ -19,6 +19,14 @@ services:
       - MODELS=${MODELS:-mock}
       - CASES=${CASES:-0}
       - SUITE=${SUITE:-fixtures/starter_v3}
+      # Standard API keys
       - ANTHROPIC_API_KEY
       - OPENAI_API_KEY
       - GEMINI_API_KEY
+      # Azure AI Foundry overrides (optional — take precedence when set)
+      - ANTHROPIC_FOUNDRY_BASE_URL
+      - ANTHROPIC_FOUNDRY_API_KEY
+      - AZURE_OPENAI_ENDPOINT
+      - AZURE_OPENAI_API_KEY
+      - AZURE_OPENAI_API_VERSION
+      - GPT55_DEPLOYMENT_NAME

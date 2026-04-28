@@ -82,7 +82,7 @@ WORKDIR /app
 # Install declared dependencies first (cached layer).
 # Pillow is added here for make_thumbnail / make_fallback_png in the harness.
 COPY requirements.txt pyproject.toml ./
-RUN pip install --no-cache-dir pydantic>=2.7 "pytest>=8" Pillow
+RUN pip install --no-cache-dir pydantic>=2.7 "pytest>=8" Pillow "anthropic>=0.28" "openai>=1.30"
 
 # Copy source, then install the package itself without re-downloading deps.
 COPY . .

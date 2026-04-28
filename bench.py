@@ -15,16 +15,16 @@ MODELS = [
     ("mock",              "Mock runner       — no API key, instant"),
     ("claude-sonnet-4-6", "Claude Sonnet 4.6 — needs ANTHROPIC_API_KEY"),
     ("claude-opus-4-7",   "Claude Opus 4.7   — needs ANTHROPIC_API_KEY"),
+    ("gpt-5.5",           "GPT-5.5           — needs OPENAI_API_KEY"),
     ("gemini-2.5-pro",    "Gemini 2.5 Pro    — needs GEMINI_API_KEY"),
-    ("gpt-5.4",           "GPT-5.4           — needs OPENAI_API_KEY"),
 ]
 
 _KEY_PREFIXES = {
     "claude":  "ANTHROPIC_API_KEY",
-    "gemini":  "GEMINI_API_KEY",
     "gpt":     "OPENAI_API_KEY",
     "o1":      "OPENAI_API_KEY",
     "o3":      "OPENAI_API_KEY",
+    "gemini":  "GEMINI_API_KEY",
 }
 
 
