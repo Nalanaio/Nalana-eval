@@ -39,7 +39,6 @@
 | `total_cases` | int | `200` | 这次实际跑的 case 数 |
 | `total_attempts` | int | `600` | = total_cases × pass_at_k |
 | `difficulty_dist` | json string | `{"Short":80,"Medium":80,"Long":40}` | 实际跑的 difficulty 分布 |
-| `length_dist` | json string | `{"easy":60,"medium":100,"hard":40}` | 任务长度分布 |
 | `category_dist` | json string | `{"Object Creation":60,"Transformations":50,...}` | category 分布 |
 | `execution_success_rate` | float | `0.95` | parse + safety + execute 全过的 case 比例 |
 | `hard_pass_rate` | float | `0.78` | 硬约束全部通过的 case 比例 |

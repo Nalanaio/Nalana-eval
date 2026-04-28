@@ -414,13 +414,6 @@ class Harness:
                 artifact.failure_reason = eval_result.failure_reason
                 artifact.pass_overall = eval_result.hard_pass and eval_result.topology_pass
 
-                # Thumbnail (main-process PIL, not in Blender worker)
-                if artifact.screenshot_path and Path(artifact.screenshot_path).exists():
-                    try:
-                        make_thumbnail(artifact.screenshot_path)
-                    except Exception as exc:
-                        logger.debug("Thumbnail failed for %s: %s", case.id, exc)
-
                 # Step 4: judge (if policy allows)
                 if self.judge and not is_honeypot:
                     try:
@@ -435,6 +428,12 @@ class Harness:
             fallback_path = str(screenshots_dir / fallback_name)
             make_fallback_png(fallback_path, case.id, artifact.failure_class.value)
             artifact.screenshot_path = fallback_path
+
+        # Thumbnail always — covers both real PNG and fallback PNG
+        try:
+            make_thumbnail(artifact.screenshot_path)
+        except Exception as exc:
+            logger.debug("Thumbnail failed for %s: %s", case.id, exc)
 
         return artifact
 

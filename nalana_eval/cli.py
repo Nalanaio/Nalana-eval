@@ -149,7 +149,6 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
         output_dir=args.output_dir or "artifacts",
         judge_budget=args.judge_budget,
         difficulty_dist=_parse_dist(args.difficulty_dist),
-        task_length_dist=_parse_dist(getattr(args, "task_length_dist", "") or ""),
         mock_blender=getattr(args, "mock_blender", False),
     )
 
@@ -270,7 +269,6 @@ def _add_benchmark_parser(sub: argparse.Action) -> None:
     p.add_argument("--blender-bin", default="blender")
     p.add_argument("--output-dir", default="artifacts")
     p.add_argument("--difficulty-dist", default="", help="e.g. Short:0.4,Medium:0.4,Long:0.2")
-    p.add_argument("--task-length-dist", default="", help="e.g. easy:0.3,medium:0.5,hard:0.2")
     p.add_argument("--api-keys-file", default="")
     p.add_argument("--verbose", "-v", action="store_true")
     p.set_defaults(func=cmd_benchmark)

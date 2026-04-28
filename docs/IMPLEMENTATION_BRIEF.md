@@ -436,7 +436,7 @@ def _sample_cases(self, suite, n_cases, distributions) -> List[TestCaseCard]: ..
 def _build_benchmark_run(...) -> BenchmarkRun: ...
 ```
 
-`_sample_cases` 是难点：按多个分布同时采样（`difficulty_dist` × `task_length_dist`），用拒绝采样或加权随机。
+`_sample_cases` 按 `difficulty_dist` 加权采样，用拒绝采样或加权随机。
 
 ---
 

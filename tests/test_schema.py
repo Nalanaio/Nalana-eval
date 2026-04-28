@@ -384,7 +384,7 @@ def test_judge_result_score_out_of_range():
 def test_legacy_v2_loads():
     from nalana_eval.legacy_schema import TestSuite as LegacyTestSuite
 
-    suite = LegacyTestSuite.from_json("fixtures/sample_cases_v2.json")
+    suite = LegacyTestSuite.from_json("fixtures/legacy_v2/sample_cases_v2.json")
     assert len(suite.cases) > 0
     assert suite.fixture_version == "2.0"
 
@@ -392,7 +392,7 @@ def test_legacy_v2_loads():
 def test_legacy_v2_case_fields():
     from nalana_eval.legacy_schema import TestSuite as LegacyTestSuite
 
-    suite = LegacyTestSuite.from_json("fixtures/sample_cases_v2.json")
+    suite = LegacyTestSuite.from_json("fixtures/legacy_v2/sample_cases_v2.json")
     case = suite.cases[0]
     assert hasattr(case, "voice_commands")
     assert len(case.voice_commands) > 0

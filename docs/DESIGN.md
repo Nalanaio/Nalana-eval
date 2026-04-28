@@ -2,7 +2,7 @@
 
 **版本**：3.0
 **日期**：2026-04-25
-**作者**：Nalana 工程团队
+**作者**：Nalana eval&testing team
 **状态**：Active（已替代旧版 PDF "Model Performance Evaluation Standards Framework Proposal"）
 
 ---
@@ -549,7 +549,7 @@ artifacts/run_20260425_143022_<run_id_8>/
 | 列名 | 说明 |
 |---|---|
 | run_id, timestamp_utc, model_id, prompt_template_version | 标识 |
-| total_cases, total_attempts, difficulty_dist (JSON), length_dist (JSON), category_dist (JSON) | 这次 run 的输入结构 |
+| total_cases, total_attempts, difficulty_dist (JSON), category_dist (JSON) | 这次 run 的输入结构 |
 | execution_success_rate, hard_pass_rate, topology_pass_rate, avg_soft_score, pass_at_1, pass_at_3 | L1/L2 主指标 |
 | avg_judge_semantic, avg_judge_aesthetic, avg_judge_professional, judge_reliable | L3 软信号 + 判官健康 |
 | avg_latency_ms, total_cost_usd | 成本 |
