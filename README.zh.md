@@ -124,6 +124,7 @@ python -m nalana_eval.cli history --compare gpt-5,claude-sonnet-4-6
 | **从 v2.0 旧系统迁移** | [`docs/MIGRATION_FROM_V2.md`](docs/MIGRATION_FROM_V2.md) |
 | **建立 LLM 评委的校准集** | [`calibration/README.md`](calibration/README.md) |
 | **理解 CSV 数据库的字段** | [`docs/CSV_SCHEMA.md`](docs/CSV_SCHEMA.md) |
+| **看历史架构决策档案** | [`docs/DECISIONS.zh.md`](docs/DECISIONS.zh.md) |
 
 ---
 
