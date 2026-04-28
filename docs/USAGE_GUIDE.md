@@ -116,7 +116,6 @@ python -m nalana_eval.cli calibrate --judge-model gpt-4o
 | `--suite path` | str | fixtures/starter_v3 | 测试用例目录或文件 |
 | `--legacy-suite path` | str | none | 跑 L1 legacy 单元测试套件（v2.0 格式） |
 | `--difficulty-dist` | str | uniform | 难度分布，例如 `short:0.3,medium:0.5,long:0.2` |
-| `--task-length-dist` | str | uniform | 任务长度分布，例如 `easy:0.3,medium:0.5,hard:0.2` |
 | `--pass-at-k k` | int | 3 | 每个 case 跑 k 次 attempt |
 | `--workers N` | int | cpu_count*0.75 | Blender worker 数 |
 | `--simple-mode` | flag | off | 退化为单次 subprocess 模式（慢但稳） |
@@ -138,9 +137,6 @@ python -m nalana_eval.cli calibrate --judge-model gpt-4o
 # 用例数 = 200，按 difficulty 分布采样
 --cases 200 --difficulty-dist short:0.4,medium:0.4,long:0.2
 # 实际跑：80 short + 80 medium + 40 long
-
-# 配合 task length
---task-length-dist easy:0.3,medium:0.5,hard:0.2
 ```
 
 如果 suite 里某个分布 bucket 不够，会从其他 bucket 借（并在 report 里 warning）。

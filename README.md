@@ -91,7 +91,6 @@ python -m nalana_eval.cli \
     --cases 200 \
     --models gpt-5,claude-sonnet-4-6,gemini-2.5-pro \
     --difficulty-dist short:0.4,medium:0.4,long:0.2 \
-    --task-length-dist easy:0.3,medium:0.5,hard:0.2 \
     --pass-at-k 3 \
     --judge-model gpt-4o \
     --workers 8
