@@ -9,30 +9,40 @@ import subprocess
 import sys
 from pathlib import Path
 
-# ── known models ─────────────────────────────────────────────────────────────
+# ── provider catalogue ────────────────────────────────────────────────────────
 
-MODELS = [
-    ("mock",              "Mock runner       — no API key, instant"),
-    ("claude-sonnet-4-6", "Claude Sonnet 4.6 — needs ANTHROPIC_API_KEY"),
-    ("claude-opus-4-7",   "Claude Opus 4.7   — needs ANTHROPIC_API_KEY"),
-    ("gpt-5.5",           "GPT-5.5           — needs OPENAI_API_KEY"),
-    ("gemini-2.5-pro",    "Gemini 2.5 Pro    — needs GEMINI_API_KEY"),
+PROVIDERS = [
+    ("mock",      "Mock         — no API key, instant"),
+    ("anthropic", "Anthropic    — ANTHROPIC_API_KEY"),
+    ("openai",    "OpenAI       — OPENAI_API_KEY"),
+    ("gemini",    "Gemini       — GEMINI_API_KEY"),
 ]
 
-_KEY_PREFIXES = {
-    "claude":  "ANTHROPIC_API_KEY",
-    "gpt":     "OPENAI_API_KEY",
-    "o1":      "OPENAI_API_KEY",
-    "o3":      "OPENAI_API_KEY",
-    "gemini":  "GEMINI_API_KEY",
+PROVIDER_MODELS: dict[str, list[tuple[str, str]]] = {
+    "anthropic": [
+        ("claude-sonnet-4-6", "Claude Sonnet 4.6"),
+        ("claude-opus-4-7",   "Claude Opus 4.7"),
+        ("claude-haiku-4-5-20251001", "Claude Haiku 4.5"),
+    ],
+    "openai": [
+        ("gpt-5.5",    "GPT-5.5"),
+        ("gpt-5.4",    "GPT-5.4"),
+        ("gpt-4o",     "GPT-4o"),
+        ("gpt-4o-mini","GPT-4o Mini"),
+        ("o3",         "o3"),
+        ("o1",         "o1"),
+    ],
+    "gemini": [
+        ("gemini-2.5-pro",   "Gemini 2.5 Pro"),
+        ("gemini-2.0-flash", "Gemini 2.0 Flash"),
+    ],
 }
 
-
-def _api_key_var(model_id: str) -> str | None:
-    for prefix, var in _KEY_PREFIXES.items():
-        if model_id.startswith(prefix):
-            return var
-    return None
+PROVIDER_KEY_VAR: dict[str, str] = {
+    "anthropic": "ANTHROPIC_API_KEY",
+    "openai":    "OPENAI_API_KEY",
+    "gemini":    "GEMINI_API_KEY",
+}
 
 
 def _available_suites() -> list[tuple[str, str]]:
@@ -44,7 +54,7 @@ def _available_suites() -> list[tuple[str, str]]:
 # ── UI helpers ────────────────────────────────────────────────────────────────
 
 def _pick(label: str, options: list[tuple[str, str]]) -> str:
-    """Numbered menu; last option is always 'custom'."""
+    """Numbered menu; last option is always 'other / type your own'."""
     print(f"\n{label}")
     for i, (_, desc) in enumerate(options, 1):
         print(f"  {i}. {desc}")
@@ -72,29 +82,36 @@ def main() -> None:
     print("│   Nalana Eval  ·  Benchmark CLI   │")
     print("└──────────────────────────────────┘")
 
-    # Model
-    model = _pick("Which model?", MODELS)
+    # Step 1: provider
+    provider = _pick("Which provider?", PROVIDERS)
 
-    # API key (prompt only if not already in environment)
-    key_var = _api_key_var(model)
+    # Step 2: API key (skip for mock)
     api_key: str | None = None
+    key_var: str | None = PROVIDER_KEY_VAR.get(provider)
     if key_var:
         api_key = os.environ.get(key_var, "").strip() or None
         if not api_key:
             api_key = input(f"\n  {key_var}: ").strip() or None
         if not api_key:
-            sys.exit(f"\nError: {key_var} is required for {model}.")
+            sys.exit(f"\nError: {key_var} is required for {provider}.")
 
-    # Suite
+    # Step 3: model (from provider's list, or "mock" directly)
+    if provider == "mock":
+        model = "mock"
+    else:
+        model = _pick("Which model?", PROVIDER_MODELS[provider])
+
+    # Step 4: suite
     suite = _pick("Which test suite?", _available_suites())
 
-    # Cases + pass@k
+    # Step 5: cases + pass@k
     print()
-    cases    = _ask("Number of cases (0 = all)", "0")
+    cases     = _ask("Number of cases (0 = all)", "0")
     pass_at_k = _ask("Attempts per case  (pass@k)", "3")
 
     # Summary
     print("\n  ────────────────────────────────")
+    print(f"  Provider  {provider}")
     print(f"  Model     {model}")
     print(f"  Suite     {suite}")
     print(f"  Cases     {'all' if cases == '0' else cases}")
