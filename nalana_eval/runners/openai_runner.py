@@ -84,12 +84,18 @@ class OpenAIRunner(BaseModelRunner):
             messages.append({"role": "system", "content": self.system_prompt})
         messages.append({"role": "user", "content": prompt})
 
-        resp = client.chat.completions.create(
-            model=deployment,
-            messages=messages,
-            response_format={"type": "json_object"},
+        create_kwargs: Dict[str, Any] = {
+            "model": deployment,
+            "messages": messages,
             **_build_params(deployment, temperature, seed, self.max_tokens),
-        )
+        }
+        # json_object forces dict output, which contradicts the system prompt's
+        # instruction to return a JSON array. Only use it for models that need
+        # it to avoid prose (gpt-4o etc.). Restricted models (gpt-5.x, o-series)
+        # follow JSON instructions reliably without enforcement.
+        if not _is_restricted(self.model_id):
+            create_kwargs["response_format"] = {"type": "json_object"}
+        resp = client.chat.completions.create(**create_kwargs)
         if resp.usage:
             self._last_input_tokens  = resp.usage.prompt_tokens
             self._last_output_tokens = resp.usage.completion_tokens

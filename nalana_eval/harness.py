@@ -340,6 +340,7 @@ class Harness:
         attempt_index: int,
         output_dir: Path,
         is_honeypot: bool = False,
+        previous_attempts: Optional[List[AttemptArtifact]] = None,
     ) -> AttemptArtifact:
         screenshots_dir = output_dir / "screenshots"
         screenshots_dir.mkdir(parents=True, exist_ok=True)
@@ -347,7 +348,7 @@ class Harness:
         prompt_used = _select_prompt(case, attempt_index, self._rng)
 
         # Step 1: call model
-        invocation = runner.generate(prompt_used, case, attempt_index)
+        invocation = runner.generate(prompt_used, case, attempt_index, previous_attempts)
 
         artifact = AttemptArtifact(
             case_id=case.id,
@@ -470,8 +471,13 @@ class Harness:
                 )
                 all_attempts.append(hp_attempt)
 
+            case_attempts: List[AttemptArtifact] = []
             for attempt_idx in range(self.config.pass_at_k):
-                attempt = self._run_single_attempt(runner, case, attempt_idx, output_dir)
+                attempt = self._run_single_attempt(
+                    runner, case, attempt_idx, output_dir,
+                    previous_attempts=case_attempts or None,
+                )
+                case_attempts.append(attempt)
                 all_attempts.append(attempt)
 
                 if attempt.pass_overall:

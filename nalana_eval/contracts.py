@@ -436,9 +436,11 @@ def normalize_model_output(raw_output: Any) -> Tuple[List[NormalizedStep], Outpu
     """
     parsed = _parse_json_payload(raw_output)
 
-    # Unwrap {"commands": [...]} wrapper
-    if isinstance(parsed, dict) and "commands" in parsed:
-        parsed = parsed["commands"]
+    # Unwrap any single-key dict wrapping a list (handles "commands", "steps", "operations", etc.)
+    if isinstance(parsed, dict):
+        list_vals = [(k, v) for k, v in parsed.items() if isinstance(v, list)]
+        if len(list_vals) == 1:
+            parsed = list_vals[0][1]
 
     if isinstance(parsed, dict):
         parsed = [parsed]
