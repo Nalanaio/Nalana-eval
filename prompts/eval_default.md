@@ -47,11 +47,23 @@ VALID PRIMITIVES
 - CUBE, UV_SPHERE, ICO_SPHERE, CYLINDER, CONE, TORUS
 
 VALID STEP KINDS (for NORMALIZED contract)
-- ADD_MESH, SET_MODE, TRANSLATE, SCALE, ROTATE, BEVEL, INSET, EXTRUDE_REGION, SET_CAMERA, SET_MATERIAL
+- ADD_MESH(primitive, size/radius/depth/vertices, location:[x,y,z], rotation:[x,y,z], scale:[x,y,z])
+- SET_MODE(mode: OBJECT|EDIT)
+- TRANSLATE(value:[x,y,z])
+- SCALE(value:[x,y,z])
+- ROTATE(value:radians_scalar, orient_axis:X|Y|Z)  — value is a single float, NOT a vector
+- BEVEL(offset, segments, profile)
+- INSET(thickness, depth)
+- EXTRUDE_REGION(translate:[x,y,z])
+- SET_CAMERA(name)
+- SET_MATERIAL(name, base_color:[r,g,b])
+- DELETE_ALL()  — removes all objects from the scene
+- SELECT_ALL(action: SELECT|DESELECT|TOGGLE|INVERT)
 
 EXAMPLE OUTPUT (NORMALIZED contract):
 [
-  {"kind": "ADD_MESH", "args": {"primitive": "CUBE", "size": 2.0, "location": [0, 0, 0]}}
+  {"kind": "ADD_MESH", "args": {"primitive": "CUBE", "size": 2.0, "location": [0, 0, 0]}},
+  {"kind": "ROTATE", "args": {"value": 0.785, "orient_axis": "Z"}}
 ]
 
 EXAMPLE OUTPUT (LEGACY_OPS contract):
@@ -85,6 +97,7 @@ EXAMPLE OUTPUT (LEGACY_OPS contract):
 | 版本 | 日期 | 变化 | 校准集影响 |
 |---|---|---|---|
 | v1 | 2026-04-25 | 初版 | baseline established |
+| v2 | 2026-04-29 | 补充 DELETE_ALL/SELECT_ALL；为所有 step kinds 加参数文档；修正 ROTATE 格式说明（scalar+axis，非 euler vector）；NORMALIZED 示例加 ROTATE | **需要重跑 baseline** |
 
 ---
 

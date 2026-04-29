@@ -4,6 +4,7 @@
 Usage:
     python bench.py
 """
+import getpass
 import os
 import subprocess
 import sys
@@ -91,7 +92,7 @@ def main() -> None:
     if key_var:
         api_key = os.environ.get(key_var, "").strip() or None
         if not api_key:
-            api_key = input(f"\n  {key_var}: ").strip() or None
+            api_key = getpass.getpass(f"\n  {key_var}: ").strip() or None
         if not api_key:
             sys.exit(f"\nError: {key_var} is required for {provider}.")
 

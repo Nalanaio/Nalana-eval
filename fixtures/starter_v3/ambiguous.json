@@ -95,12 +95,12 @@
       ],
       "initial_scene": {"mode": "OBJECT", "objects": []},
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1}
+        "mesh_object_count": {"minimum": 2}
       },
       "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
       "soft_constraints": [
         {"name": "house has multiple parts", "metric": "total_mesh_objects", "direction": "min",
-         "target": 1.0, "tolerance": 0.0, "weight": 0.5}
+         "target": 2.0, "tolerance": 0.0, "weight": 0.5}
       ],
       "style_intent": {
         "explicit": false,
