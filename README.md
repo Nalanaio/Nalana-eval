@@ -51,10 +51,26 @@ Outputs:
 
 ## Quick start
 
-### Step 1: install dependencies
+> **Recommended: use `make bench`** — no local Blender install needed, no manual env wiring. Just Docker.
 
 ```bash
-cd /Users/ianian/Nalana-eval
+make bench
+```
+
+That's it. The interactive launcher asks you which model, API keys, suite, and number of cases to run, then builds and starts everything. Artifacts land in `./artifacts/` and `./db/`.
+
+> Requires Docker with Compose v2. If you don't have Docker, see the [manual setup](#manual-setup-alternative) below.
+
+---
+
+### Manual setup (alternative)
+
+<details>
+<summary>Expand if you prefer to run without Docker</summary>
+
+**Install dependencies**
+
+```bash
 pip install -r requirements.txt
 
 # Install Blender 4.0+ if you don't have it
@@ -63,30 +79,19 @@ pip install -r requirements.txt
 # Verify: blender --version
 ```
 
-### Step 2: configure API keys
-
-```bash
-# Recommended: write them to .env (already in .gitignore, won't enter git)
-cat > .env <<EOF
-OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-GOOGLE_API_KEY=...
-EOF
-```
-
-### Step 3: first run (10-case smoke test)
+**Smoke test (10 cases)**
 
 ```bash
 python -m nalana_eval.cli \
     --cases 10 \
     --models gpt-5 \
     --suite fixtures/starter_v3 \
-    --simple-mode      # use simple-mode the first time to confirm the env is OK
+    --simple-mode      # confirms the env is OK
 ```
 
 Output goes to `artifacts/run_<timestamp>/`. Open `report.md` to see results.
 
-### Step 4: real run — 200 cases across multiple models
+**Full run — 200 cases across multiple models**
 
 ```bash
 python -m nalana_eval.cli \
@@ -98,7 +103,7 @@ python -m nalana_eval.cli \
     --workers 8
 ```
 
-### Step 5: look at historical trends
+**Historical trends**
 
 ```bash
 # Last 5 runs of the same model
@@ -107,6 +112,8 @@ python -m nalana_eval.cli history --model gpt-5 --last 5
 # Multi-model head-to-head
 python -m nalana_eval.cli history --compare gpt-5,claude-sonnet-4-6
 ```
+
+</details>
 
 ---
 
@@ -235,19 +242,7 @@ Nalana-eval/
 
 ---
 
-## Docker
-
-No local Blender install required. Requires Docker with Compose v2.
-
-### Interactive launcher (recommended)
-
-```bash
-make bench
-```
-
-Prompts you for model, suite, number of cases, and API key, then builds and runs everything.
-
-### Direct run (scripting / CI)
+## Docker (scripting / CI)
 
 ```bash
 make docker-run                                              # mock model, all cases
