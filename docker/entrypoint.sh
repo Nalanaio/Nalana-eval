@@ -14,9 +14,27 @@ source /opt/venv/bin/activate
 
 # Start virtual framebuffer so Blender's OpenGL renderer has a display context.
 Xvfb :99 -screen 0 1920x1080x24 -ac +extension GLX +render -noreset &
+XVFB_PID=$!
 export DISPLAY=:99
-sleep 1
-trap "kill $! 2>/dev/null || true" EXIT
+trap "kill ${XVFB_PID} 2>/dev/null || true" EXIT
+
+# Wait until the X server is actually responding rather than guessing with sleep.
+# Probe with xdpyinfo (from x11-utils); give up after ~6 seconds.
+for _ in $(seq 1 30); do
+    if xdpyinfo -display :99 >/dev/null 2>&1; then
+        break
+    fi
+    if ! kill -0 "${XVFB_PID}" 2>/dev/null; then
+        echo "Xvfb died during startup" >&2
+        exit 1
+    fi
+    sleep 0.2
+done
+
+if ! xdpyinfo -display :99 >/dev/null 2>&1; then
+    echo "Xvfb did not become ready within 6 seconds" >&2
+    exit 1
+fi
 
 exec python -m nalana_eval.cli benchmark \
     --models     "${MODELS:-mock}" \
