@@ -92,12 +92,18 @@
       ],
       "initial_scene": {
         "mode": "OBJECT",
-        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+        "objects": [{"primitive": "CUBE", "name": "Cube", "location": [-2.0, 0.0, 0.0]}]
       },
       "hard_constraints": {
         "mesh_object_count": {"minimum": 2},
         "required_named_objects": ["Cube"],
-        "scene_mutation": {"preserve_seed_objects": true}
+        "scene_mutation": {"preserve_seed_objects": true},
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {"minimum": [3.0, 0.0, 0.0]}
+          }
+        ]
       },
       "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
       "soft_constraints": [
