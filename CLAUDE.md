@@ -1,0 +1,144 @@
+# CLAUDE.md — AI Assistant Onboarding
+
+> **First file any AI assistant should read when entering this repository.**
+> Humans: skip to `README.md`. AI: keep reading — this defines how you should behave in this repo.
+
+---
+
+## What this repo is
+
+**Nalana Eval V3.0** — an evaluation system for LLM × Blender 3D modeling. It tests how well LLMs (GPT, Claude, Gemini, …) generate Blender JSON operations from natural-language prompts.
+
+The evaluation runs in three tiers (L1 / L2 / L3). Full architecture: [`docs/SYSTEM_MAP.md`](docs/SYSTEM_MAP.md).
+
+This is **not** the Nalana product itself — it's a standalone testing tool.
+
+---
+
+## Mandatory reading order
+
+Before making any change, read in order:
+
+1. **[`docs/SYSTEM_MAP.md`](docs/SYSTEM_MAP.md)** — 4-layer architecture (M1 Inputs / M2 Execution / M3 Evaluation / M4 Outputs). Tells you what files do what.
+2. **[`docs/DECISIONS.md`](docs/DECISIONS.md)** — Architecture Decision Records (ADRs). Explains *why* the codebase is the way it is. Don't undo a decision without reading the relevant ADR.
+3. **[`docs/handoffs/`](docs/handoffs/)** — Anything in this folder marked `Status: in_progress` is current work. Don't conflict with it.
+4. **[`CHANGELOG.md`](CHANGELOG.md)** — last ~20 entries. 30-second read.
+5. **TodoList** (Cowork) / open tasks — to see what's currently active.
+
+---
+
+## Workflow rules (you must follow)
+
+### Every work item maps to a Task entry
+
+| When | Action |
+|---|---|
+| Decide to start a new piece of work | `TaskCreate` (status `pending`) |
+| Actually start coding | `TaskUpdate` → `in_progress` |
+| Scope or plan changes | `TaskUpdate` description |
+| Done | `TaskUpdate` → `completed`, add `CHANGELOG.md` entry |
+| Blocked / abandoned | `TaskUpdate` description with reason; don't delete |
+
+The TaskList **is** the source of truth for "what's in flight." Keep it accurate.
+
+### Every PR / significant change gets a handoff note
+
+Create `docs/handoffs/<short-name>.md` from `docs/handoffs/_TEMPLATE.md`. Fill sections 1–4 at planning time, sections 5–7 at completion. Link this file in the PR description.
+
+This is how the next person (or their AI assistant) understands what you did and why — without scrolling through commits.
+
+### One PR = one concern (ADR-003)
+
+Bundling unrelated changes in one PR makes attribution impossible. The retry-loop / prompt-fix / API-fix bundle in PR #21 is the cautionary tale — see [ADR-003](docs/DECISIONS.md). When in doubt, split.
+
+Bug fixes can be combined **only if they share a root cause**.
+
+### Don't break L2 / L3 separation (ADR-004)
+
+- **L2** (constraint validation, `nalana_eval/evaluator.py`) is the objective benchmark. Output is deterministic given fixture + scene snapshot.
+- **L3** (LLM judge, `nalana_eval/judge.py`) is a *soft signal*. Output is probabilistic.
+
+**Never feed L3 judge scores back into L2 pass/fail logic, retry triggers, or score aggregation.** Loop mechanisms can use L2 constraint failure reasons as feedback to the model — they cannot use judge output.
+
+### Bilingual docs convention
+
+User-facing docs are EN primary + `<name>.zh.md` Chinese mirror.
+
+| Doc type | Bilingual? |
+|---|---|
+| `README`, `DESIGN`, `USAGE_GUIDE`, `SYSTEM_MAP`, `DECISIONS` | Yes — keep `.zh.md` in sync |
+| `CHANGELOG`, `CLAUDE.md`, `docs/handoffs/<date>-<desc>.md` | EN-only by convention (internal velocity > polish) |
+| `ARCHITECTURE`, `TEST_CASE_AUTHORING`, `CSV_SCHEMA`, `MIGRATION_FROM_V2`, `IMPLEMENTATION_BRIEF`, `calibration/README` | Currently Chinese-only — translation pending (see Task #11 follow-up) |
+
+When editing a doc that has a `.zh.md` sibling, update **both**.
+
+---
+
+## Communication style (this repo)
+
+These apply to every contributor regardless of who you're talking to:
+
+- **Direct and concise.** Skip apologies, hedging, fluff.
+- **Push back when you disagree** — back it with data, not gut feel.
+- **Prefer specific recommendations** over open-ended questions. "Pick A or B" beats "what should I do?"
+- **Self-correct explicitly** when new data invalidates an earlier conclusion. Don't quietly retract — call it out.
+- **Use technical terms precisely.** Don't apply "agentic" / "intelligent" / "smart" to non-agentic features. ADR-004 is the cautionary case.
+- **Mention cost / latency** when scope changes meaningfully affect run cost (>2× delta is the usual threshold).
+
+## Language matching (per-user)
+
+The repo has multilingual contributors. **Match the working language of whoever you're talking to** — usually whatever language they wrote their first message in:
+
+- ian (primary maintainer) writes in Chinese — reply in Chinese.
+- Brian + most other contributors write in English — reply in English.
+- Code, commit messages, file contents, doc files: **always English** regardless of who you're talking to. The bilingual-mirror convention (`<doc>.zh.md`) is the only exception.
+
+If unsure on a fresh session, mirror the user's first message. Don't ask "what language should I reply in?" — that's friction.
+
+For more elaborate per-user preferences (editor tabs, indent style, naming conventions), use `.claude/settings.local.json` (gitignored, per-user). Don't expand this CLAUDE.md with user-specific knobs.
+
+---
+
+## Repo-specific gotchas
+
+| Gotcha | Where |
+|---|---|
+| Don't reuse the production XML-RPC channel for evals | DESIGN.md §5.3 |
+| Workbench renderer ignores `material.base_color` by default — must set `shading.color_type = 'MATERIAL'` | `nalana_eval/screenshot.py` |
+| gpt-5 / o-series ignore `temperature` and `seed` parameters | `nalana_eval/runners/openai_runner.py` `_RESTRICTED_PREFIXES` |
+| Mock model has hardcoded output — **exclude from retry-rescue / variance / cost statistics** | `nalana_eval/runners/mock_runner.py` |
+| Docker container `db/` is **separate** from host `~/Nalana-eval/db/`. When analyzing retry stats etc., gather from BOTH | mount config in `docker-compose.yml` |
+| Some pre-`98ce599` runs may have stale schema columns; reading old reports may need null-safe access | — |
+| `.claude/` and `.env` are local secrets, gitignored. `AGENTS.md` and `CLAUDE.md` are **version controlled** — they are documentation, not config. | `.gitignore` |
+
+---
+
+## When you start a new Cowork session
+
+1. Open with: *"Loading context from `CLAUDE.md`, `docs/handoffs/`, and TaskList — what's today's focus?"*
+2. Run `TaskList` to see open tasks.
+3. Skim any `docs/handoffs/<X>.md` whose front-matter shows `Status: in_progress`.
+4. Skim last 5 `CHANGELOG.md` entries.
+5. Confirm focus with user before doing tool calls.
+
+If user says *"continue from session X"* — read transcript via `mcp__session_info__read_transcript(session_id=X)` and pick up. Don't speculate; ask if anything is ambiguous.
+
+---
+
+## Skill / slash-command availability (Cowork)
+
+Planned but not yet implemented. Use the markdown templates manually:
+
+| Slash | What it would do | Manual fallback |
+|---|---|---|
+| `/handoff` | generate handoff note from current diff + active task | copy `docs/handoffs/_TEMPLATE.md`, fill in |
+| `/adr` | format a decision into ADR entry, append to `DECISIONS.md` | copy ADR-003's structure, append by hand |
+| `/changelog` | extract changelog block from recent commits | edit `CHANGELOG.md` manually |
+
+---
+
+## Last updated
+
+> 2026-04-29 by ian + Claude (PR-A C0a, initial draft).
+
+Update this line on every change to this file.
