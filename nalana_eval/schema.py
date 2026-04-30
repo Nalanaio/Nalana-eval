@@ -546,6 +546,15 @@ class AttemptArtifact(BaseModel):
     execution_latency_ms: float = 0.0
     cost_usd: float = 0.0
     is_honeypot: bool = False
+    # Retry telemetry. `had_retry_context` is True only when this specific
+    # attempt's prompt was augmented with a previous-attempt feedback block
+    # (i.e., retry_with_feedback was enabled AND this is attempt_index >= 1
+    # AND the prior attempt failed). `iterations_taken` is the 1-indexed
+    # iteration number of this attempt within its case (= attempt_index + 1),
+    # included for SQL/CSV ergonomics so analytics don't have to mentally
+    # add 1. See ADR-004.
+    had_retry_context: bool = False
+    iterations_taken: int = 1
 
 
 # ---------------------------------------------------------------------------
@@ -571,6 +580,10 @@ class BenchmarkRunConfig(BaseModel):
     judge_budget: float = 10.0
     difficulty_dist: Dict[str, float] = Field(default_factory=dict)
     mock_blender: bool = False
+    # Default OFF as of ADR-004: 40-retry retrospective showed 7.5% rescue
+    # rate, concentrated in 1 of 7 runs — not robust enough to justify
+    # changing pass@k semantics by default. Opt in with --retry-with-feedback.
+    retry_with_feedback: bool = False
 
 
 class RunMetrics(BaseModel):

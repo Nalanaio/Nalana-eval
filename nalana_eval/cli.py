@@ -150,6 +150,7 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
         judge_budget=args.judge_budget,
         difficulty_dist=_parse_dist(args.difficulty_dist),
         mock_blender=getattr(args, "mock_blender", False),
+        retry_with_feedback=getattr(args, "retry_with_feedback", False),
     )
 
     system_prompt_path = Path("prompts") / f"{config.system_prompt_version}.md"
@@ -269,6 +270,12 @@ def _add_benchmark_parser(sub: argparse.Action) -> None:
     p.add_argument("--blender-bin", default="blender")
     p.add_argument("--output-dir", default="artifacts")
     p.add_argument("--difficulty-dist", default="", help="e.g. Short:0.4,Medium:0.4,Long:0.2")
+    p.add_argument("--retry-with-feedback", action="store_true",
+                   help="Enable retry-with-feedback loop. When a pass@k attempt "
+                        "fails, the next attempt's prompt is augmented with a "
+                        "structured summary of what went wrong (failure class, "
+                        "executed steps, scene snapshot). Default OFF — see "
+                        "ADR-004 for the data behind this default.")
     p.add_argument("--api-keys-file", default="")
     p.add_argument("--verbose", "-v", action="store_true")
     p.set_defaults(func=cmd_benchmark)
