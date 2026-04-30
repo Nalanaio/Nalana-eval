@@ -129,8 +129,10 @@
 | `screenshot_path` | string | 相对路径 `artifacts/run_<id>/screenshots/...` |
 | `scene_stats_path` | string | 相对路径 `artifacts/run_<id>/scene_stats/...` |
 | `is_honeypot` | bool | 是否为诱饵用例 |
+| `had_retry_context` | bool | 这条 attempt 的 prompt 是否被加过"上次失败摘要"。仅当 `--retry-with-feedback` 启用、attempt_index ≥ 1、且上次失败不是 API 配置错时为 true。详见 ADR-004。 |
+| `iterations_taken` | int | 这条 attempt 在所属 case 内的 1-indexed 迭代号（= attempt_index + 1）。冗余但便于 SQL 聚合。 |
 
-### 字段总数：~50
+### 字段总数：~52
 
 ### 写入规则
 

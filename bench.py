@@ -110,6 +110,16 @@ def main() -> None:
     cases     = _ask("Number of cases (0 = all)", "0")
     pass_at_k = _ask("Attempts per case  (pass@k)", "3")
 
+    # Step 6: judge model.  Default is gpt-4o (multimodal, see DECISIONS.md
+    # ADR re: M3 evaluation).  Type "skip" to disable.  Suites with cases
+    # whose `judge_policy: score` will silently produce no L3 score when
+    # judge is disabled — we warn so the user notices.
+    judge = _ask("Judge model (or 'skip' to disable)", "gpt-4o")
+    if judge.strip().lower() in ("skip", "none", ""):
+        judge = "skip"
+        print("  ⚠ Judge disabled — any case with judge_policy=score will not "
+              "receive an L3 score.")
+
     # Summary
     print("\n  ────────────────────────────────")
     print(f"  Provider  {provider}")
@@ -117,6 +127,7 @@ def main() -> None:
     print(f"  Suite     {suite}")
     print(f"  Cases     {'all' if cases == '0' else cases}")
     print(f"  pass@k    {pass_at_k}")
+    print(f"  Judge     {judge}")
     if key_var and api_key:
         print(f"  {key_var[:16]:<16}  {api_key[:10]}...")
     print("  ────────────────────────────────")
@@ -128,12 +139,31 @@ def main() -> None:
     if key_var and api_key:
         env[key_var] = api_key
 
+    # If the judge needs a different provider's key than the test model
+    # (e.g. anthropic test model + gpt-4o judge), warn early — the judge
+    # module will silently degrade to skip mode if the key is missing,
+    # which is a frequent footgun.
+    judge_key_var = (
+        "OPENAI_API_KEY"      if judge.startswith(("gpt-", "o1", "o3", "o4")) else
+        "ANTHROPIC_API_KEY"   if judge.startswith("claude-") else
+        "GEMINI_API_KEY"      if judge.startswith("gemini-") else
+        None
+    )
+    if judge != "skip" and judge_key_var and not os.environ.get(judge_key_var):
+        print(f"  ⚠ Judge model '{judge}' needs {judge_key_var}, but it isn't "
+              f"set in your shell. Judge calls inside the container will fail "
+              f"and L3 scores will be N/A. Set it before running, or pick "
+              f"'skip' for the judge.")
+
+    cli_extra_args = ["--pass-at-k", pass_at_k]
+    if judge == "skip":
+        cli_extra_args.append("--no-judge")
+    else:
+        cli_extra_args += ["--judge-model", judge]
+
     print()
     result = subprocess.run(
-        [
-            "docker", "compose", "run", "--build", "--rm", "eval",
-            "--pass-at-k", pass_at_k,
-        ],
+        ["docker", "compose", "run", "--build", "--rm", "eval"] + cli_extra_args,
         env=env,
     )
     sys.exit(result.returncode)

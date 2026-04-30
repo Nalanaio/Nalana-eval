@@ -39,9 +39,8 @@ api_keys.txt
 .pytest_cache/
 htmlcov/
 
-# Legacy reference (kept for now during migration)
-# Remove these comments after migration is complete
-__pycache__
-
-AGENTS.md
+# IDE / AI assistant local config (per-user, not version controlled)
 .claude/
+
+# NOTE: CLAUDE.md and AGENTS.md (if added later) are version controlled.
+# They are documentation/onboarding files, not local config — see CLAUDE.md.

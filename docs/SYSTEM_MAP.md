@@ -218,6 +218,22 @@ Top-level command parser. Routes to:
 
 This is what wires M1 → M2 → M3 → M4 together for one benchmark run. Argparse + small dispatcher; the actual work happens in the layer modules.
 
+### Alternative front-doors: Docker + `bench.py`
+
+There are two additional ways to launch a benchmark run, both layered on top of the CLI Orchestrator — they don't replace it, they wrap it:
+
+| Front-door | File | When to use |
+|---|---|---|
+| **Interactive launcher** | `bench.py` (repo root) | First-time users who want a guided prompt-by-prompt setup. Asks provider → (API key) → model → suite → cases → pass@k → judge model, then dispatches to Docker. |
+| **Headless Docker pipeline** | `Dockerfile`, `docker-compose.yml`, `docker/entrypoint.sh` | CI / scripting. `make docker-run` (with env vars `MODELS`, `CASES`, `SUITE`, `*_API_KEY`) runs the full L1+L2+L3 pipeline inside Ubuntu 22.04 + Blender 4.2.3 + Xvfb. No local Blender install required. Pinned to `linux/amd64` for Apple Silicon via Rosetta. SHA256-verified Blender tarball; runs as non-root `appuser` (UID 1000). |
+
+Both paths ultimately invoke `python -m nalana_eval.cli benchmark` inside the container — same code, same outputs. `bench.py` is just a friendlier shell over `make docker-run`.
+
+`Makefile` exposes:
+- `make bench` — interactive launcher (calls `bench.py`)
+- `make docker-run` — direct headless run (env-var configured)
+- `make test` / `make lint` / `make fixtures` / `make clean` — host-side dev helpers
+
 ---
 
 ## How to navigate the codebase as a new contributor

@@ -59,6 +59,7 @@ ATTEMPTS_FIELDS = [
     "model_latency_ms", "execution_latency_ms",
     "model_cost_usd", "judge_cost_usd",
     "screenshot_path", "scene_stats_path", "is_honeypot",
+    "had_retry_context", "iterations_taken",
 ]
 
 JUDGE_VS_HUMAN_FIELDS = [
@@ -240,6 +241,8 @@ def append_attempt(
         "screenshot_path": attempt.screenshot_path,
         "scene_stats_path": attempt.scene_stats_path,
         "is_honeypot": attempt.is_honeypot,
+        "had_retry_context": attempt.had_retry_context,
+        "iterations_taken": attempt.iterations_taken,
     }
     _append_row(_ATTEMPTS_CSV, ATTEMPTS_FIELDS, row)
 
@@ -305,3 +308,87 @@ def query_attempts(run_id: Optional[str] = None, case_id: Optional[str] = None) 
     if case_id:
         rows = [r for r in rows if r.get("case_id") == case_id]
     return rows
+
+
+# ---------------------------------------------------------------------------
+# Retry-rescue analytics (ADR-004 anchor)
+# ---------------------------------------------------------------------------
+
+
+def compute_retry_rescue_rate(
+    attempt_rows: Optional[List[Dict[str, Any]]] = None,
+    *,
+    exclude_mock: bool = True,
+    skip_api_error_retries: bool = True,
+) -> Dict[str, Any]:
+    """Canonical retry-rescue rate calculation.
+
+    Per ADR-004, any rescue-rate / variance metric reported in this codebase
+    MUST exclude the ``mock`` model (its hardcoded output makes retries
+    deterministically equivalent to attempt-0 and inflates the denominator
+    with non-informative samples). Future history.py / reporting.py code
+    should call THIS function rather than rolling its own filter.
+
+    Parameters
+    ----------
+    attempt_rows
+        List of dict rows shaped like ``ATTEMPTS_FIELDS``. Defaults to the
+        full attempts.csv.
+    exclude_mock
+        Filter out rows where ``model_id == 'mock'``. Default ``True`` per
+        ADR-004; pass ``False`` only for debugging the mock harness itself.
+    skip_api_error_retries
+        Don't count retries whose prior attempt failed with an API-config
+        error (auth, parameter, endpoint) — those can't be rescued by retry
+        context anyway, see harness.py and ADR-004.
+
+    Returns
+    -------
+    {
+        "n_retries":        int,    # attempt_index >= 1, after filters
+        "n_saves":          int,    # of which pass_overall == True
+        "rescue_rate":      float,  # n_saves / n_retries (0.0 if denom == 0)
+        "by_model":         {model_id: {"n_retries": int, "n_saves": int}},
+    }
+    """
+    rows = attempt_rows if attempt_rows is not None else _read_all(_ATTEMPTS_CSV)
+
+    # Build a per-(run_id, case_id) lookup so we can inspect each retry's
+    # prior attempt failure_reason for the API-error skip rule.
+    by_case: Dict[tuple, List[Dict[str, Any]]] = {}
+    for r in rows:
+        key = (r.get("run_id", ""), r.get("case_id", ""))
+        by_case.setdefault(key, []).append(r)
+    for atts in by_case.values():
+        atts.sort(key=lambda a: int(a.get("attempt_index", 0)))
+
+    retries: List[Dict[str, Any]] = []
+    for atts in by_case.values():
+        for i, att in enumerate(atts):
+            if int(att.get("attempt_index", 0)) < 1:
+                continue
+            if exclude_mock and att.get("model_id") == "mock":
+                continue
+            if skip_api_error_retries and i > 0:
+                prev = atts[i - 1]
+                prev_reason = (prev.get("failure_reason") or "").strip()
+                if prev_reason.startswith("API error:"):
+                    continue
+            retries.append(att)
+
+    saves = [a for a in retries if str(a.get("pass_overall", "")).lower() == "true"]
+
+    by_model: Dict[str, Dict[str, int]] = {}
+    for a in retries:
+        m = a.get("model_id", "?")
+        slot = by_model.setdefault(m, {"n_retries": 0, "n_saves": 0})
+        slot["n_retries"] += 1
+        if str(a.get("pass_overall", "")).lower() == "true":
+            slot["n_saves"] += 1
+
+    return {
+        "n_retries":   len(retries),
+        "n_saves":     len(saves),
+        "rescue_rate": (len(saves) / len(retries)) if retries else 0.0,
+        "by_model":    by_model,
+    }

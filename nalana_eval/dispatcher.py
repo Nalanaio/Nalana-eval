@@ -240,6 +240,16 @@ def _set_material(args: Dict[str, Any]) -> None:
 
 
 def _set_principled_base_color(mat: Any, color: List[float]) -> None:
+    """Set the material's color in two places so both render paths see it:
+
+    1. ``Principled BSDF.Base Color`` — read by EEVEE / Cycles render engines.
+    2. ``material.diffuse_color`` (viewport display color) — read by the
+       Workbench engine when ``shading.color_type == 'MATERIAL'``, which is
+       what the eval system uses for fast headless screenshots. Without this,
+       Workbench shows everything as default grey regardless of BSDF inputs —
+       the multimodal judge would then see colorless screenshots and grade
+       blind on any color-related criterion.
+    """
     if not mat.use_nodes:
         mat.use_nodes = True
     nodes = mat.node_tree.nodes
@@ -249,8 +259,11 @@ def _set_principled_base_color(mat: Any, color: List[float]) -> None:
             if node.type == "BSDF_PRINCIPLED":
                 bsdf = node
                 break
-    if bsdf is None:
-        return
     # Pad to RGBA
     rgba = list(color) + [1.0] * (4 - len(color))
-    bsdf.inputs["Base Color"].default_value = rgba[:4]
+    rgba = rgba[:4]
+    if bsdf is not None:
+        bsdf.inputs["Base Color"].default_value = rgba
+    # Workbench viewport display color (independent of BSDF — must be set
+    # for headless render to actually surface the color).
+    mat.diffuse_color = rgba

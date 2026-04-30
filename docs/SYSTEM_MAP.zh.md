@@ -218,6 +218,22 @@ Schema 一改，所有层都受影响——这就是为什么 task #13 的"加 `
 
 它就是把 M1 → M2 → M3 → M4 串起来跑一次 benchmark 的胶水。argparse + 小型 dispatcher，真正干活的代码在各层模块里。
 
+### 替代入口：Docker + `bench.py`
+
+除了直接调 CLI，还有两个**包在 CLI 外面**的启动方式（不是替代，是封装）：
+
+| 入口 | 文件 | 什么时候用 |
+|---|---|---|
+| **交互式启动器** | `bench.py`（repo 根目录）| 新人想要逐步引导式配置。依次问 provider →（API key）→ model → suite → cases → pass@k → judge model，然后发到 Docker 跑。 |
+| **Headless Docker pipeline** | `Dockerfile`、`docker-compose.yml`、`docker/entrypoint.sh` | CI / 脚本化。`make docker-run`（配 env vars `MODELS`、`CASES`、`SUITE`、`*_API_KEY`）在 Ubuntu 22.04 + Blender 4.2.3 + Xvfb 容器里跑完整 L1+L2+L3 pipeline。本地不需要装 Blender。pin 在 `linux/amd64`，M 系 Mac 通过 Rosetta 跑。Blender tarball 走 SHA256 校验；容器以非 root 身份（appuser，UID 1000）运行。 |
+
+两条路最终都在容器里调 `python -m nalana_eval.cli benchmark`——同一份代码、同一份输出。`bench.py` 只是 `make docker-run` 的友好外壳。
+
+`Makefile` 暴露的命令：
+- `make bench` — 交互式启动（调 `bench.py`）
+- `make docker-run` — 直接 headless 跑（env-var 配置）
+- `make test` / `make lint` / `make fixtures` / `make clean` — host-side 开发辅助
+
 ---
 
 ## 新人怎么按 bug 类型查代码

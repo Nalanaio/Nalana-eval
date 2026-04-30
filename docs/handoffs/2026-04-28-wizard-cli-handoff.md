@@ -1,8 +1,17 @@
-# Task #14 — Wizard CLI Handoff Notes
+# Handoff: Wizard CLI (Task #14)
+
+```yaml
+status:        shipped (with reduced scope — see "Implementation deviation" at end)
+owner:         ian (handoff author) → Brian Chen (implementer)
+related_task:  #14
+related_pr:    #21 (merged 2026-04-28 as commit 98ce599)
+date_opened:   2026-04-28
+date_closed:   2026-04-28
+```
+
+> **Migrated 2026-04-29** from `docs/HANDOFF_TASK_14.md` to `docs/handoffs/2026-04-28-wizard-cli-handoff.md` (PR-A C0b). Chinese version (`HANDOFF_TASK_14.zh.md`) deleted — handoffs are EN-only by convention. Original spec preserved verbatim below; an "Implementation deviation" note is appended at the end documenting where Brian's actual `bench.py` differs from the spec.
 
 > Notes for the engineer picking up Task #14 (`nalana-eval wizard` interactive subcommand). Self-contained — read this and `SYSTEM_MAP.md`, you have everything you need.
-
-**中文版**: [`HANDOFF_TASK_14.zh.md`](HANDOFF_TASK_14.zh.md)
 
 ---
 
@@ -203,3 +212,32 @@ Open a PR against `main` when acceptance criteria pass. Tag `@ian` (or whoever t
 PR conventions: small commits, descriptive messages, link this doc in the PR description so reviewers know the context.
 
 Welcome aboard. 🚀
+
+---
+
+## Implementation deviation (added retroactively, 2026-04-29)
+
+Brian shipped via PR #21 as `bench.py` at the repo root + Docker compose dispatch, **not** as a `nalana-eval wizard` subcommand. The implementation covers ~5 of the 10 specced questions. Below is the gap analysis; the remaining items are scoped into PR-B follow-up work alongside difficulty-vs-task-length redesign.
+
+| Spec question | bench.py status | Gap impact |
+|---|---|---|
+| 1. Model | ✅ Improved (provider → model two-step) | none — better UX than spec |
+| 2. Cases | ✅ asks (default `0` = all, instead of `30` smoke) | low — different default |
+| 3. Suite | ✅ asks | none |
+| 4. Difficulty distribution | ❌ not asked | medium — defaults to uniform; fixture is currently Short-heavy so sampling is skewed |
+| 5. Pass@k | ✅ asks | none |
+| 6. Judge model | ❌ not asked (defaults to `skip`) | **high** — users get no L3 judge unless they pass `--judge-model` directly. Fixed in PR-A C2 (default flipped to `gpt-4o`). |
+| 7. Workers | ❌ not asked | medium — Docker uses simple-mode (1 worker), large runs slow |
+| 8. Output dir | ❌ not asked | low — Docker volume is fixed mount; correct for Docker |
+| 9. System prompt (eval-default vs nalana-prod) | ❌ not asked | medium — can't easily benchmark "with vs without Nalana production prompt" |
+| 10. Print / execute / both | ❌ executes only | medium — loses the "learn the CLI flag form" teaching value |
+
+**Architecture deviation:** standalone script + Docker dispatch, not a CLI subcommand. Trade-off: simpler for first-time users but couples wizard to Docker. Power users still use direct CLI. Reasonable for an MVP wizard.
+
+**Other deviations:**
+- Model list is hardcoded in `bench.py` (spec asked for pull from `runners/__init__.py` factory) — will go stale as new models ship.
+- No `tests/test_bench.py` (spec required tests). Added retroactively in PR-A C7.
+- No "Wizard mode" section in `USAGE_GUIDE.md` (spec required). Deferred to PR-B.
+- Tag-filter follow-up (per spec) still pending Task #13.
+
+**Why these are OK to defer:** Brian's design choice was a minimal-viable wizard that hands power-user controls back to direct CLI invocation. This is a reasonable UX pattern. The high-impact gap (judge default) is patched in PR-A C2; the rest collect into PR-B and will be re-scoped alongside the broader "difficulty vs task length" rethink.

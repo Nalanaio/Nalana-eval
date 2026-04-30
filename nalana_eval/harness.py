@@ -362,6 +362,8 @@ class Harness:
             model_latency_ms=invocation.model_latency_ms,
             cost_usd=invocation.cost_usd,
             is_honeypot=is_honeypot,
+            had_retry_context=bool(previous_attempts),
+            iterations_taken=attempt_index + 1,
         )
 
         if not invocation.parse_success:
@@ -473,9 +475,22 @@ class Harness:
 
             case_attempts: List[AttemptArtifact] = []
             for attempt_idx in range(self.config.pass_at_k):
+                # Retry-with-feedback is opt-in (ADR-004). When disabled, each
+                # attempt is independent — pass@k semantics match V3 baseline.
+                # When enabled, attempt N≥1 sees a structured summary of all
+                # previous attempts' failures appended to its prompt.
+                # Additional skip: if the prior attempt's failure was an
+                # API-level error (auth/param config), retry context can't help.
+                prev_for_retry: Optional[List[AttemptArtifact]] = None
+                if self.config.retry_with_feedback and case_attempts:
+                    last = case_attempts[-1]
+                    last_reason = (last.failure_reason or "").strip()
+                    if not last_reason.startswith("API error:"):
+                        prev_for_retry = case_attempts
+
                 attempt = self._run_single_attempt(
                     runner, case, attempt_idx, output_dir,
-                    previous_attempts=case_attempts or None,
+                    previous_attempts=prev_for_retry,
                 )
                 case_attempts.append(attempt)
                 all_attempts.append(attempt)
