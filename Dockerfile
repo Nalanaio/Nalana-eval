@@ -28,8 +28,14 @@ FROM --platform=linux/amd64 ubuntu:22.04 AS blender
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Pin Blender 4.2 LTS.  Override at build time:
-#   docker build --build-arg BLENDER_VERSION=4.2.4 ...
+#   docker build --build-arg BLENDER_VERSION=4.2.4 \
+#                --build-arg BLENDER_SHA256=<sha256 from blender.org> ...
 ARG BLENDER_VERSION=4.2.3
+# SHA256 of blender-${BLENDER_VERSION}-linux-x64.tar.xz.
+# To populate / update:
+#   curl -fsSL https://download.blender.org/release/Blender4.2/blender-4.2.3-linux-x64.tar.xz.sha256
+# (copy the 64-char hex hash, drop the filename suffix)
+ARG BLENDER_SHA256=3a64efd1982465395abab4259b4091d5c8c56054c7267e9633e4f702a71ea3f4
 
 # System packages:
 #   python3.11 + venv — harness runtime; venv is needed to create an isolated
@@ -38,6 +44,7 @@ ARG BLENDER_VERSION=4.2.3
 #                       the system site-packages at runtime).
 #   wget / xz-utils   — Blender archive download
 #   xvfb + Mesa + X11 — headless OpenGL for BLENDER_WORKBENCH renders
+#   x11-utils         — provides xdpyinfo for the entrypoint readiness probe
 RUN apt-get update && apt-get install -y --no-install-recommends \
         python3.11 \
         python3.11-dev \
@@ -45,6 +52,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         wget \
         xz-utils \
         xvfb \
+        x11-utils \
         libgl1-mesa-glx \
         libgl1-mesa-dri \
         libglu1-mesa \
@@ -68,11 +76,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN python3.11 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Download Blender portable binary and symlink to /usr/local/bin/blender.
-# Verify the expected checksum at: https://download.blender.org/release/Blender4.2/
+# Download Blender portable binary, verify SHA256, and symlink to /usr/local/bin/blender.
+# Checksum guards against tampered downloads (supply-chain attack on the mirror).
+# If you bump BLENDER_VERSION you MUST also pass BLENDER_SHA256.
 RUN wget -q \
         "https://download.blender.org/release/Blender4.2/blender-${BLENDER_VERSION}-linux-x64.tar.xz" \
         -O /tmp/blender.tar.xz \
+    && echo "${BLENDER_SHA256}  /tmp/blender.tar.xz" | sha256sum -c - \
     && tar -xf /tmp/blender.tar.xz -C /opt/ \
     && rm /tmp/blender.tar.xz \
     && ln -s "/opt/blender-${BLENDER_VERSION}-linux-x64/blender" /usr/local/bin/blender
@@ -100,6 +110,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+# Drop root.  UID 1000 matches the typical default user on Linux desktops;
+# Docker Desktop on macOS handles UID translation for bind mounts transparently.
+# If your host user has a different UID (run `id -u`), override at build time:
+#   docker build --build-arg APP_UID=$(id -u) ...
+ARG APP_UID=1000
+RUN useradd --create-home --shell /bin/bash --uid "${APP_UID}" appuser \
+    && chown -R appuser:appuser /app /opt/venv
+USER appuser
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD []
