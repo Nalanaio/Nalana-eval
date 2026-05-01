@@ -24,6 +24,7 @@ from nalana_eval.schema import (
     HardConstraints,
     InitialScene,
     JudgePolicy,
+    SceneSnapshot,
     StyleIntent,
     TaskFamily,
     TestCaseCard,
@@ -221,6 +222,53 @@ def test_judge_skips_when_budget_zero(tmp_path):
     )
     result = j.judge(case, "Add a cube", str(png))
     assert result is None
+
+
+def test_judge_skips_when_scene_empty(tmp_path):
+    """Empty scene = fallback PNG; multimodal judge would hallucinate. Guard MUST trip."""
+    case = _make_case()
+    png = tmp_path / "shot.png"
+    png.write_bytes(b"\x89PNG")  # would be a valid PNG to other guards
+    j = Judge(judge_model="gpt-4o", api_key="fake", db_path=tmp_path / "cache.sqlite")
+
+    empty_snapshot = SceneSnapshot(total_mesh_objects=0)
+    # No mock for the API call — if guard fails, the test crashes on missing OpenAI key
+    # (which is exactly what we want: test fails loud).
+    result = j.judge(case, "Add a cube", str(png), scene_snapshot=empty_snapshot)
+    assert result is None
+
+
+def test_judge_runs_when_scene_has_objects(tmp_path, monkeypatch):
+    """Counter-test: when scene has mesh objects, guard does NOT trip."""
+    case = _make_case()
+    png = tmp_path / "shot.png"
+    png.write_bytes(b"\x89PNG")
+    j = Judge(judge_model="gpt-4o", api_key="fake", db_path=tmp_path / "cache.sqlite", n_runs=1)
+
+    # Mock the OpenAI call so we don't hit network
+    monkeypatch.setattr(
+        "nalana_eval.judge._call_openai",
+        lambda *args, **kwargs: _VALID_RESPONSE,
+    )
+    populated_snapshot = SceneSnapshot(total_mesh_objects=2)
+    result = j.judge(case, "Add a cube", str(png), scene_snapshot=populated_snapshot)
+    assert result is not None
+    assert result.semantic > 0  # got a real score, not None
+
+
+def test_judge_no_snapshot_arg_preserves_old_behavior(tmp_path, monkeypatch):
+    """Back-compat: callers that don't pass scene_snapshot get the old code path."""
+    case = _make_case()
+    png = tmp_path / "shot.png"
+    png.write_bytes(b"\x89PNG")
+    j = Judge(judge_model="gpt-4o", api_key="fake", db_path=tmp_path / "cache.sqlite", n_runs=1)
+    monkeypatch.setattr(
+        "nalana_eval.judge._call_openai",
+        lambda *args, **kwargs: _VALID_RESPONSE,
+    )
+    # No scene_snapshot kwarg — guard is bypassed, judge runs as before
+    result = j.judge(case, "Add a cube", str(png))
+    assert result is not None
 
 
 # ---------------------------------------------------------------------------
