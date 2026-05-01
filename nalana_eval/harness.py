@@ -420,7 +420,12 @@ class Harness:
                 # Step 4: judge (if policy allows)
                 if self.judge and not is_honeypot:
                     try:
-                        judge_result = self.judge.judge(case, prompt_used, artifact.screenshot_path)
+                        judge_result = self.judge.judge(
+                            case,
+                            prompt_used,
+                            artifact.screenshot_path,
+                            scene_snapshot=artifact.scene_snapshot,
+                        )
                         artifact.judge_result = judge_result
                     except Exception as exc:
                         logger.warning("Judge failed for %s: %s", case.id, exc)
