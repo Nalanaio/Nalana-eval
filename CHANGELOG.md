@@ -9,6 +9,22 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
+## 2026-04-30 — ADR-005: TaskLength dropped, SceneComplexity added, L3 judge for spatial coherence
+
+Doc-only PR. Taxonomy redesign of `TestCaseCard` axes feeding #13 (Test case authoring pipeline). Five linked decisions made via chat 2026-04-30:
+
+- **Q1** `Difficulty` enum kept as deprecated `Optional` for one cycle; removal targeted at v3.2.
+- **Q2** Proposed `TaskLength` axis dropped at design time. Histogram of all 80 existing prompts (shortest variant per case) clustered in 3-9 word range — axis would be a constant column with no signal. Original "Difficulty" intent of "step count" was the same v2 ground-truth-replication mental model V3 abandoned.
+- **Q3** Spatial coherence on `SceneComplexity = composition` cases evaluated via L3 judge, NOT hard `relative_positions` constraints. Task #22 prototype confirmed judge can distinguish coherent vs incoherent outputs on non-empty scenes.
+- **Q4** New `SceneComplexity` field is **manually authored** on `TestCaseCard`; not auto-derived from constraint shape. Decoupling preserves author intent and enables drift_check (#13.4) cross-validation.
+- **Q5** #13.2 audit operates in **strict mode**: tag + flip `judge_policy=score` + expand `acceptable_styles` for COMPOSITION/FULL_SCENE cases all in one pass. Per-run cost rises ~3.5× (~$3 → ~$10 for 200-case run); accepted and documented.
+
+Hard prerequisite for #13.2 enactment: `ian/judge-empty-scene-guard` PR must merge first (otherwise empty-scene hallucination contaminates new judge metrics).
+
+Refs: ADR-005, [docs/handoffs/2026-04-30-adr-005-taxonomy.md](docs/handoffs/2026-04-30-adr-005-taxonomy.md), Task #22 prototype data (run `20260501_7d5bc27e`).
+
+---
+
 ## 2026-04-29 — PR-A: post-merge cleanup + handover infrastructure
 
 13-commit PR. Fixes from #18 review (Docker hardening, openai_runner, screenshot rendering) plus 4 process / docs files (this CHANGELOG, `CLAUDE.md`, `docs/handoffs/`, two new ADRs).
