@@ -189,4 +189,89 @@ After Task #13 lands ≥30 hard cases (defined as: cases that gpt-4-class models
 - V3 `pass@k` numbers remain comparable across runs and across model versions. Brian's 4-29runs results showing 100% pass on 5 cases revert to "single-shot 100% on those 5 cases" rather than "retry-augmented 100%" — clearer story.
 - Cost-per-case stays at single-shot baseline by default. Users who opt into retry know they're paying ~50% more on average for ~7.5% lift on current fixtures.
 - The `--retry-with-feedback` flag is a discoverable opt-in; users who specifically want production-style "give the model a second chance" behavior can enable it in one flag.
-- This ADR is provisional; expected to be revisited and either upgraded to permanent decision or replaced by ADR-005 within ~1 month of Task #13 landing.
+- This ADR is provisional; expected to be revisited and either upgraded to permanent decision or replaced by a follow-up ADR within ~1 month of Task #13 landing.
+
+---
+
+## ADR-005 — Test case taxonomy: drop TaskLength, add SceneComplexity, evaluate spatial coherence via L3 judge
+
+**Date**: 2026-04-30
+**Status**: Active
+**Supersedes**: implicit `Difficulty` semantics in `nalana_eval.schema.Difficulty` (kept deprecated one cycle; removal targeted at v3.2)
+**Depends on**: `ian/judge-empty-scene-guard` PR merged before #13.2 audit (otherwise empty-scene hallucination contaminates the new judge-based metrics)
+**Blocks**: #13.1 (schema field additions), #13.2 (existing fixture re-audit)
+
+### Context
+
+Two issues with the current `Difficulty: Short | Medium | Long` field surfaced during PR-A end-to-end verification (2026-04-29) and the Q3 prototype experiment (Task #22, 2026-04-30):
+
+1. **`Difficulty` conflates three independent dimensions** — prompt verbosity, scene complexity, and judgment difficulty. The PR-A audit found CV-AMB-004 "Make a simple house" labeled `Long`, while the expected scene is cube + cone — by any reasonable measure that's an inexpensive task. The original authoring intent of `Difficulty` was "step count," which is the same mental model as v2 ground-truth-step-replication — explicitly abandoned in V3.
+
+2. **Spatial coherence on compositional cases** (e.g., "Build a simple table") is currently **untestable**. Hard `mesh_object_count >= 2` constraints let pathological outputs (5 cubes piled at the origin) pass L2. Task #22 prototype confirmed the L3 judge **can** distinguish coherent vs incoherent compositions on non-empty scenes — given that the empty-scene hallucination guard ships first.
+
+These motivate replacing the muddy `Difficulty` axis with cleaner axes and shifting spatial-coherence evaluation from L2 (constraints) to L3 (judge).
+
+### Decision
+
+#### 1. Drop `TaskLength` axis (proposal rejected at design time)
+
+Initially proposed as a prompt-verbosity replacement for `Difficulty`. Histogram of all existing 80 prompts (shortest variant per case) showed 100% cluster in 3-9 word range — the axis would be a constant column with no signal. Word count is also a poor proxy for model burden in 8K+ context regimes. Axis dropped before landing.
+
+#### 2. Add `SceneComplexity` axis (manually authored — Q4)
+
+```python
+class SceneComplexity(str, Enum):
+    SINGLE_OBJECT = "single_object"   # 1 mesh
+    MULTI_OBJECT  = "multi_object"    # 2–5 mesh, no spatial relationships required
+    COMPOSITION   = "composition"     # 2+ mesh that the AUTHOR INTENDS to require spatial structure
+                                      # (e.g., table = top above legs); enforcement is the L3 judge's
+                                      # job, NOT a hard relative_positions constraint
+    FULL_SCENE    = "full_scene"      # 5+ mesh + materials, full environment
+```
+
+`scene_complexity` is a **required field** on `TestCaseCard` and reflects **author intent**, NOT derived from constraint shape. Author intent and constraint shape can intentionally diverge — a stylized "futuristic table" might be tagged COMPOSITION with loose constraints to give the model creative latitude. This decoupling lets `tools/drift_check.py` (#13.4) catch the inconsistencies that would otherwise go silent if the field were auto-derived from constraints.
+
+#### 3. Spatial coherence on COMPOSITION cases evaluated via L3 judge (Q3 — Task #22 data)
+
+For COMPOSITION-tagged cases, **do not** add `hard_constraints.relative_positions` requiring fixed spatial relations. Hard constraints kill creative interpretations (a hammock-style chair, an art-installation inverted table). Instead:
+
+- `judge_policy: "score"` (not `skip`)
+- `style_intent.acceptable_styles` expanded to ≥3 creative options (e.g., `["realistic", "minimalist", "stylized", "futuristic", "geometric"]`)
+- Trust the multimodal LLM judge to recognize "this is a table-like composition" vs "this is 5 cubes at the origin"
+
+The schema's existing `relative_positions` field stays in place as **opt-in** for cases where geometric strictness is part of the test intent (e.g., a future "industrial CAD precision" category). Evaluator implementation of `relative_positions` is deferred until such cases land.
+
+#### 4. Deprecate the existing `Difficulty` field (Q1)
+
+```python
+class TestCaseCard:
+    scene_complexity:  SceneComplexity              # NEW, required
+    difficulty:        Optional[Difficulty] = None  # DEPRECATED — removal in v3.2
+```
+
+Existing 80 fixtures keep their `difficulty` value during the deprecation cycle; new fixtures (#13.3+) do not populate it. CLI flag `--difficulty-dist` keeps working but emits a deprecation warning. Removal one cycle from now after all fixtures are migrated.
+
+### Migration of existing 80 fixtures (executed in #13.2 — Q5 strict mode)
+
+The audit performs all three actions in one commit per case-file batch:
+
+1. Add `scene_complexity` field to every case based on manual judgment (~30 sec/case = ~40 min total for 80)
+2. For every case tagged `scene_complexity: "composition"` or `"full_scene"`:
+   - Flip `judge_policy: "skip"` → `"score"`
+   - Expand `style_intent.acceptable_styles` to include 3+ creative options
+3. Document each re-tag and policy-flip in the #13.2 PR description
+
+Estimated impact:
+- ~10–15 of existing 80 cases re-tagged COMPOSITION/FULL_SCENE
+- Benchmark cost rises from ~$3 (current, mostly skip) to ~$10 per 200-case run (with ~25/80 at score)
+- `docs/USAGE_GUIDE.md` cost-projection table updated as part of #13.2 PR
+
+### Consequences
+
+- **Schema** gains one field (`scene_complexity`), deprecates another (`difficulty`). Migration is graceful (one cycle, not breaking).
+- **Authoring overhead**: +~5 sec per case for the new field. LLM-assisted authoring (#13.3) auto-fills `scene_complexity` from the draft.
+- **Drift check (#13.4)** gets a new rule: warn when `scene_complexity` and `hard_constraints` shape disagree (e.g., tagged COMPOSITION but `mesh_object_count.minimum < 2`).
+- **Reporting** gains "by scene complexity" group-by tables; "by difficulty" table marked deprecated.
+- **Benchmark cost rises ~3.5×** for runs that include composition/full-scene cases. Documented and accepted.
+- **L3 judge reliability now matters more** — the empty-scene hallucination guard PR is a hard prerequisite for the #13.2 strict-mode audit. Without it, the new judge-based metrics get systematically inflated.
+- **ADR-004 retry-with-feedback re-evaluation gate (#13.12)** becomes more meaningful: hard composition cases produce real failures with real judge signals; the retry loop's value can finally be measured on data that isn't mock-dominated.
