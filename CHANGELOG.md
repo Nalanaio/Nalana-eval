@@ -9,6 +9,32 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
+## 2026-05-02 — #13.1: schema fields (SceneComplexity / Provenance / Tag / draft) + mechanical fixture backfill
+
+Per ADR-005, schema-level taxonomy lands. Pure infrastructure PR — no judgment-based data changes (those land in #13.2 audit).
+
+Schema changes (`nalana_eval/schema.py`):
+- New enums: `SceneComplexity` (single_object / multi_object / composition / full_scene), `Provenance` (handcrafted / synthetic / llm_authored), `Tag` (canonical / adversarial / ambiguous / honeypot)
+- New required field on `TestCaseCard`: `scene_complexity: SceneComplexity = SINGLE_OBJECT` (default = safe placeholder; #13.2 corrects ~10-15 cases)
+- New optional fields: `provenance: Provenance = HANDCRAFTED`, `draft: bool = False`, `tags: List[Tag] = []`
+- Existing field `difficulty: Difficulty` made `Optional` (deprecated per ADR-005, removal in v3.2)
+
+Existing 80 fixtures backfilled mechanically:
+- All cases get `scene_complexity: "single_object"` (placeholder — #13.2 audit corrects the ~10-15 that should be multi_object/composition/full_scene)
+- `starter_v3/*` cases get `provenance: "handcrafted"`; `synthetic/*` get `provenance: "synthetic"`
+- All cases get `tags: ["canonical"]`
+
+Tests (`tests/test_schema.py`):
+- 14 new tests covering each new enum value, defaults, validation, deprecation back-compat
+- All existing tests pass unchanged
+
+Side cleanup:
+- `docs/handoffs/2026-04-29-post-merge-cleanup.md` status flipped `in_progress` → `shipped` (PR-A merged 2026-04-30; this update was one of #21's bundled follow-ups)
+
+Refs: ADR-005, #13.0 (covered by ADR-005 PR), #13.1 GitHub issue, [docs/handoffs/2026-05-02-13.1-schema-fields.md](docs/handoffs/2026-05-02-13.1-schema-fields.md). Blocks #13.2 (existing-fixture audit) and #13.3 (LLM authoring CLI).
+
+---
+
 ## 2026-04-30 — ADR-005: TaskLength dropped, SceneComplexity added, L3 judge for spatial coherence
 
 Doc-only PR. Taxonomy redesign of `TestCaseCard` axes feeding #13 (Test case authoring pipeline). Five linked decisions made via chat 2026-04-30:

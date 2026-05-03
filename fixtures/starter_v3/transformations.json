@@ -16,28 +16,65 @@
       ],
       "initial_scene": {
         "mode": "OBJECT",
-        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
       },
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
+        "mesh_object_count": {
+          "minimum": 1
+        },
         "bounding_boxes": [
           {
             "target": "__scene__",
             "size_range": {
-              "minimum": [3.5, 3.5, 3.5],
-              "maximum": [4.5, 4.5, 4.5]
+              "minimum": [
+                3.5,
+                3.5,
+                3.5
+              ],
+              "maximum": [
+                4.5,
+                4.5,
+                4.5
+              ]
             }
           }
         ]
       },
-      "topology_policy": {"manifold_required": true, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": true,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [
-        {"name": "single object preserved", "metric": "total_mesh_objects", "direction": "exact",
-         "target": 1.0, "tolerance": 0.0, "weight": 0.5}
+        {
+          "name": "single object preserved",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 1.0,
+          "tolerance": 0.0,
+          "weight": 0.5
+        }
       ],
-      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -53,25 +90,56 @@
       ],
       "initial_scene": {
         "mode": "OBJECT",
-        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
       },
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
+        "mesh_object_count": {
+          "minimum": 1
+        },
         "bounding_boxes": [
           {
             "target": "__scene__",
             "size_range": {
-              "minimum": [5.0, 1.5, 1.5],
-              "maximum": [7.0, 2.5, 2.5]
+              "minimum": [
+                5.0,
+                1.5,
+                1.5
+              ],
+              "maximum": [
+                7.0,
+                2.5,
+                2.5
+              ]
             }
           }
         ]
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [],
-      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -87,21 +155,56 @@
       ],
       "initial_scene": {
         "mode": "OBJECT",
-        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
       },
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1}
+        "mesh_object_count": {
+          "minimum": 1
+        }
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [
-        {"name": "bevel adds geometry", "metric": "total_vertices", "direction": "min",
-         "target": 24.0, "tolerance": 8.0, "weight": 1.0},
-        {"name": "more faces after bevel", "metric": "total_faces", "direction": "min",
-         "target": 20.0, "tolerance": 6.0, "weight": 1.0}
+        {
+          "name": "bevel adds geometry",
+          "metric": "total_vertices",
+          "direction": "min",
+          "target": 24.0,
+          "tolerance": 8.0,
+          "weight": 1.0
+        },
+        {
+          "name": "more faces after bevel",
+          "metric": "total_faces",
+          "direction": "min",
+          "target": 20.0,
+          "tolerance": 6.0,
+          "weight": 1.0
+        }
       ],
-      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -117,28 +220,65 @@
       ],
       "initial_scene": {
         "mode": "OBJECT",
-        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
       },
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
+        "mesh_object_count": {
+          "minimum": 1
+        },
         "bounding_boxes": [
           {
             "target": "__scene__",
             "size_range": {
-              "minimum": [1.5, 1.5, 2.5],
-              "maximum": [2.5, 2.5, 4.5]
+              "minimum": [
+                1.5,
+                1.5,
+                2.5
+              ],
+              "maximum": [
+                2.5,
+                2.5,
+                4.5
+              ]
             }
           }
         ]
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [
-        {"name": "extrusion adds faces", "metric": "total_faces", "direction": "min",
-         "target": 10.0, "tolerance": 2.0, "weight": 1.0}
+        {
+          "name": "extrusion adds faces",
+          "metric": "total_faces",
+          "direction": "min",
+          "target": 10.0,
+          "tolerance": 2.0,
+          "weight": 1.0
+        }
       ],
-      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -154,21 +294,56 @@
       ],
       "initial_scene": {
         "mode": "OBJECT",
-        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
       },
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1}
+        "mesh_object_count": {
+          "minimum": 1
+        }
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [
-        {"name": "complex geometry from two ops", "metric": "total_vertices", "direction": "min",
-         "target": 30.0, "tolerance": 10.0, "weight": 1.0},
-        {"name": "many faces", "metric": "total_faces", "direction": "min",
-         "target": 25.0, "tolerance": 8.0, "weight": 1.0}
+        {
+          "name": "complex geometry from two ops",
+          "metric": "total_vertices",
+          "direction": "min",
+          "target": 30.0,
+          "tolerance": 10.0,
+          "weight": 1.0
+        },
+        {
+          "name": "many faces",
+          "metric": "total_faces",
+          "direction": "min",
+          "target": 25.0,
+          "tolerance": 8.0,
+          "weight": 1.0
+        }
       ],
-      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     }
   ]
 }

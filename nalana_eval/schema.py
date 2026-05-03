@@ -28,9 +28,51 @@ class Category(str, Enum):
 
 
 class Difficulty(str, Enum):
+    """⚠ DEPRECATED — see ADR-005. Removal targeted at v3.2.
+
+    Conflated three independent dimensions (prompt verbosity / scene complexity /
+    judgment difficulty). Replaced by SceneComplexity (manually authored, captures
+    output-shape intent). Existing fixtures keep populating this for one cycle to
+    avoid breaking downstream code; new fixtures (#13.3+) should not set it.
+    """
     SHORT = "Short"
     MEDIUM = "Medium"
     LONG = "Long"
+
+
+class SceneComplexity(str, Enum):
+    """ADR-005 — replaces Difficulty as the primary case-shape axis.
+
+    Reflects AUTHOR INTENT for the output scene; not auto-derived from
+    constraint shape (the decoupling lets drift_check #13.4 catch
+    label-vs-constraint inconsistencies that auto-derivation would silence).
+    """
+    SINGLE_OBJECT = "single_object"   # 1 mesh
+    MULTI_OBJECT  = "multi_object"    # 2-5 mesh, no spatial relationships required
+    COMPOSITION   = "composition"     # 2+ mesh; author intends spatial structure
+                                      # (e.g., table = top above legs); enforcement
+                                      # is the L3 judge's job, NOT hard relative_positions
+    FULL_SCENE    = "full_scene"      # 5+ mesh + materials, complete environment
+
+
+class Provenance(str, Enum):
+    """Where this case came from. Used by reports + drift_check + slate composition."""
+    HANDCRAFTED  = "handcrafted"   # human-authored (starter_v3/*)
+    SYNTHETIC    = "synthetic"     # programmatic generator (synthetic/*)
+    LLM_AUTHORED = "llm_authored"  # LLM drafting pipeline (#13.3+)
+
+
+class Tag(str, Enum):
+    """Orthogonal categorical labels (independent of SceneComplexity / Provenance).
+
+    The enum can grow; new values land alongside the use case that needs them
+    (e.g., 'multi_object' / 'edit' / 'stylized' may show up later — they're
+    semantically OK to delegate to SceneComplexity for now).
+    """
+    CANONICAL   = "canonical"     # standard baseline test
+    ADVERSARIAL = "adversarial"   # deliberately stress-testing edge cases
+    AMBIGUOUS   = "ambiguous"     # prompt intentionally underspecified
+    HONEYPOT    = "honeypot"      # deliberately failing case (judge-reliability check)
 
 
 class TaskFamily(str, Enum):
@@ -461,7 +503,12 @@ class TestCaseCard(BaseModel):
     fixture_version: str = FIXTURE_VERSION
     id: str
     category: Category
-    difficulty: Difficulty
+    # `difficulty` is DEPRECATED per ADR-005; kept Optional one cycle for back-compat.
+    # New axis is `scene_complexity` (manually authored, captures author intent for
+    # output shape). Existing 80 fixtures continue to populate `difficulty` until
+    # v3.2 removal.
+    difficulty: Optional[Difficulty] = None
+    scene_complexity: SceneComplexity = SceneComplexity.SINGLE_OBJECT
     task_family: TaskFamily
     prompt_variants: List[str] = Field(..., min_length=1)
     initial_scene: InitialScene = Field(default_factory=InitialScene)
@@ -471,6 +518,13 @@ class TestCaseCard(BaseModel):
     style_intent: StyleIntent = Field(default_factory=StyleIntent)
     judge_policy: JudgePolicy = JudgePolicy.SCORE
     artifact_policy: ArtifactPolicy = Field(default_factory=ArtifactPolicy)
+    # Provenance / draft / tags introduced in #13.1 to support the authoring
+    # pipeline (LLM drafting, drift check, sampling human review).  Existing
+    # 80 fixtures get backfilled mechanically (provenance by directory,
+    # tags=["canonical"]).  See ADR-005.
+    provenance: Provenance = Provenance.HANDCRAFTED
+    draft: bool = False
+    tags: List[Tag] = Field(default_factory=list)
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("prompt_variants")

@@ -20,6 +20,8 @@ from nalana_eval.schema import (
     JudgeResult,
     MaterialConstraint,
     NormalizedStep,
+    Provenance,
+    SceneComplexity,
     SceneMeshSnapshot,
     SceneSnapshot,
     SceneSeed,
@@ -28,6 +30,7 @@ from nalana_eval.schema import (
     SoftMetric,
     StepKind,
     StyleIntent,
+    Tag,
     TaskFamily,
     TestCaseCard,
     TestSuite,
@@ -240,6 +243,91 @@ def test_test_case_card_unknown_field_rejected():
 def test_test_case_card_judge_policy_skip():
     case = TestCaseCard.model_validate(_minimal_case(judge_policy="skip"))
     assert case.judge_policy == JudgePolicy.SKIP
+
+
+# ---------------------------------------------------------------------------
+# ADR-005: SceneComplexity / Provenance / Tag / draft / deprecated Difficulty
+# ---------------------------------------------------------------------------
+
+
+def test_scene_complexity_default_is_single_object():
+    """If a fixture omits scene_complexity, it defaults to SINGLE_OBJECT.
+    This is the safe default used for mechanical backfill in #13.1; #13.2 fixes wrong tags."""
+    case = TestCaseCard.model_validate(_minimal_case())
+    assert case.scene_complexity == SceneComplexity.SINGLE_OBJECT
+
+
+def test_scene_complexity_explicit_value():
+    case = TestCaseCard.model_validate(_minimal_case(scene_complexity="composition"))
+    assert case.scene_complexity == SceneComplexity.COMPOSITION
+
+
+def test_scene_complexity_invalid_value_rejected():
+    with pytest.raises(ValidationError):
+        TestCaseCard.model_validate(_minimal_case(scene_complexity="not_a_real_value"))
+
+
+def test_provenance_default_is_handcrafted():
+    case = TestCaseCard.model_validate(_minimal_case())
+    assert case.provenance == Provenance.HANDCRAFTED
+
+
+def test_provenance_synthetic():
+    case = TestCaseCard.model_validate(_minimal_case(provenance="synthetic"))
+    assert case.provenance == Provenance.SYNTHETIC
+
+
+def test_provenance_llm_authored():
+    case = TestCaseCard.model_validate(_minimal_case(provenance="llm_authored"))
+    assert case.provenance == Provenance.LLM_AUTHORED
+
+
+def test_tags_default_is_empty_list():
+    """Default empty list — fixtures get backfilled with ['canonical'] by #13.1 script."""
+    case = TestCaseCard.model_validate(_minimal_case())
+    assert case.tags == []
+
+
+def test_tags_canonical_explicit():
+    case = TestCaseCard.model_validate(_minimal_case(tags=["canonical"]))
+    assert Tag.CANONICAL in case.tags
+
+
+def test_tags_multiple():
+    case = TestCaseCard.model_validate(_minimal_case(tags=["canonical", "adversarial"]))
+    assert set(case.tags) == {Tag.CANONICAL, Tag.ADVERSARIAL}
+
+
+def test_tags_invalid_rejected():
+    with pytest.raises(ValidationError):
+        TestCaseCard.model_validate(_minimal_case(tags=["not_a_real_tag"]))
+
+
+def test_draft_default_is_false():
+    case = TestCaseCard.model_validate(_minimal_case())
+    assert case.draft is False
+
+
+def test_draft_true_for_llm_drafts():
+    """LLM-authored cases are marked draft=True until human review (#13.6)."""
+    payload = _minimal_case(provenance="llm_authored", draft=True)
+    case = TestCaseCard.model_validate(payload)
+    assert case.draft is True
+    assert case.provenance == Provenance.LLM_AUTHORED
+
+
+def test_difficulty_now_optional():
+    """Per ADR-005, Difficulty is deprecated and Optional. Cases can omit it."""
+    payload = _minimal_case()
+    payload.pop("difficulty", None)
+    case = TestCaseCard.model_validate(payload)
+    assert case.difficulty is None
+
+
+def test_difficulty_still_accepts_legacy_values():
+    """Existing 80 fixtures still set difficulty during the deprecation cycle."""
+    case = TestCaseCard.model_validate(_minimal_case(difficulty="Long"))
+    assert case.difficulty == Difficulty.LONG
 
 
 def test_test_case_card_full():
