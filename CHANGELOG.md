@@ -9,6 +9,9 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
+<<<<<<< ian/numbering-rename
+## 2026-05-02 — #15.1: schema fields (SceneComplexity / Provenance / Tag / draft) + mechanical fixture backfill
+=======
 ## 2026-05-06 — PR-C: Xvfb stderr noise suppression
 
 First of three split PRs replacing the original PR-B omnibus per ADR-003. Smallest of the trio — ships first to clear the plate.
@@ -25,17 +28,18 @@ Refs: ADR-003, [docs/handoffs/2026-05-06-pr-c-xvfb-noise.md](docs/handoffs/2026-
 ---
 
 ## 2026-05-02 — #13.1: schema fields (SceneComplexity / Provenance / Tag / draft) + mechanical fixture backfill
+>>>>>>> main
 
-Per ADR-005, schema-level taxonomy lands. Pure infrastructure PR — no judgment-based data changes (those land in #13.2 audit).
+Per ADR-005, schema-level taxonomy lands. Pure infrastructure PR — no judgment-based data changes (those land in #15.2 audit).
 
 Schema changes (`nalana_eval/schema.py`):
 - New enums: `SceneComplexity` (single_object / multi_object / composition / full_scene), `Provenance` (handcrafted / synthetic / llm_authored), `Tag` (canonical / adversarial / ambiguous / honeypot)
-- New required field on `TestCaseCard`: `scene_complexity: SceneComplexity = SINGLE_OBJECT` (default = safe placeholder; #13.2 corrects ~10-15 cases)
+- New required field on `TestCaseCard`: `scene_complexity: SceneComplexity = SINGLE_OBJECT` (default = safe placeholder; #15.2 corrects ~10-15 cases)
 - New optional fields: `provenance: Provenance = HANDCRAFTED`, `draft: bool = False`, `tags: List[Tag] = []`
 - Existing field `difficulty: Difficulty` made `Optional` (deprecated per ADR-005, removal in v3.2)
 
 Existing 80 fixtures backfilled mechanically:
-- All cases get `scene_complexity: "single_object"` (placeholder — #13.2 audit corrects the ~10-15 that should be multi_object/composition/full_scene)
+- All cases get `scene_complexity: "single_object"` (placeholder — #15.2 audit corrects the ~10-15 that should be multi_object/composition/full_scene)
 - `starter_v3/*` cases get `provenance: "handcrafted"`; `synthetic/*` get `provenance: "synthetic"`
 - All cases get `tags: ["canonical"]`
 
@@ -46,7 +50,7 @@ Tests (`tests/test_schema.py`):
 Side cleanup:
 - `docs/handoffs/2026-04-29-post-merge-cleanup.md` status flipped `in_progress` → `shipped` (PR-A merged 2026-04-30; this update was one of #21's bundled follow-ups)
 
-Refs: ADR-005, #13.0 (covered by ADR-005 PR), #13.1 GitHub issue, [docs/handoffs/2026-05-02-13.1-schema-fields.md](docs/handoffs/2026-05-02-13.1-schema-fields.md). Blocks #13.2 (existing-fixture audit) and #13.3 (LLM authoring CLI).
+Refs: ADR-005, #15.0 (covered by ADR-005 PR), #15.1 GitHub issue, [docs/handoffs/2026-05-02-15.1-schema-fields.md](docs/handoffs/2026-05-02-15.1-schema-fields.md). Blocks #15.2 (existing-fixture audit) and #15.3 (LLM authoring CLI).
 
 ---
 
@@ -57,10 +61,10 @@ Doc-only PR. Taxonomy redesign of `TestCaseCard` axes feeding #13 (Test case aut
 - **Q1** `Difficulty` enum kept as deprecated `Optional` for one cycle; removal targeted at v3.2.
 - **Q2** Proposed `TaskLength` axis dropped at design time. Histogram of all 80 existing prompts (shortest variant per case) clustered in 3-9 word range — axis would be a constant column with no signal. Original "Difficulty" intent of "step count" was the same v2 ground-truth-replication mental model V3 abandoned.
 - **Q3** Spatial coherence on `SceneComplexity = composition` cases evaluated via L3 judge, NOT hard `relative_positions` constraints. Task #22 prototype confirmed judge can distinguish coherent vs incoherent outputs on non-empty scenes.
-- **Q4** New `SceneComplexity` field is **manually authored** on `TestCaseCard`; not auto-derived from constraint shape. Decoupling preserves author intent and enables drift_check (#13.4) cross-validation.
-- **Q5** #13.2 audit operates in **strict mode**: tag + flip `judge_policy=score` + expand `acceptable_styles` for COMPOSITION/FULL_SCENE cases all in one pass. Per-run cost rises ~3.5× (~$3 → ~$10 for 200-case run); accepted and documented.
+- **Q4** New `SceneComplexity` field is **manually authored** on `TestCaseCard`; not auto-derived from constraint shape. Decoupling preserves author intent and enables drift_check (#15.4) cross-validation.
+- **Q5** #15.2 audit operates in **strict mode**: tag + flip `judge_policy=score` + expand `acceptable_styles` for COMPOSITION/FULL_SCENE cases all in one pass. Per-run cost rises ~3.5× (~$3 → ~$10 for 200-case run); accepted and documented.
 
-Hard prerequisite for #13.2 enactment: `ian/judge-empty-scene-guard` PR must merge first (otherwise empty-scene hallucination contaminates new judge metrics).
+Hard prerequisite for #15.2 enactment: `ian/judge-empty-scene-guard` PR must merge first (otherwise empty-scene hallucination contaminates new judge metrics).
 
 Refs: ADR-005, [docs/handoffs/2026-04-30-adr-005-taxonomy.md](docs/handoffs/2026-04-30-adr-005-taxonomy.md), Task #22 prototype data (run `20260501_7d5bc27e`).
 

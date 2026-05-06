@@ -198,8 +198,8 @@ After Task #13 lands ≥30 hard cases (defined as: cases that gpt-4-class models
 **Date**: 2026-04-30
 **Status**: Active
 **Supersedes**: implicit `Difficulty` semantics in `nalana_eval.schema.Difficulty` (kept deprecated one cycle; removal targeted at v3.2)
-**Depends on**: `ian/judge-empty-scene-guard` PR merged before #13.2 audit (otherwise empty-scene hallucination contaminates the new judge-based metrics)
-**Blocks**: #13.1 (schema field additions), #13.2 (existing fixture re-audit)
+**Depends on**: `ian/judge-empty-scene-guard` PR merged before #15.2 audit (otherwise empty-scene hallucination contaminates the new judge-based metrics)
+**Blocks**: #15.1 (schema field additions), #15.2 (existing fixture re-audit)
 
 ### Context
 
@@ -229,7 +229,7 @@ class SceneComplexity(str, Enum):
     FULL_SCENE    = "full_scene"      # 5+ mesh + materials, full environment
 ```
 
-`scene_complexity` is a **required field** on `TestCaseCard` and reflects **author intent**, NOT derived from constraint shape. Author intent and constraint shape can intentionally diverge — a stylized "futuristic table" might be tagged COMPOSITION with loose constraints to give the model creative latitude. This decoupling lets `tools/drift_check.py` (#13.4) catch the inconsistencies that would otherwise go silent if the field were auto-derived from constraints.
+`scene_complexity` is a **required field** on `TestCaseCard` and reflects **author intent**, NOT derived from constraint shape. Author intent and constraint shape can intentionally diverge — a stylized "futuristic table" might be tagged COMPOSITION with loose constraints to give the model creative latitude. This decoupling lets `tools/drift_check.py` (#15.4) catch the inconsistencies that would otherwise go silent if the field were auto-derived from constraints.
 
 #### 3. Spatial coherence on COMPOSITION cases evaluated via L3 judge (Q3 — Task #22 data)
 
@@ -249,9 +249,9 @@ class TestCaseCard:
     difficulty:        Optional[Difficulty] = None  # DEPRECATED — removal in v3.2
 ```
 
-Existing 80 fixtures keep their `difficulty` value during the deprecation cycle; new fixtures (#13.3+) do not populate it. CLI flag `--difficulty-dist` keeps working but emits a deprecation warning. Removal one cycle from now after all fixtures are migrated.
+Existing 80 fixtures keep their `difficulty` value during the deprecation cycle; new fixtures (#15.3+) do not populate it. CLI flag `--difficulty-dist` keeps working but emits a deprecation warning. Removal one cycle from now after all fixtures are migrated.
 
-### Migration of existing 80 fixtures (executed in #13.2 — Q5 strict mode)
+### Migration of existing 80 fixtures (executed in #15.2 — Q5 strict mode)
 
 The audit performs all three actions in one commit per case-file batch:
 
@@ -259,19 +259,19 @@ The audit performs all three actions in one commit per case-file batch:
 2. For every case tagged `scene_complexity: "composition"` or `"full_scene"`:
    - Flip `judge_policy: "skip"` → `"score"`
    - Expand `style_intent.acceptable_styles` to include 3+ creative options
-3. Document each re-tag and policy-flip in the #13.2 PR description
+3. Document each re-tag and policy-flip in the #15.2 PR description
 
 Estimated impact:
 - ~10–15 of existing 80 cases re-tagged COMPOSITION/FULL_SCENE
 - Benchmark cost rises from ~$3 (current, mostly skip) to ~$10 per 200-case run (with ~25/80 at score)
-- `docs/USAGE_GUIDE.md` cost-projection table updated as part of #13.2 PR
+- `docs/USAGE_GUIDE.md` cost-projection table updated as part of #15.2 PR
 
 ### Consequences
 
 - **Schema** gains one field (`scene_complexity`), deprecates another (`difficulty`). Migration is graceful (one cycle, not breaking).
-- **Authoring overhead**: +~5 sec per case for the new field. LLM-assisted authoring (#13.3) auto-fills `scene_complexity` from the draft.
-- **Drift check (#13.4)** gets a new rule: warn when `scene_complexity` and `hard_constraints` shape disagree (e.g., tagged COMPOSITION but `mesh_object_count.minimum < 2`).
+- **Authoring overhead**: +~5 sec per case for the new field. LLM-assisted authoring (#15.3) auto-fills `scene_complexity` from the draft.
+- **Drift check (#15.4)** gets a new rule: warn when `scene_complexity` and `hard_constraints` shape disagree (e.g., tagged COMPOSITION but `mesh_object_count.minimum < 2`).
 - **Reporting** gains "by scene complexity" group-by tables; "by difficulty" table marked deprecated.
 - **Benchmark cost rises ~3.5×** for runs that include composition/full-scene cases. Documented and accepted.
-- **L3 judge reliability now matters more** — the empty-scene hallucination guard PR is a hard prerequisite for the #13.2 strict-mode audit. Without it, the new judge-based metrics get systematically inflated.
-- **ADR-004 retry-with-feedback re-evaluation gate (#13.12)** becomes more meaningful: hard composition cases produce real failures with real judge signals; the retry loop's value can finally be measured on data that isn't mock-dominated.
+- **L3 judge reliability now matters more** — the empty-scene hallucination guard PR is a hard prerequisite for the #15.2 strict-mode audit. Without it, the new judge-based metrics get systematically inflated.
+- **ADR-004 retry-with-feedback re-evaluation gate (#15.12)** becomes more meaningful: hard composition cases produce real failures with real judge signals; the retry loop's value can finally be measured on data that isn't mock-dominated.

@@ -33,7 +33,7 @@ class Difficulty(str, Enum):
     Conflated three independent dimensions (prompt verbosity / scene complexity /
     judgment difficulty). Replaced by SceneComplexity (manually authored, captures
     output-shape intent). Existing fixtures keep populating this for one cycle to
-    avoid breaking downstream code; new fixtures (#13.3+) should not set it.
+    avoid breaking downstream code; new fixtures (#15.3+) should not set it.
     """
     SHORT = "Short"
     MEDIUM = "Medium"
@@ -44,7 +44,7 @@ class SceneComplexity(str, Enum):
     """ADR-005 — replaces Difficulty as the primary case-shape axis.
 
     Reflects AUTHOR INTENT for the output scene; not auto-derived from
-    constraint shape (the decoupling lets drift_check #13.4 catch
+    constraint shape (the decoupling lets drift_check #15.4 catch
     label-vs-constraint inconsistencies that auto-derivation would silence).
     """
     SINGLE_OBJECT = "single_object"   # 1 mesh
@@ -59,7 +59,7 @@ class Provenance(str, Enum):
     """Where this case came from. Used by reports + drift_check + slate composition."""
     HANDCRAFTED  = "handcrafted"   # human-authored (starter_v3/*)
     SYNTHETIC    = "synthetic"     # programmatic generator (synthetic/*)
-    LLM_AUTHORED = "llm_authored"  # LLM drafting pipeline (#13.3+)
+    LLM_AUTHORED = "llm_authored"  # LLM drafting pipeline (#15.3+)
 
 
 class Tag(str, Enum):
@@ -518,7 +518,7 @@ class TestCaseCard(BaseModel):
     style_intent: StyleIntent = Field(default_factory=StyleIntent)
     judge_policy: JudgePolicy = JudgePolicy.SCORE
     artifact_policy: ArtifactPolicy = Field(default_factory=ArtifactPolicy)
-    # Provenance / draft / tags introduced in #13.1 to support the authoring
+    # Provenance / draft / tags introduced in #15.1 to support the authoring
     # pipeline (LLM drafting, drift check, sampling human review).  Existing
     # 80 fixtures get backfilled mechanically (provenance by directory,
     # tags=["canonical"]).  See ADR-005.

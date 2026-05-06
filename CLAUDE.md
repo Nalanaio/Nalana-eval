@@ -47,6 +47,25 @@ Create `docs/handoffs/<short-name>.md` from `docs/handoffs/_TEMPLATE.md`. Fill s
 
 This is how the next person (or their AI assistant) understands what you did and why — without scrolling through commits.
 
+### Issue / task numbering convention
+
+There are three independent numbering systems. Don't conflate them.
+
+| System | Looks like | Where it lives | Use in writing |
+|---|---|---|---|
+| **GitHub epic / sub-issue** | `#15`, `#15.1`, `#15.2`, … `#15.12` | GitHub project board, PR titles, branch slugs | **Default** — chat, PR titles, handoff docs, CHANGELOG, commit messages |
+| **Internal Cowork TaskList ID** | `#21`, `#24`, `#25`, … | Cowork TaskList only | Internal todo tracking — **never** in PRs / commits / docs |
+| **Doc section numbers** | `13.1`, `13.2`, … inside `TEST_CASE_AUTHORING.md` | The doc itself (it's chapter 13) | Don't rename — they're document structure, not task IDs |
+
+GitHub assigns numbers project-wide as issues are created, so its numbers race ahead of any "internal milestone" numbering you might be tempted to use. Always reference work by GitHub number once an issue exists.
+
+**Mapping for the case-authoring epic** (because old artifacts use the obsolete shorthand):
+- Internal task tracker `#13` ≡ GitHub epic `#15` ≡ "Test case authoring pipeline"
+- Sub-issues `#15.1`–`#15.12` ≡ project-board numbers `#26`–`#37` (don't use the latter; the dotted form is more readable)
+- Old `#13.x` shorthand from before 2026-05-06 has been renamed in repo. Bare `#13` may still appear in older handoff docs as historical mention; don't go reformatting history.
+
+**Cleanup-track PRs** (`PR-C`, `PR-D`, `PR-E`, …) without a GitHub issue use the letter shorthand instead. That's fine — they're small, ephemeral, and the linked handoff doc carries the context.
+
 ### One PR = one concern (ADR-003)
 
 Bundling unrelated changes in one PR makes attribution impossible. The retry-loop / prompt-fix / API-fix bundle in PR #21 is the cautionary tale — see [ADR-003](docs/DECISIONS.md). When in doubt, split.
@@ -139,6 +158,7 @@ Planned but not yet implemented. Use the markdown templates manually:
 
 ## Last updated
 
+> 2026-05-06 by ian + Claude (added "Issue / task numbering convention" section).
 > 2026-04-29 by ian + Claude (PR-A C0a, initial draft).
 
 Update this line on every change to this file.

@@ -252,7 +252,7 @@ def test_test_case_card_judge_policy_skip():
 
 def test_scene_complexity_default_is_single_object():
     """If a fixture omits scene_complexity, it defaults to SINGLE_OBJECT.
-    This is the safe default used for mechanical backfill in #13.1; #13.2 fixes wrong tags."""
+    This is the safe default used for mechanical backfill in #15.1; #15.2 fixes wrong tags."""
     case = TestCaseCard.model_validate(_minimal_case())
     assert case.scene_complexity == SceneComplexity.SINGLE_OBJECT
 
@@ -283,7 +283,7 @@ def test_provenance_llm_authored():
 
 
 def test_tags_default_is_empty_list():
-    """Default empty list — fixtures get backfilled with ['canonical'] by #13.1 script."""
+    """Default empty list — fixtures get backfilled with ['canonical'] by #15.1 script."""
     case = TestCaseCard.model_validate(_minimal_case())
     assert case.tags == []
 
@@ -309,7 +309,7 @@ def test_draft_default_is_false():
 
 
 def test_draft_true_for_llm_drafts():
-    """LLM-authored cases are marked draft=True until human review (#13.6)."""
+    """LLM-authored cases are marked draft=True until human review (#15.6)."""
     payload = _minimal_case(provenance="llm_authored", draft=True)
     case = TestCaseCard.model_validate(payload)
     assert case.draft is True
