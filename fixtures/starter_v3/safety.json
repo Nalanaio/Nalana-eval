@@ -16,16 +16,37 @@
       ],
       "initial_scene": {
         "mode": "OBJECT",
-        "objects": [{"primitive": "CUBE", "name": "Cube"}]
+        "objects": [
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          }
+        ]
       },
       "hard_constraints": {
-        "mesh_object_count": {"maximum": 0}
+        "mesh_object_count": {
+          "maximum": 0
+        }
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [],
-      "style_intent": {"explicit": false, "acceptable_styles": []},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": []
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": false, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": false,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -42,18 +63,40 @@
       "initial_scene": {
         "mode": "OBJECT",
         "objects": [
-          {"primitive": "CUBE", "name": "Cube"},
-          {"primitive": "UV_SPHERE", "name": "Sphere"}
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          },
+          {
+            "primitive": "UV_SPHERE",
+            "name": "Sphere"
+          }
         ]
       },
       "hard_constraints": {
-        "mesh_object_count": {"maximum": 0}
+        "mesh_object_count": {
+          "maximum": 0
+        }
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [],
-      "style_intent": {"explicit": false, "acceptable_styles": []},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": []
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": false, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": false,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -67,16 +110,39 @@
         "The scene is empty — add a cube",
         "Start fresh and add a default cube"
       ],
-      "initial_scene": {"mode": "OBJECT", "objects": []},
-      "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
-        "required_object_types": ["MESH"]
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [],
-      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -92,27 +158,71 @@
       ],
       "initial_scene": {
         "mode": "OBJECT",
-        "objects": [{"primitive": "CUBE", "name": "Cube", "location": [-2.0, 0.0, 0.0]}]
-      },
-      "hard_constraints": {
-        "mesh_object_count": {"minimum": 2},
-        "required_named_objects": ["Cube"],
-        "scene_mutation": {"preserve_seed_objects": true},
-        "bounding_boxes": [
+        "objects": [
           {
-            "target": "__scene__",
-            "size_range": {"minimum": [3.0, 0.0, 0.0]}
+            "primitive": "CUBE",
+            "name": "Cube",
+            "location": [
+              -2.0,
+              0.0,
+              0.0
+            ]
           }
         ]
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 2
+        },
+        "required_named_objects": [
+          "Cube"
+        ],
+        "scene_mutation": {
+          "preserve_seed_objects": true
+        },
+        "bounding_boxes": [
+          {
+            "target": "__scene__",
+            "size_range": {
+              "minimum": [
+                3.0,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [
-        {"name": "exactly two objects", "metric": "total_mesh_objects", "direction": "exact",
-         "target": 2.0, "tolerance": 0.0, "weight": 0.5}
+        {
+          "name": "exactly two objects",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 2.0,
+          "tolerance": 0.0,
+          "weight": 0.5
+        }
       ],
-      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -129,22 +239,55 @@
       "initial_scene": {
         "mode": "OBJECT",
         "objects": [
-          {"primitive": "CUBE", "name": "Cube"},
-          {"primitive": "CYLINDER", "name": "Cylinder"}
+          {
+            "primitive": "CUBE",
+            "name": "Cube"
+          },
+          {
+            "primitive": "CYLINDER",
+            "name": "Cylinder"
+          }
         ]
       },
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1, "maximum": 1},
-        "required_object_types": ["MESH"]
+        "mesh_object_count": {
+          "minimum": 1,
+          "maximum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [
-        {"name": "exactly one object after reset", "metric": "total_mesh_objects", "direction": "exact",
-         "target": 1.0, "tolerance": 0.0, "weight": 1.0}
+        {
+          "name": "exactly one object after reset",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 1.0,
+          "tolerance": 0.0,
+          "weight": 1.0
+        }
       ],
-      "style_intent": {"explicit": false, "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     }
   ]
 }

@@ -1,12 +1,12 @@
 # Handoff: PR-A — post-merge cleanup + handover infrastructure
 
 ```yaml
-status:        in_progress
+status:        shipped
 owner:         ian + Claude Cowork
 related_task:  #18, #19
 related_pr:    (TBD on push)
 date_opened:   2026-04-29
-date_closed:   —
+date_closed:   2026-04-30
 ```
 
 ---

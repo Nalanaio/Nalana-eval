@@ -51,7 +51,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -102,7 +107,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -153,7 +163,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -204,7 +219,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -255,7 +275,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -310,7 +335,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -365,7 +395,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -420,7 +455,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -475,7 +515,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -530,7 +575,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -585,7 +635,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -640,7 +695,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -695,7 +755,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -750,7 +815,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -805,7 +875,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -860,7 +935,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -915,7 +995,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -970,7 +1055,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1025,7 +1115,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1080,7 +1175,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1135,7 +1235,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1190,7 +1295,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1245,7 +1355,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1300,7 +1415,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1355,7 +1475,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1410,7 +1535,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1465,7 +1595,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1520,7 +1655,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1575,7 +1715,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1630,7 +1775,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1685,7 +1835,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1740,7 +1895,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1795,7 +1955,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1850,7 +2015,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1905,7 +2075,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -1960,7 +2135,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2015,7 +2195,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2070,7 +2255,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2125,7 +2315,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2180,7 +2375,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2235,7 +2435,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2290,7 +2495,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2345,7 +2555,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2400,7 +2615,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2455,7 +2675,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2510,7 +2735,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2565,7 +2795,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2620,7 +2855,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2675,7 +2915,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -2730,7 +2975,12 @@
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
-      }
+      },
+      "scene_complexity": "single_object",
+      "provenance": "synthetic",
+      "tags": [
+        "canonical"
+      ]
     }
   ]
 }

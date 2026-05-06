@@ -14,19 +14,49 @@
         "Place a cube in the scene",
         "Add a box shape"
       ],
-      "initial_scene": {"mode": "OBJECT", "objects": []},
-      "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
-        "required_object_types": ["MESH"]
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
       },
-      "topology_policy": {"manifold_required": true, "quad_ratio_min": 0.0},
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": true,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [
-        {"name": "single mesh object", "metric": "total_mesh_objects", "direction": "exact",
-         "target": 1.0, "tolerance": 0.0, "weight": 1.0}
+        {
+          "name": "single mesh object",
+          "metric": "total_mesh_objects",
+          "direction": "exact",
+          "target": 1.0,
+          "tolerance": 0.0,
+          "weight": 1.0
+        }
       ],
-      "style_intent": {"explicit": false, "concept": "cube", "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "concept": "cube",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -40,27 +70,67 @@
         "Place a large sphere with radius 2m in the scene",
         "Add a ball with radius of 2 meters"
       ],
-      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
+        "mesh_object_count": {
+          "minimum": 1
+        },
         "bounding_boxes": [
           {
             "target": "__scene__",
             "size_range": {
-              "minimum": [3.5, 3.5, 3.5],
-              "maximum": [4.5, 4.5, 4.5]
+              "minimum": [
+                3.5,
+                3.5,
+                3.5
+              ],
+              "maximum": [
+                4.5,
+                4.5,
+                4.5
+              ]
             }
           }
         ]
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0, "max_vertex_count": 50000},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0,
+        "max_vertex_count": 50000
+      },
       "soft_constraints": [
-        {"name": "sphere vertex count reasonable", "metric": "total_vertices", "direction": "min",
-         "target": 50.0, "tolerance": 20.0, "weight": 0.5}
+        {
+          "name": "sphere vertex count reasonable",
+          "metric": "total_vertices",
+          "direction": "min",
+          "target": 50.0,
+          "tolerance": 20.0,
+          "weight": 0.5
+        }
       ],
-      "style_intent": {"explicit": false, "concept": "sphere", "concept_aliases": ["ball"], "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "concept": "sphere",
+        "concept_aliases": [
+          "ball"
+        ],
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -74,24 +144,54 @@
         "Make a cylindrical shape, radius 1m height 3m",
         "Add a tall cylinder: radius=1, depth=3"
       ],
-      "initial_scene": {"mode": "OBJECT", "objects": []},
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
+      },
       "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
+        "mesh_object_count": {
+          "minimum": 1
+        },
         "bounding_boxes": [
           {
             "target": "__scene__",
             "size_range": {
-              "minimum": [1.5, 1.5, 2.5],
-              "maximum": [2.5, 2.5, 3.5]
+              "minimum": [
+                1.5,
+                1.5,
+                2.5
+              ],
+              "maximum": [
+                2.5,
+                2.5,
+                3.5
+              ]
             }
           }
         ]
       },
-      "topology_policy": {"manifold_required": false, "quad_ratio_min": 0.0},
+      "topology_policy": {
+        "manifold_required": false,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [],
-      "style_intent": {"explicit": false, "concept": "cylinder", "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "concept": "cylinder",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -105,16 +205,40 @@
         "Place an icospheric mesh in the scene",
         "Add an icosahedron sphere"
       ],
-      "initial_scene": {"mode": "OBJECT", "objects": []},
-      "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
-        "required_object_types": ["MESH"]
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
       },
-      "topology_policy": {"manifold_required": true, "quad_ratio_min": 0.0},
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": true,
+        "quad_ratio_min": 0.0
+      },
       "soft_constraints": [],
-      "style_intent": {"explicit": false, "concept": "sphere", "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "concept": "sphere",
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     },
     {
       "fixture_version": "3.0",
@@ -128,19 +252,53 @@
         "Place a donut-shaped mesh in the scene",
         "Add a torus primitive"
       ],
-      "initial_scene": {"mode": "OBJECT", "objects": []},
-      "hard_constraints": {
-        "mesh_object_count": {"minimum": 1},
-        "required_object_types": ["MESH"]
+      "initial_scene": {
+        "mode": "OBJECT",
+        "objects": []
       },
-      "topology_policy": {"manifold_required": true, "quad_ratio_min": 0.7},
+      "hard_constraints": {
+        "mesh_object_count": {
+          "minimum": 1
+        },
+        "required_object_types": [
+          "MESH"
+        ]
+      },
+      "topology_policy": {
+        "manifold_required": true,
+        "quad_ratio_min": 0.7
+      },
       "soft_constraints": [
-        {"name": "torus vertex count", "metric": "total_vertices", "direction": "min",
-         "target": 50.0, "tolerance": 20.0, "weight": 0.5}
+        {
+          "name": "torus vertex count",
+          "metric": "total_vertices",
+          "direction": "min",
+          "target": 50.0,
+          "tolerance": 20.0,
+          "weight": 0.5
+        }
       ],
-      "style_intent": {"explicit": false, "concept": "torus", "concept_aliases": ["donut", "ring"], "acceptable_styles": ["geometric"]},
+      "style_intent": {
+        "explicit": false,
+        "concept": "torus",
+        "concept_aliases": [
+          "donut",
+          "ring"
+        ],
+        "acceptable_styles": [
+          "geometric"
+        ]
+      },
       "judge_policy": "skip",
-      "artifact_policy": {"require_screenshot": true, "write_scene_stats": true}
+      "artifact_policy": {
+        "require_screenshot": true,
+        "write_scene_stats": true
+      },
+      "scene_complexity": "single_object",
+      "provenance": "handcrafted",
+      "tags": [
+        "canonical"
+      ]
     }
   ]
 }
