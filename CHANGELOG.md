@@ -9,9 +9,6 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
-<<<<<<< ian/numbering-rename
-## 2026-05-02 — #15.1: schema fields (SceneComplexity / Provenance / Tag / draft) + mechanical fixture backfill
-=======
 ## 2026-05-06 — PR-C: Xvfb stderr noise suppression
 
 First of three split PRs replacing the original PR-B omnibus per ADR-003. Smallest of the trio — ships first to clear the plate.
@@ -27,8 +24,7 @@ Refs: ADR-003, [docs/handoffs/2026-05-06-pr-c-xvfb-noise.md](docs/handoffs/2026-
 
 ---
 
-## 2026-05-02 — #13.1: schema fields (SceneComplexity / Provenance / Tag / draft) + mechanical fixture backfill
->>>>>>> main
+## 2026-05-02 — #15.1: schema fields (SceneComplexity / Provenance / Tag / draft) + mechanical fixture backfill
 
 Per ADR-005, schema-level taxonomy lands. Pure infrastructure PR — no judgment-based data changes (those land in #15.2 audit).
 
