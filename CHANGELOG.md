@@ -9,6 +9,21 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
+## 2026-05-06 — PR-C: Xvfb stderr noise suppression
+
+First of three split PRs replacing the original PR-B omnibus per ADR-003. Smallest of the trio — ships first to clear the plate.
+
+`docker/entrypoint.sh`:
+- Xvfb's own stdio redirected to `${XVFB_LOG:-/tmp/xvfb.log}`. Harmless `_XSERVTransmkdir` warnings (caused by `/tmp/.X11-unix` ownership mismatch under non-root `appuser`, see PR-A C5) no longer drown out benchmark output.
+- New `_dump_xvfb_log` helper called on both existing startup-failure exit paths, preserving diagnosability.
+- No new env flags; full diff is ~12 lines.
+
+Sibling PRs to follow: PR-D (`attempts.csv` schema migration helper) and PR-E (L2 validator vocabulary + `CV-AMB-001` constraint tightening). All three address PR-A retrospective items deferred from the merge.
+
+Refs: ADR-003, [docs/handoffs/2026-05-06-pr-c-xvfb-noise.md](docs/handoffs/2026-05-06-pr-c-xvfb-noise.md), [docs/handoffs/2026-04-29-post-merge-cleanup.md](docs/handoffs/2026-04-29-post-merge-cleanup.md) §6.
+
+---
+
 ## 2026-05-02 — #13.1: schema fields (SceneComplexity / Provenance / Tag / draft) + mechanical fixture backfill
 
 Per ADR-005, schema-level taxonomy lands. Pure infrastructure PR — no judgment-based data changes (those land in #13.2 audit).
