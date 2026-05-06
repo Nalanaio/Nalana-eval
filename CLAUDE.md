@@ -152,6 +152,23 @@ Hard rule for the AI: **before running, recommending, or evaluating any command 
 
 Hard rule for the user: **after any merge happens via GitHub UI, run `git fetch origin --prune && git pull` locally before asking the AI to verify the result.** When resolving a merge conflict via the web UI, double-check the file preview for stray conflict markers before clicking *Mark as resolved*.
 
+### Sandbox shell and the user's `.git/` don't mix
+
+**Avoid running git commands in the Cowork sandbox shell against the user's repo.** The sandbox mount's permission model means git operations there can create `.git/index.lock` files that the user's local git later can't unlink (`Operation not permitted`), blocking the user's subsequent commands until they `rm` the stale lock by hand. Cautionary case (2026-05-06): twice during the post-rename cleanup, sandbox `git status` calls left lock files that crashed the user's `git add` and `git commit` mid-flow.
+
+For codebase verification, prefer `Read` / `Grep` against the working-tree files directly — those don't touch `.git/`. Reserve sandbox bash git for read-only operations against branches/refs you can prove safe (e.g. `git log` without index work), and **never** while the user is mid-flight on a `git commit` / `git rebase` / merge.
+
+### "Behind main" alone is not a delete signal
+
+Long-lived working branches (e.g. `ian_workspace`) live behind `main` by design — they accumulate work, then merge forward when ready. The user's workflow may forbid pushing to `main` directly, in which case branches like this are critical, not dead. Cautionary case (2026-05-06): the AI mass-listed `ian_workspace` for deletion alongside actually-orphaned topic branches based on a stale `[behind 2]` indicator; the user caught it before any damage but the local copy was already gone and had to be re-checked-out from `origin`.
+
+Before recommending branch deletion, verify one of:
+1. The branch's HEAD commit is reachable from `main` (it merged) — `git merge-base --is-ancestor <branch> main`.
+2. The branch is an orphaned topic branch whose unique commits have been cherry-picked elsewhere (you have the cherry-pick commit hash).
+3. The user explicitly confirmed it's deletable.
+
+"Behind main" or "stale-looking name" alone is not enough.
+
 ---
 
 ## Skill / slash-command availability (Cowork)
@@ -168,6 +185,7 @@ Planned but not yet implemented. Use the markdown templates manually:
 
 ## Last updated
 
+> 2026-05-06 by ian + Claude (added "Sandbox shell and .git/" + "behind main is not a delete signal" rules).
 > 2026-05-06 by ian + Claude (added "Sync before reasoning about git state" rule + cautionary case).
 > 2026-05-06 by ian + Claude (added "Issue / task numbering convention" section).
 > 2026-04-29 by ian + Claude (PR-A C0a, initial draft).
