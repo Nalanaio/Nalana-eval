@@ -142,6 +142,16 @@ For more elaborate per-user preferences (editor tabs, indent style, naming conve
 
 If user says *"continue from session X"* — read transcript via `mcp__session_info__read_transcript(session_id=X)` and pick up. Don't speculate; ask if anything is ambiguous.
 
+### Sync before reasoning about git state
+
+**The Cowork sandbox cannot reach `github.com` (proxy 403 on `git fetch`).** Whatever the AI sees about branches, merge state, and `main`'s file content reflects the user's **last `git pull` only**. Acting on a stale view will silently produce wrong cleanup commands and wrong "is the codebase clean?" verdicts.
+
+Cautionary case (2026-05-06): the rename PR was merged on remote with **unresolved conflict markers** (the user thought the GitHub web conflict editor had resolved them, but the commit went through with `<<<<<<<` / `=======` / `>>>>>>>` lines in `CHANGELOG.md`). The AI reviewed a stale local `main` from before the merge and reported the codebase as clean, missing the broken state. Only after the user ran `git pull` did the conflict markers surface.
+
+Hard rule for the AI: **before running, recommending, or evaluating any command that depends on remote git state (branch lists, `main` content, "is X merged"), ask the user to run `git fetch origin --prune && git pull` first**, and base decisions on the post-pull output. After any git operation that resolves conflicts (especially via the GitHub web UI), grep the touched files for `^<<<<<<< `, `^======= *$`, `^>>>>>>> ` before declaring the work done.
+
+Hard rule for the user: **after any merge happens via GitHub UI, run `git fetch origin --prune && git pull` locally before asking the AI to verify the result.** When resolving a merge conflict via the web UI, double-check the file preview for stray conflict markers before clicking *Mark as resolved*.
+
 ---
 
 ## Skill / slash-command availability (Cowork)
@@ -158,6 +168,7 @@ Planned but not yet implemented. Use the markdown templates manually:
 
 ## Last updated
 
+> 2026-05-06 by ian + Claude (added "Sync before reasoning about git state" rule + cautionary case).
 > 2026-05-06 by ian + Claude (added "Issue / task numbering convention" section).
 > 2026-04-29 by ian + Claude (PR-A C0a, initial draft).
 
