@@ -9,6 +9,22 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
+## 2026-05-06 — PR-H: git-risk hardening (pre-commit hook + AI verify-branch rule)
+
+Tier 1 preventive tooling for the class of mistakes that cost ~30 min × 3 in this session: commits landing on the wrong branch because `git checkout -b` was forgotten or paste lost the branch-create step. The cleanup-via-cherry-pick path was always the same and always avoidable.
+
+New tooling:
+- `scripts/git-hooks/pre-commit` — refuses commits on `main` / `master` with a help message pointing to `git checkout -b`. Bypass with `git commit --no-verify` for emergencies.
+- `scripts/setup-git-hooks.sh` — idempotent installer; copies repo-tracked hooks into `.git/hooks/`. Per-clone setup since hooks aren't git-tracked. Brian + future contributors should run this once.
+
+`CLAUDE.md` updates:
+- New gotcha row pointing to the hook setup.
+- New sub-rule under "Sync before reasoning about git state": **AI commit recipe always verifies branch first** — every command sequence containing `git add` / `git commit` MUST start with `git branch --show-current` and `git status -sb` as separate paste-able lines, so user sees branch state before staging anything. Hook is the backstop; AI rule is for not slipping in the first place.
+
+Refs: ADR-003, [docs/handoffs/2026-05-06-pr-h-precommit-hook.md](docs/handoffs/2026-05-06-pr-h-precommit-hook.md).
+
+---
+
 ## 2026-05-06 — PR-C: Xvfb stderr noise suppression
 
 First of three split PRs replacing the original PR-B omnibus per ADR-003. Smallest of the trio — ships first to clear the plate.
