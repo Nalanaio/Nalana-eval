@@ -48,7 +48,7 @@
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "multi_object",
       "provenance": "handcrafted",
       "tags": [
         "canonical"
@@ -100,7 +100,7 @@
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "multi_object",
       "provenance": "handcrafted",
       "tags": [
         "canonical"
@@ -162,15 +162,18 @@
         "explicit": false,
         "concept": "stack",
         "acceptable_styles": [
-          "geometric"
+          "realistic",
+          "minimalist",
+          "geometric",
+          "low-poly"
         ]
       },
-      "judge_policy": "audit_only",
+      "judge_policy": "score",
       "artifact_policy": {
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "composition",
       "provenance": "handcrafted",
       "tags": [
         "canonical"
@@ -219,9 +222,12 @@
           "furniture"
         ],
         "acceptable_styles": [
+          "realistic",
+          "minimalist",
+          "stylized",
+          "futuristic",
           "geometric",
-          "cartoon",
-          "low-poly"
+          "cartoon"
         ]
       },
       "judge_policy": "score",
@@ -229,7 +235,7 @@
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "composition",
       "provenance": "handcrafted",
       "tags": [
         "canonical"
@@ -273,10 +279,12 @@
       "style_intent": {
         "explicit": false,
         "acceptable_styles": [
+          "realistic",
+          "minimalist",
+          "stylized",
           "geometric",
           "cartoon",
-          "low-poly",
-          "abstract"
+          "low-poly"
         ]
       },
       "judge_policy": "score",
@@ -284,7 +292,7 @@
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "composition",
       "provenance": "handcrafted",
       "tags": [
         "canonical"

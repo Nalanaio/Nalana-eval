@@ -96,10 +96,12 @@
           "furniture"
         ],
         "acceptable_styles": [
-          "cartoon",
+          "realistic",
+          "minimalist",
+          "stylized",
           "geometric",
-          "low-poly",
-          "realistic"
+          "cartoon",
+          "futuristic"
         ]
       },
       "judge_policy": "score",
@@ -107,7 +109,7 @@
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "composition",
       "provenance": "handcrafted",
       "tags": [
         "canonical"
@@ -198,10 +200,12 @@
           "structure"
         ],
         "acceptable_styles": [
-          "cartoon",
+          "realistic",
+          "minimalist",
+          "stylized",
+          "futuristic",
           "geometric",
-          "low-poly",
-          "realistic"
+          "cartoon"
         ]
       },
       "judge_policy": "score",
@@ -209,7 +213,7 @@
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "composition",
       "provenance": "handcrafted",
       "tags": [
         "canonical"
@@ -250,7 +254,7 @@
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "multi_object",
       "provenance": "handcrafted",
       "tags": [
         "canonical"

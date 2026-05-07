@@ -9,6 +9,36 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
+## 2026-05-06 — #15.2: existing-fixture audit (per ADR-005 strict mode)
+
+Applies the per-case audit decisions locked in [`docs/handoffs/2026-05-02-15.2-audit-decisions.md`](docs/handoffs/2026-05-02-15.2-audit-decisions.md). All changes mechanical — no judgment beyond what the decisions doc already records.
+
+Fixture taxonomy corrections (9 of 80 cases, replacing #15.1's `single_object` placeholder):
+- `fixtures/starter_v3/ambiguous.json`:
+  - **CV-AMB-002** (chair) → `composition`; `acceptable_styles` expanded to 6 styles
+  - **CV-AMB-004** (house) → `composition`; `acceptable_styles` expanded to 6 styles
+  - **CV-AMB-005** (open creative) → `multi_object`
+- `fixtures/starter_v3/compositional.json`:
+  - **CV-CMP-001** (cube + sphere) → `multi_object`
+  - **CV-CMP-002** (3 primitives) → `multi_object`
+  - **CV-CMP-003** (stack two cubes) → `composition`; `judge_policy: audit_only` → `score` (the only flip in the corpus); `acceptable_styles` expanded to 4 styles
+  - **CV-CMP-004** (table) → `composition`; `acceptable_styles` expanded to 6 styles
+  - **CV-CMP-005** (3-object scene) → `composition`; `acceptable_styles` expanded to 6 styles
+- `fixtures/starter_v3/safety.json`:
+  - **CV-SAF-004** (sphere + cube preserve) → `multi_object`
+
+The other 71 cases retain `single_object` (the #15.1 mechanical placeholder is correct for them per audit §7).
+
+CLI deprecation (deferred from #15.1 to avoid noisy intermediate state):
+- `nalana_eval/cli.py` `--difficulty-dist` now emits a runtime deprecation warning and its help string is marked `[DEPRECATED, removal in v3.2]` per ADR-005. Functionality preserved through v3.1.
+
+Cost impact (revising ADR-005 §Q5 projection):
+- Audit moves only **1 case** to `judge_policy=score` (CV-CMP-003 from `audit_only`); the other 4 composition cases were already at `score`. Per-run cost rises ~$3 → ~$3.20 (≈+7%), not the projected ~3.5×. The dramatic ~$3 → ~$10 jump lands later, with the LLM-authored hard cases (#15.3+), not with this audit pass.
+
+Refs: ADR-005, [docs/handoffs/2026-05-02-15.2-audit-decisions.md](docs/handoffs/2026-05-02-15.2-audit-decisions.md), [docs/handoffs/2026-05-06-15.2-audit.md](docs/handoffs/2026-05-06-15.2-audit.md). Unblocks #15.3 (LLM authoring CLI), #15.4 (drift checker), #15.5 (honeypot infrastructure).
+
+---
+
 ## 2026-05-06 — PR-C: Xvfb stderr noise suppression
 
 First of three split PRs replacing the original PR-B omnibus per ADR-003. Smallest of the trio — ships first to clear the plate.
