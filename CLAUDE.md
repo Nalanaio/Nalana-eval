@@ -129,6 +129,7 @@ For more elaborate per-user preferences (editor tabs, indent style, naming conve
 | Docker container `db/` is **separate** from host `~/Nalana-eval/db/`. When analyzing retry stats etc., gather from BOTH | mount config in `docker-compose.yml` |
 | Some pre-`98ce599` runs may have stale schema columns; reading old reports may need null-safe access | — |
 | `.claude/` and `.env` are local secrets, gitignored. `AGENTS.md` and `CLAUDE.md` are **version controlled** — they are documentation, not config. | `.gitignore` |
+| Direct commits to `main` / `master` are blocked by a `pre-commit` hook. Run `bash scripts/setup-git-hooks.sh` once after cloning to install. Bypass with `git commit --no-verify`. | `scripts/git-hooks/pre-commit` |
 
 ---
 
@@ -158,6 +159,21 @@ Hard rule for the user: **after any merge happens via GitHub UI, run `git fetch 
 
 For codebase verification, prefer `Read` / `Grep` against the working-tree files directly — those don't touch `.git/`. Reserve sandbox bash git for read-only operations against branches/refs you can prove safe (e.g. `git log` without index work), and **never** while the user is mid-flight on a `git commit` / `git rebase` / merge.
 
+### AI commit recipe always verifies branch first
+
+Cautionary case (2026-05-06): three commits in one session landed on the wrong branch (twice on `main`, once on a stale topic branch) because branch verification was implicit, not enforced. Each one cost a recover-via-cherry-pick + reset round-trip.
+
+Hard rule for the AI: **any command sequence that includes `git add` or `git commit` MUST start with the following two verification commands as separate, paste-able lines:**
+
+```bash
+git branch --show-current        # what branch am I on?
+git status -sb                   # what's modified, what's clean?
+```
+
+Only after the user can see those two outputs and confirm the branch matches the intended PR target should the recipe continue with `git checkout -b` (if branching is needed) or `git add` (if branch is correct). Don't bury verification inside a multi-line block — the user's terminal paste pipeline can lose lines or mis-interpret comments. Each verification step should be its own paste-able command.
+
+The `pre-commit` hook (see Repo-specific gotchas) refuses commits on `main` / `master` as a backstop. Don't rely on the hook alone — verify branch FIRST. The hook is for catching slips; the AI rule is for not slipping.
+
 ### "Behind main" alone is not a delete signal
 
 Long-lived working branches (e.g. `ian_workspace`) live behind `main` by design — they accumulate work, then merge forward when ready. The user's workflow may forbid pushing to `main` directly, in which case branches like this are critical, not dead. Cautionary case (2026-05-06): the AI mass-listed `ian_workspace` for deletion alongside actually-orphaned topic branches based on a stale `[behind 2]` indicator; the user caught it before any damage but the local copy was already gone and had to be re-checked-out from `origin`.
@@ -185,6 +201,7 @@ Planned but not yet implemented. Use the markdown templates manually:
 
 ## Last updated
 
+> 2026-05-06 by ian + Claude (added "AI commit recipe always verifies branch first" rule + pre-commit hook gotcha row; companion to scripts/git-hooks/pre-commit).
 > 2026-05-06 by ian + Claude (added "Sandbox shell and .git/" + "behind main is not a delete signal" rules).
 > 2026-05-06 by ian + Claude (added "Sync before reasoning about git state" rule + cautionary case).
 > 2026-05-06 by ian + Claude (added "Issue / task numbering convention" section).
