@@ -218,7 +218,7 @@
         "require_screenshot": true,
         "write_scene_stats": true
       },
-      "scene_complexity": "single_object",
+      "scene_complexity": "multi_object",
       "provenance": "handcrafted",
       "tags": [
         "canonical"
