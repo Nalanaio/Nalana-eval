@@ -9,6 +9,23 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
+## 2026-05-13 — PR-J: Context bridge for Anthropic Blender plugin research conversation
+
+Paper-only doc bootstrapping a separate Cowork conversation focused on researching Anthropic's Blender integration and extracting actionable lessons for both Nalana-eval (`#15.3` LLM authoring CLI design) and the Nalana product.
+
+`docs/handoffs/2026-05-13-anthropic-blender-research-context.md`:
+- Distinguishes Nalana product (private repos, Blender + LLM 3D modeling for artists / designers; agentic stages on the roadmap) from Nalana-eval (this repo, dev-team capability eval).
+- Captures V3 architecture summary (L1 ground-truth / L2 schema-constraint / L3 judge) and the six technical principles guiding this week's decisions, including the corrected scope of "schema-driven constraints" (applies to L2 + L3 only; L1 IS ground truth because L1 work is deterministic).
+- Locks `#15.3` Q1-Q5 decisions (paper-first / CLI+config / draft-flag / structured-output strict-with-retry / no-inline-benchmark) so the research conversation knows what NOT to relitigate.
+- 18 research questions across foundational / technical / product axes; each anchored so the new conversation knows where to start digging.
+- Working agreement for the research conversation: read CLAUDE.md + this doc, produce a `docs/RESEARCH/<topic>.md` findings doc with separate Technical / Product implications sections, file follow-up tasks, no code changes in that session per ADR-003.
+
+This is the first context-bridge-pattern doc (vs decisions-locked-pattern); subsequent cross-conversation handoffs can use the same shape.
+
+Refs: ADR-003, [docs/handoffs/2026-05-13-anthropic-blender-research-context.md](docs/handoffs/2026-05-13-anthropic-blender-research-context.md).
+
+---
+
 ## 2026-05-06 — PR-I: L2 validator vocabulary (paper-only design, decisions_locked)
 
 Paper-only handoff doc capturing the L2 validator vocabulary discussed earlier today during the CV-AMB-001 "fixture too loose" exchange. No code, no fixture changes — just the spec PR-E (task #28) will paste-apply.
