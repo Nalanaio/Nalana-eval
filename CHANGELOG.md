@@ -9,6 +9,22 @@ For details on any entry, follow the linked PR / handoff doc / ADR.
 
 ---
 
+## 2026-05-06 — PR-I: L2 validator vocabulary (paper-only design, decisions_locked)
+
+Paper-only handoff doc capturing the L2 validator vocabulary discussed earlier today during the CV-AMB-001 "fixture too loose" exchange. No code, no fixture changes — just the spec PR-E (task #28) will paste-apply.
+
+Design (`docs/handoffs/2026-05-06-l2-validator-vocabulary.md`):
+- **L2 = floor, L3 = ceiling.** L2 sets "is this a plausible candidate answer?" lower bounds; L3 evaluates "is it the right answer?". Strengthens ADR-004 separation without crossing it.
+- **Three new constraint primitives** (deterministic, no judge): `non_degenerate_mesh_count` (filters flat planes / points), `scene_bounding_box` (`min_volume` + `max_dimension` for unit-error sanity), `concept_carrier_exists` (dominant-mesh ratio; use sparingly).
+- **Validator helper abstraction**: `assert_geometry_exists` / `assert_reasonable_scale` / `assert_dominant_mesh` — semantic wrappers around the primitives, composable via a new `L2_validators: List[str]` field on `TestCaseCard`.
+- **CV-AMB-001 prescription** (PR-E's first user): use the first two helpers; deliberately NOT `assert_dominant_mesh` (an 8-metaball apple should pass L2; whether it looks like an apple is judge's call).
+
+Implementation deferred to PR-E (task #28). This PR is the spec — eager paper-only ship per "decisions_locked" pattern (same as `2026-05-02-15.2-audit-decisions.md` was for #15.2).
+
+Refs: ADR-004, [docs/handoffs/2026-05-06-l2-validator-vocabulary.md](docs/handoffs/2026-05-06-l2-validator-vocabulary.md), [docs/handoffs/2026-05-02-15.2-audit-decisions.md](docs/handoffs/2026-05-02-15.2-audit-decisions.md) §10 (CV-AMB-001 edge case origin).
+
+---
+
 ## 2026-05-06 — #15.2: existing-fixture audit (per ADR-005 strict mode)
 
 Applies the per-case audit decisions locked in [`docs/handoffs/2026-05-02-15.2-audit-decisions.md`](docs/handoffs/2026-05-02-15.2-audit-decisions.md). All changes mechanical — no judgment beyond what the decisions doc already records.
