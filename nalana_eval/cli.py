@@ -115,6 +115,15 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
     if args.api_keys_file:
         _load_dotenv(args.api_keys_file)
 
+    # Deprecation: --difficulty-dist (ADR-005). Warn but keep working through v3.1.
+    if args.difficulty_dist:
+        print(
+            "WARNING: --difficulty-dist is deprecated (ADR-005) and will be removed in v3.2. "
+            "The Difficulty axis was retired; new fixtures do not populate it. "
+            "Use --suite filtering or scene_complexity / tags selection instead.",
+            file=sys.stderr,
+        )
+
     # Load suite (--legacy-suite takes precedence over --suite)
     suite_path = args.legacy_suite or args.suite or "fixtures/starter_v3"
     suite = TestSuite.from_json_or_dir(suite_path)
@@ -269,7 +278,11 @@ def _add_benchmark_parser(sub: argparse.Action) -> None:
                    help="Skip real Blender; use stub snapshot + placeholder PNG (CI mode)")
     p.add_argument("--blender-bin", default="blender")
     p.add_argument("--output-dir", default="artifacts")
-    p.add_argument("--difficulty-dist", default="", help="e.g. Short:0.4,Medium:0.4,Long:0.2")
+    p.add_argument("--difficulty-dist", default="",
+                   help="[DEPRECATED, removal in v3.2] e.g. Short:0.4,Medium:0.4,Long:0.2. "
+                        "The Difficulty axis was retired by ADR-005; new fixtures (#15.3+) "
+                        "do not populate it. Use --suite filtering or scene_complexity / tags "
+                        "selection going forward.")
     p.add_argument("--retry-with-feedback", action="store_true",
                    help="Enable retry-with-feedback loop. When a pass@k attempt "
                         "fails, the next attempt's prompt is augmented with a "
